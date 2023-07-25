@@ -53,3 +53,5 @@ C:\Users\mzahidberber\Desktop\shopapp\shopapp.web\obj\Debug\net7.0\scopedcss\pro
 C:\Users\mzahidberber\Desktop\shopapp\shopapp.web\obj\Debug\net7.0\shopapp.web.csproj.CopyComplete
 C:\Users\mzahidberber\Desktop\shopapp\shopapp.web\obj\Debug\net7.0\shopapp.web.genruntimeconfig.cache
 C:\Users\mzahidberber\Desktop\shopapp\shopapp.web\obj\Debug\net7.0\ref\shopapp.web.dll
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.web\bin\Debug\net7.0\package-lock.json
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.web\bin\Debug\net7.0\package.json

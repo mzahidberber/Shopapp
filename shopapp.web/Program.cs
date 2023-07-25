@@ -5,6 +5,7 @@ using shopapp.core.Business.Abstract;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.Entity.Concrete;
 using shopapp.dataaccess.Concrete.EntityFramework;
+using shopapp.web.EmailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,15 @@ builder.Services.AddTransient(typeof(ICategoryRepository), typeof(EfCategoryRepo
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductService));
 builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
 builder.Services.AddTransient(typeof(ShopContext), typeof(ShopContext));
+
+builder.Services.AddScoped<IEmailSender, SmtpEmailSender>(
+    i =>new SmtpEmailSender(
+        builder.Configuration["EmailSender:Host"],
+        builder.Configuration.GetValue<int>("EmailSender:Port"),
+        builder.Configuration.GetValue<bool>("EmailSender:EnableSSL"),
+        builder.Configuration["EmailSender:UserName"],
+        builder.Configuration["EmailSender:Password"]
+        ));
 
 using (ShopContext context = new ShopContext(builder.Configuration))
 {
@@ -37,7 +47,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 
     //options.User.AllowedUserNameCharacters = "";
     options.User.RequireUniqueEmail = true;
-    options.SignIn.RequireConfirmedEmail=false;
+    options.SignIn.RequireConfirmedEmail=true;
     options.SignIn.RequireConfirmedPhoneNumber=false;
 
 });
@@ -52,7 +62,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie = new CookieBuilder
     {
         HttpOnly = true,
-        Name=".ShopApp.Security.Cookie"
+        Name=".ShopApp.Security.Cookie",
+        SameSite=SameSiteMode.Strict
     };
 });
 
