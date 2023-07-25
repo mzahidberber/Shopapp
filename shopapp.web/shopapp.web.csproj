@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\shopapp.business\shopapp.business.csproj" />
+    <ProjectReference Include="..\shopapp.core\shopapp.core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Identity\" />
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
+</Project>

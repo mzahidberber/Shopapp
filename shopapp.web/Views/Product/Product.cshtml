@@ -1,0 +1,63 @@
+﻿@model ProductAndCategories
+
+<div class="row">
+    <div class="col-2">
+        <div class="list-group">
+            @foreach (var c in Model.Categories)
+            {
+                <a href="#" class="list-group-item list-group-item-action">@c.Name</a>
+                
+            }
+        </div>
+    </div>
+    <div class="col-10">
+
+        <div class="mt-1 me-2 ms-2">
+            <table class="table table-light">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+
+                        <th scope="col">Price</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Order</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.Products)
+                    {
+                        <tr>
+                            <th scope="row">@Model.Products.IndexOf(@p)</th>
+                            <td><img class="productImg" src="~/img/@p.ImageUrl"></td>
+                            <td>@p.Name</td>
+                            <td>@p.Description</td>
+                            <td>@p.Price</td>
+                            <td>@p.Stock</td>
+                            <td>
+                                <button class="btn btn-light p-1">
+                                    <img class="OrderImg" src="~/img/checkout.png" />
+                                </button>
+                                <input type="number" name="value" id="age" min="0" max="20" step="1" value="1">
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+

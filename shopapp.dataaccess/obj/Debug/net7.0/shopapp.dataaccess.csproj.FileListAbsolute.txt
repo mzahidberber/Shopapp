@@ -1,0 +1,17 @@
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\bin\Debug\net7.0\shopapp.dataaccess.deps.json
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\bin\Debug\net7.0\shopapp.dataaccess.runtimeconfig.json
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\bin\Debug\net7.0\shopapp.dataaccess.dll
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\bin\Debug\net7.0\shopapp.dataaccess.pdb
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\bin\Debug\net7.0\shopapp.core.dll
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\bin\Debug\net7.0\shopapp.core.pdb
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\shopapp.dataaccess.csproj.AssemblyReference.cache
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\shopapp.dataaccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\shopapp.dataaccess.AssemblyInfoInputs.cache
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\shopapp.dataaccess.AssemblyInfo.cs
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\shopapp.dataaccess.csproj.CoreCompileInputs.cache
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\shopapp.dataaccess.csproj.CopyComplete
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\shopapp.dataaccess.dll
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\refint\shopapp.dataaccess.dll
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\shopapp.dataaccess.pdb
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\shopapp.dataaccess.genruntimeconfig.cache
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.dataaccess\obj\Debug\net7.0\ref\shopapp.dataaccess.dll

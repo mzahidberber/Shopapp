@@ -1,0 +1,12 @@
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\bin\Debug\net7.0\shopapp.core.deps.json
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\bin\Debug\net7.0\shopapp.core.dll
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\bin\Debug\net7.0\shopapp.core.pdb
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\obj\Debug\net7.0\shopapp.core.csproj.AssemblyReference.cache
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\obj\Debug\net7.0\shopapp.core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\obj\Debug\net7.0\shopapp.core.AssemblyInfoInputs.cache
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\obj\Debug\net7.0\shopapp.core.AssemblyInfo.cs
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\obj\Debug\net7.0\shopapp.core.csproj.CoreCompileInputs.cache
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\obj\Debug\net7.0\shopapp.core.dll
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\obj\Debug\net7.0\refint\shopapp.core.dll
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\obj\Debug\net7.0\shopapp.core.pdb
+C:\Users\mzahidberber\Desktop\shopapp\shopapp.core\obj\Debug\net7.0\ref\shopapp.core.dll
