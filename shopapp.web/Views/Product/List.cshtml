@@ -3,53 +3,53 @@
 <div class="row">
     <div class="col-2">
          @await Html.PartialAsync("_categories",Model.Categories)
+         @await Html.PartialAsync("_search",Model.Categories)
+        
     </div>
     <div class="col-10">
-
-        <div class="mt-1 me-2 ms-2">
-            <table class="table table-light">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Description</th>
-
-                        <th scope="col">Price</th>
-                        <th scope="col">Stock</th>
-                        <th scope="col">Order</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var p in Model.Products)
-                    {
+        <div class="row">
+            <div class="mt-1 me-2 ms-2">
+                <table class="table table-light">
+                    <thead>
                         <tr>
-                            <th scope="row">@Model.Products.IndexOf(@p)</th>
-                            <td><a href="/product/details/@p.Id"><img class="productImg" src="~/img/@p.ImageUrl"></a></td>
-                            <td><a href="/product/details/@p.Id">@p.Name</a></td>
-                            <td><a href="/product/details/@p.Id">@p.Description</a></td>
-                            <td><a href="/product/details/@p.Id">@p.Price</a></td>
-                            <td><a href="/product/details/@p.Id">@p.Stock</a></td>
-                            <td>
-                                <button class="btn btn-light p-1">
-                                    <img class="OrderImg" src="~/img/checkout.png" />
-                                </button>
-                                <input type="number" name="value" id="age" min="0" max="20" step="1" value="1">
+                            <th scope="col">#</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
 
-                            </td>
+                            <th scope="col">Price</th>
+                            <th scope="col">Stock</th>
+                            <th scope="col">Order</th>
                         </tr>
-                    }
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model.Products)
+                        {
+                            <tr>
+                                <th scope="row">@(Model.Products.IndexOf(@p)+1)</th>
+                                <td><a href="/product/details/@p.Id"><img class="productImg" src="~/img/@p.ImageUrl"></a></td>
+                                <td><a href="/product/details/@p.Id">@p.Name</a></td>
+                                <td><a href="/product/details/@p.Id">@p.Description</a></td>
+                                <td><a href="/product/details/@p.Id">@p.Price</a></td>
+                                <td><a href="/product/details/@p.Id">@p.Stock</a></td>
+                                <td>
+                                    <button class="btn btn-light p-1">
+                                        <i class="fa-solid fa-cart-shopping fa-lg"></i>
+                                    </button>
+                                    <input type="number" name="value" id="age" min="0" max="20" step="1" value="1">
 
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
 
 
+            </div>
         </div>
-
-
-    </div>
-
-
+        
+        @await Html.PartialAsync("_page",Model.PageInfo)
 </div>
 
 

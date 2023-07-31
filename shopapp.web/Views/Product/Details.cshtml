@@ -1,4 +1,48 @@
-﻿@page
-@model shopapp.web.Views.Product.DetailsModel
-@{
-}
+﻿@model ProductDTO
+
+<div class="row">
+	<div class="col-4">
+		<img style="height:30rem;weight:auto;" src="~/img/@Model.ImageUrl" />
+
+	</div>
+	<div class="col-8">
+		<div class="d-flex">
+			@foreach (var c in Model.ProductCategories)
+			{
+				<p class="me-3">@c.Category.Name</p>
+			}
+
+		</div>
+		
+
+		<p>@Model.Name</p>
+		<p>@Model.Description</p>
+		<p>@Model.Price</p>
+		<p>@Model.Stock</p>
+
+		@*@if (User.Identity.IsAuthenticated)
+		{*@
+			<form asp-controller="Cart" asp-action="AddToCart" method="post" style="display:inline;" class="form-inline">
+				<input type="hidden" name="productId" value="@Model.Id">
+				<div class="input-group mb-3" style="width:100px;">
+					<input  class="form-control" type="number" name="quantity" id="age" min="0" max="20" step="1" value="1">
+					<button class="btn btn-light p-1" type="submit">
+						<img class="OrderImg" src="~/img/checkout.png" />
+					</button>
+				</div>
+				
+
+			</form>
+			
+			
+		@*}*@
+		
+
+	</div>
+
+
+
+
+
+</div>
+

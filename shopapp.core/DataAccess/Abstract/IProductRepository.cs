@@ -8,5 +8,7 @@ namespace shopapp.core.DataAccess.Abstract
     {
         IQueryable<Product> WhereWithCategories(Expression<Func<Product, bool>> filter);
         Task<Product> GetByIdWithCategoriesAsync(int id);
+        IQueryable<Product> WherePage( int page, int pageSize,Expression<Func<Product, bool>>? filter=null);
+        Task<int> GetCountByCategory(Expression<Func<Product, bool>>? filter=null);
     }
 }

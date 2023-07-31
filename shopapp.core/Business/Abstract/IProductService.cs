@@ -8,5 +8,8 @@ namespace shopapp.core.Business.Abstract
     {
         Task<Response<IEnumerable<ProductDTO>>> WhereWithCategories(Expression<Func<Product, bool>> predicate);
         Task<Response<ProductDTO>> GetByIdWithCategoriesAsync(int id);
+
+        Task<Response<ProductDTOAndTotalCount>> WherePage(int page,int pageSize, Expression<Func<Product, bool>>? predicate=null);
+        Task<Response<Dictionary<string,int>>> GetCountByCategory(string categoryUrl);
     }
 }

@@ -3,9 +3,9 @@
 <div class="row">
     <div class="col-2">
             @await Html.PartialAsync("_categories",Model.Categories)
+            @await Html.PartialAsync("_search",Model.Categories)
     </div>
     <div class="col-10">
-
         <div class="mt-1 me-2 ms-2">
             <table class="table table-light">
                 <thead>
@@ -32,7 +32,7 @@
                             <td><a href="/product/details/@p.Id">@p.Stock</a></td>
                             <td>
                                 <button class="btn btn-light p-1">
-                                    <img class="OrderImg" src="~/img/checkout.png" />
+                                    <i class="fa-solid fa-cart-shopping"></i>
                                 </button>
                                 <input type="number" name="value" id="age" min="0" max="20" step="1" value="1">
 
@@ -49,7 +49,7 @@
 
     </div>
 
-
+    @*@await Html.PartialAsync("_page",Model.PageInfo)*@
 </div>
 
 

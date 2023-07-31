@@ -11,10 +11,12 @@ namespace shopapp.web.Controllers
     {
         public IProductService _productService { get; set; }
         public ICategoryService _categoryService { get; set; }
-        public ProductController(IProductService productService, ICategoryService categoryService)
+        public IConfiguration _configuration { get; set; }
+        public ProductController(IProductService productService, ICategoryService categoryService, IConfiguration configuration)
         {
             this._productService = productService;
             this._categoryService = categoryService;
+            this._configuration = configuration;
         }
         public async Task<IActionResult> Index() 
         {
@@ -25,19 +27,30 @@ namespace shopapp.web.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var product = await this._productService.GetByIdAsync(id);
+            var product = await this._productService.GetByIdWithCategoriesAsync(id);
             return View(product.data);
         }
 
-        public async Task<IActionResult> List(int? id)
+        public async Task<IActionResult> List(string category,int page=1)
         {
-            if (RouteData.Values["action"].ToString()=="List")
+            if (RouteData.Values["action"].ToString() == "List")
+            {
                 ViewBag.SelectedCategory = RouteData?.Values["id"];
-            var product = new List<ProductDTO>();
-            if (id == null) product = this._productService.GetAllAsync().Result.data.ToList();
-            else product = this._productService.Where(x=>x.Id==id).Result.data.ToList();
+            }
+            var product = new ProductDTOAndTotalCount();
+            var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
+            if (category == null) product = this._productService.WherePage(page,pageSize).Result.data;
+            else product =this._productService.WherePage(page, pageSize,x => x.ProductCategories.Any(x=>x.Category.Url==category)).Result.data;
             var categories = await this._categoryService.GetAllAsync();
-            return View(new ProductAndCategories { Categories = categories.data.ToList(), Products = product });
+            return View(new ProductAndCategories { PageInfo=new PageInfo
+            {
+                TotalItems = product.TotalCount,
+                CurrentPage=page,
+                ItemsPerPage=pageSize,
+                CurrentCategory=category
+            },
+                Categories = categories.data.ToList(), 
+                Products = product.Product.ToList() });
         }
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -80,6 +93,17 @@ namespace shopapp.web.Controllers
             }
             await this._productService.Update(product,product.Id);
             return RedirectToAction("list");
+        }
+
+        public async Task<IActionResult> Search(string q)
+        {
+            if (RouteData.Values["action"].ToString() == "List")
+                ViewBag.SelectedCategory = RouteData?.Values["id"];
+            if (q == null)
+                q = "";
+            var product=await _productService.Where(x=>x.Description.ToLower().Contains(q.ToLower()) || x.Name.ToLower().Contains(q.ToLower()));
+            var categories = await this._categoryService.GetAllAsync();
+            return View(new ProductAndCategories { Categories = categories.data.ToList(), Products = product.data.ToList() });
         }
     }
 }

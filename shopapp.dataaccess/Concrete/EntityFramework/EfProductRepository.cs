@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using shopapp.core.DataAccess.Abstract;
-using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace shopapp.dataaccess.Concrete.EntityFramework
@@ -12,7 +10,13 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         public EfProductRepository(ShopContext context) : base(context)
         {
         }
-
+        public IQueryable<Product> WherePage(int page,int pageSize, Expression<Func<Product, bool>>? filter)
+        {
+            if(filter == null)
+                return _dbSet.Skip((page - 1) * pageSize).Take(pageSize);
+            else
+                return _dbSet.Where(filter).Skip((page-1)*pageSize).Take(pageSize);
+        }
         public async Task<Product> GetByIdWithCategoriesAsync(int id)
         {
             var entity = await _dbSet
@@ -33,6 +37,14 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
                     .Include(x => x.ProductCategories)
                     .ThenInclude(x => x.Category)
                     .AsQueryable();
+        }
+
+        public async Task<int> GetCountByCategory(Expression<Func<Product, bool>>? filter = null)
+        {
+            if (filter == null)
+                return await _dbSet.CountAsync();
+            else
+                return await _dbSet.Where(filter).CountAsync();
         }
     }
 }

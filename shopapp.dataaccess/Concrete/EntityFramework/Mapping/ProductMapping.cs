@@ -8,7 +8,10 @@ namespace shopapp.dataaccess.Concrete.EntityFramework.Mapping
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            throw new NotImplementedException();
+            builder.HasData(
+                new Product { Id=1,Name="Laptop",Url="laptop",Price=10,Description="Güzel laptop",ImageUrl="1.jpg",Stock=1},
+                new Product { Id=2,Name="Tablet",Url="tablet",Price=101,Description="Güzel laptop",ImageUrl="2.jpg",Stock=2}
+                );
         }
     }
 }

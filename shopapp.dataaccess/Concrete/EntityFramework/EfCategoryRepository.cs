@@ -7,6 +7,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
     {
         public EfCategoryRepository(ShopContext context) : base(context)
         {
+
         }
     }
 }

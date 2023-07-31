@@ -3,9 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - shopapp.web</title>
+    <title>@ViewData["Title"] - ShopApp</title>
+    
+    <link href="~/lib/fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="~/lib/fontawesome/css/brands.css" rel="stylesheet">
+    <link href="~/lib/fontawesome/css/solid.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Css", required: false)
     <link rel="stylesheet" href="~/shopapp.web.styles.css" asp-append-version="true" />
 </head>
 <body>
@@ -16,20 +22,26 @@
         <main role="main" class="pb-3">
             @if (TempData["message"] != null)
             {
-                <partial name="_ResultMessage" model="@(TempData["message"])" />
+                <partial name="_resultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
             }
+            
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - shopapp.web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - ShopApp
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/lib/fontawesome/js/fontawesome.js"></script>
+    <script src="~/lib/fontawesome/js/brands.js"></script>
+    <script src="~/lib/fontawesome/js/solid.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

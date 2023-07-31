@@ -5,7 +5,7 @@ using shopapp.core.Entity.Concrete;
 
 namespace shopapp.business.Concrete
 {
-    public class CategoryService : GenericService<Category, CategoryDTO>,ICategoryService
+    public class CategoryService : GenericService<Category, CategoryDTO>, ICategoryService
     {
         public CategoryService(ICategoryRepository genericRepository) : base(genericRepository)
         {

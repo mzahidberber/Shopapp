@@ -8,7 +8,12 @@ namespace shopapp.dataaccess.Concrete.EntityFramework.Mapping
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            throw new NotImplementedException();
+            builder.HasData(
+                new Category { Id=1,Name="Elektronik",Url="elektronik"},
+                new Category { Id=2,Name= "TV", Url="tv"},
+                new Category { Id=3,Name= "Bilgisayar", Url="bilgisayar"}
+                
+                );
         }
     }
 }

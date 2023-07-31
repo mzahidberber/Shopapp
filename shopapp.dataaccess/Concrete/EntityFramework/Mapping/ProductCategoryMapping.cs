@@ -10,6 +10,10 @@ namespace shopapp.dataaccess.Concrete.EntityFramework.Mapping
         public void Configure(EntityTypeBuilder<ProductCategory> builder)
         {
             builder.HasKey(c=>new {c.CategoryId,c.ProductId});
+            builder.HasData(
+                new ProductCategory { CategoryId=1,ProductId=1},
+                new ProductCategory { CategoryId=2,ProductId=2}
+            );
         }
     }
 }

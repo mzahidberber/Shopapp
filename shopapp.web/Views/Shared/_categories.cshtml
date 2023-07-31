@@ -1,10 +1,13 @@
 ﻿@model List<CategoryDTO>
 
 <div class="list-group">
-    <a href="/product/list" class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == null ? "active":"")">All</a>
+    <a href="/product" class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == null ? "active":"")">All</a>
     @foreach (var c in Model)
     {
-        <a href="/product/list/@c.Id" class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == c.Id.ToString() ? "active":"")">@c.Name</a>
+        <a href="/product/@c.Url" class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == c.Url.ToString() ? "active":"")">@c.Name</a>
 
     }
+    
 </div>
+
+

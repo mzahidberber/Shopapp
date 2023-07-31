@@ -10,25 +10,20 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
     {
         protected readonly ShopContext _context;
         protected readonly DbSet<T> _dbSet;
-        protected readonly IDbContextTransaction transaction;
+        protected readonly IDbContextTransaction _transaction;
         public EfGenericRepository(ShopContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
-            transaction = _context.Database.BeginTransaction();
+            _transaction = _context.Database.BeginTransaction();
         }
-        public async Task AddAsync(T entity)
-        {
-            await _dbSet.AddAsync(entity);
-        }
-
         public bool Commit(bool state = true)
         {
             _context.SaveChanges();
             if (state)
-                transaction.Commit();
+                _transaction.Commit();
             else
-                transaction.Rollback();
+                _transaction.Rollback();
 
             Dispose();
             return true;
@@ -38,12 +33,21 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         {
             await _context.SaveChangesAsync();
             if (state)
-                await transaction.CommitAsync();
+                await _transaction.CommitAsync();
             else
-                await transaction.RollbackAsync();
+                await _transaction.RollbackAsync();
 
             Dispose();
             return true;
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
+        public async Task AddAsync(T entity)
+        {
+            await _dbSet.AddAsync(entity);
         }
 
         public void Delete(T entity)
@@ -51,10 +55,6 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             _dbSet.Remove(entity);
         }
 
-        public void Dispose()
-        {
-            _context.Dispose();
-        }
 
         public IQueryable<T> GetAll(Expression<Func<T, bool>>? filter = null)
         {

@@ -12,6 +12,8 @@ namespace shopapp.business.Concrete.Mapper
             CreateMap<CategoryDTO, Category>().ReverseMap();
             CreateMap<OrderDTO, Order>().ReverseMap();
             CreateMap<UserDTO, User>().ReverseMap();
+            CreateMap<CartDTO, Cart>().ReverseMap();
+            CreateMap<CartItemDTO, CartItem>().ReverseMap();
         }
     }
 }
