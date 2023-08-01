@@ -1,12 +1,12 @@
-﻿using shopapp.core.DTOs.Concrete;
+﻿using shopapp.web.Models.Entity;
 
 namespace shopapp.web.ViewModels
 {
-    public class ProductAndCategories
+	public class ProductAndCategories
     {
         public PageInfo PageInfo { get; set; }
-        public List<ProductDTO> Products { get; set; }
-        public List<CategoryDTO> Categories { get; set; }
+        public List<ProductModel> Products { get; set; }
+        public List<CategoryModel> Categories { get; set; }
     }
 
     public class PageInfo

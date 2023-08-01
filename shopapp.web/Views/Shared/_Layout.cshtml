@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ShopApp</title>
     
-    <link href="~/lib/fontawesome/css/fontawesome.css" rel="stylesheet">
-    <link href="~/lib/fontawesome/css/brands.css" rel="stylesheet">
-    <link href="~/lib/fontawesome/css/solid.css" rel="stylesheet">
+    <link href="/modules/@("@fortawesome")/fontawesome-free/css/fontawesome.css" rel="stylesheet">
+    <link href="/modules/@("@fortawesome")/fontawesome-free/css/brands.css" rel="stylesheet">
+    <link href="/modules/@("@fortawesome")/fontawesome-free/css/solid.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.min.css" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Css", required: false)
     <link rel="stylesheet" href="~/shopapp.web.styles.css" asp-append-version="true" />
@@ -18,14 +19,17 @@
     <header>
         @await Html.PartialAsync("_navbar")
     </header>
-    <div class="container-fluid">
+
+    
+    <div class="container-fluid mt-1">
         <main role="main" class="pb-3">
-            @if (TempData["message"] != null)
-            {
-                <partial name="_resultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
-            }
             
-            @RenderBody()
+                    @if (TempData["message"] != null)
+                    {
+                        <partial name="_resultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+                    }
+                    @RenderBody()
+            
         </main>
     </div>
 
@@ -34,13 +38,14 @@
             &copy; 2023 - ShopApp
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/modules/jquery/dist/jquery.min.js"></script>
+    <script src="/modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/modules/@("@fortawesome")/fontawesome-free/js/fontawesome.js"></script>
+    <script src="/modules/@("@fortawesome")/fontawesome-free/js/brands.js"></script>
+    <script src="/modules/@("@fortawesome")/fontawesome-free/js/solid.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <script src="~/lib/fontawesome/js/fontawesome.js"></script>
-    <script src="~/lib/fontawesome/js/brands.js"></script>
-    <script src="~/lib/fontawesome/js/solid.js"></script>
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

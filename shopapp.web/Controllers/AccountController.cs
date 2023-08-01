@@ -11,22 +11,22 @@ using shopapp.web.Models;
 namespace shopapp.web.Controllers
 {
     [AutoValidateAntiforgeryToken]
-    //[Authorize]
-    public class AccountController:Controller
+	//[Authorize]
+	public class AccountController:Controller
     {
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
         private IEmailSender _emailSender;
         private ICartService _cartService;
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ICartService cartService)
+		public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ICartService cartService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _cartService = cartService;
         }
-        //[AllowAnonymous]
-        public IActionResult Login(string ReturnUrl = null)
+		//[AllowAnonymous]
+		public IActionResult Login(string ReturnUrl = null)
         {
             return View(new LoginModel()
             {
@@ -35,8 +35,8 @@ namespace shopapp.web.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
-        public async Task<IActionResult> Login(LoginModel model)
+
+		public async Task<IActionResult> Login(LoginModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -65,15 +65,15 @@ namespace shopapp.web.Controllers
             return View(model);
         }
         [HttpGet]
-       
-        public IActionResult Register()
+
+		public IActionResult Register()
         {
             return View(new RegisterModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
+		public async Task<IActionResult> Register(RegisterModel model)
         {
             if(!ModelState.IsValid)
             {
@@ -109,7 +109,7 @@ namespace shopapp.web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Logout()
+		public async Task<IActionResult> Logout()
         {
 			
 			await _signInManager.SignOutAsync();
@@ -123,7 +123,7 @@ namespace shopapp.web.Controllers
         
         }
 
-        public async Task<IActionResult> ConfirmEmail(string userId,string token)
+		public async Task<IActionResult> ConfirmEmail(string userId,string token)
         {
             if(userId==null || token == null)
             {
@@ -162,13 +162,13 @@ namespace shopapp.web.Controllers
 			return View();
 
         }
-       
-        public async  Task<IActionResult> ForgetPassword()
+
+		public async  Task<IActionResult> ForgetPassword()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> ForgetPassword(string email)
+		public async Task<IActionResult> ForgetPassword(string email)
         {
             if(string.IsNullOrEmpty(email))
             {
@@ -194,7 +194,7 @@ namespace shopapp.web.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        public async Task<IActionResult> ResetPassword(string userId,string token)
+		public async Task<IActionResult> ResetPassword(string userId,string token)
         {
             if(userId==null || token == null)
             {
@@ -205,7 +205,7 @@ namespace shopapp.web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+		public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
         {
             if(!ModelState.IsValid)
             {
@@ -226,7 +226,7 @@ namespace shopapp.web.Controllers
             return View(model);
         }
 
-        public IActionResult AccessDenied()
+		public IActionResult AccessDenied()
         {
             return View();
         }

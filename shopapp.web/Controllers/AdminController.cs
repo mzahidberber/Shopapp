@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using shopapp.core.Entity.Concrete;
+using shopapp.web.Mapper;
 using shopapp.web.Models;
+using shopapp.web.Models.Entity;
+using System.Runtime.Serialization;
 using System.Text.Json;
 
 namespace shopapp.web.Controllers
 {
     [Authorize(Roles ="Admin")]
-    public class AdminController:Controller
+	public class AdminController:Controller
     {
         private readonly ILogger<HomeController> _logger;
         private RoleManager<UserRole> _roleManager;
@@ -27,7 +30,7 @@ namespace shopapp.web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> RoleList()
+		public async Task<IActionResult> RoleList()
         {
             return View(await _roleManager.Roles.ToListAsync());
         }
@@ -57,7 +60,7 @@ namespace shopapp.web.Controllers
 			return View(model);
 		}
 
-        public async Task<IActionResult> RoleEdit(string id)
+		public async Task<IActionResult> RoleEdit(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
             var members = new List<User>();
@@ -70,13 +73,13 @@ namespace shopapp.web.Controllers
             var model = new RoleDetails()
             {
                 Role = role,
-                Members = members,
-                NonMembers = nonmembers
-            };
+                Members = ObjectMapper.Mapper.Map<List<UserModel>>(members),
+                NonMembers = ObjectMapper.Mapper.Map<List<UserModel>>(nonmembers)
+			};
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> RoleEdit(RoleEditModel model)
+		public async Task<IActionResult> RoleEdit(RoleEditModel model)
         {
             if (ModelState.IsValid)
             {
@@ -115,12 +118,12 @@ namespace shopapp.web.Controllers
             return Redirect("/admin/role/" + model.RoleId);
         }
 
-        public async Task<IActionResult> UserList()
+		public async Task<IActionResult> UserList()
         {
             return View(await _userManager.Users.ToListAsync());
         }
 
-        public async Task<IActionResult> UserEdit(string id)
+		public async Task<IActionResult> UserEdit(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
             if(user != null)
@@ -143,7 +146,7 @@ namespace shopapp.web.Controllers
             return Redirect("~/admin/user/list");
         }
         [HttpPost]
-        public async Task<IActionResult> UserEdit(UserDetailModel model, string[] selectedRoles)
+		public async Task<IActionResult> UserEdit(UserDetailModel model, string[] selectedRoles)
         {
             if (ModelState.IsValid)
             {

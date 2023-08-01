@@ -15,6 +15,8 @@ namespace shopapp.core.Entity.Concrete
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public int Stock { get; set; }
+        public bool IsApprove { get; set; }
+        public bool IsHome { get; set; }
         public List<ProductCategory> ProductCategories { get; set; }
     }
 }

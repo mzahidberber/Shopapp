@@ -237,6 +237,12 @@ namespace shopapp.dataaccess.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsApprove")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsHome")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -261,6 +267,8 @@ namespace shopapp.dataaccess.Migrations
                             Id = 1,
                             Description = "Güzel laptop",
                             ImageUrl = "1.jpg",
+                            IsApprove = false,
+                            IsHome = false,
                             Name = "Laptop",
                             Price = 10.0,
                             Stock = 1,
@@ -271,6 +279,8 @@ namespace shopapp.dataaccess.Migrations
                             Id = 2,
                             Description = "Güzel laptop",
                             ImageUrl = "2.jpg",
+                            IsApprove = false,
+                            IsHome = false,
                             Name = "Tablet",
                             Price = 101.0,
                             Stock = 2,
@@ -381,7 +391,7 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9adc5fa1-0877-483b-b72e-88136f662cae",
+                            ConcurrencyStamp = "890a37ea-6c1a-4679-8723-0d4ab655efed",
                             Email = "adminuser@shopapp.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -389,9 +399,9 @@ namespace shopapp.dataaccess.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMİNUSER@SHOPAPP.COM",
                             NormalizedUserName = "ADMİN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJ5cLLUXikRFzlVzgAST/TbjbAn/8b0WBxeH7c0R4/+HOwzp4lW95r62SciD987CTg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDNHEi+/flxvEIp47iefywaJ2aOfLefS+8pDaHOpJ+WeyPVXw4Tz5NpLqhzS+SO2vw==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "8ebc60fa-a7af-4364-b257-acc81e73f96d",
+                            SecurityStamp = "d68a53fd-a4dd-4977-a440-ea8286cf055a",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });

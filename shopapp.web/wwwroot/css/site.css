@@ -19,7 +19,6 @@ html {
 
 body {
   margin-bottom: 60px;
-  background-color:antiquewhite;
 }
 
 .productCategoryBtn{
@@ -50,3 +49,17 @@ body {
     width: 3rem;
     height: 3rem;
 }
+
+.centerAlign {
+    position: absolute;
+    bottom: 0;
+    top:0;
+}
+
+.bottomAlign {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+

@@ -1,8 +1,8 @@
-﻿@model ProductDTO
+﻿@model ProductModel
 
 <div class="row">
 	<div class="col-4">
-		<img style="height:30rem;weight:auto;" src="~/img/@Model.ImageUrl" />
+		<img width="50" src="~/img/@Model.ImageUrl" />
 
 	</div>
 	<div class="col-8">
@@ -16,7 +16,7 @@
 		
 
 		<p>@Model.Name</p>
-		<p>@Model.Description</p>
+		<p>@Html.Raw(Model.Description)</p>
 		<p>@Model.Price</p>
 		<p>@Model.Stock</p>
 

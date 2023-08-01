@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using shopapp.business.Concrete;
 using shopapp.core.Business.Abstract;
@@ -93,12 +94,22 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider=new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"node_modules")),
+    RequestPath=new PathString("/modules")
+});
 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();
+
+app.MapControllerRoute(
+	name: "productcreate",
+	pattern: "product/create",
+	defaults: new { controller = "Product", action = "Create" });
 
 app.MapControllerRoute(
     name: "product",
