@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using shopapp.business.Concrete.Mapper;
+using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.DTOs.Concrete;
@@ -8,6 +9,7 @@ using System.Linq.Expressions;
 
 namespace shopapp.business.Concrete
 {
+    [LogAspect(Priority = 1)]
     public class ProductService : GenericService<Product, ProductDTO>,IProductService
     {
         private readonly IProductRepository _genericRepository;
@@ -34,7 +36,6 @@ namespace shopapp.business.Concrete
             var result = new Dictionary<string, int>() { { "data",count} };
             return Response<Dictionary<string, int>>.Success(result, 200);
         }
-
         public async Task<Response<ProductDTOAndTotalCount>> WherePage( int page, int pageSize, Expression<Func<Product, bool>>? predicate=null)
         {
             var products = ObjectMapper.Mapper.Map<List<ProductDTO>>(await _genericRepository.WherePage(page,pageSize,predicate).ToListAsync());

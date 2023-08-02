@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
@@ -11,8 +12,9 @@ using shopapp.web.Models;
 namespace shopapp.web.Controllers
 {
     [AutoValidateAntiforgeryToken]
-	//[Authorize]
-	public class AccountController:Controller
+    //[Authorize]
+    [LogAspectController]
+    public class AccountController:Controller
     {
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;

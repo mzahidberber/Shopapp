@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using shopapp.business.Concrete.Mapper;
+using shopapp.core.Aspects.Logging;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Abstract;
@@ -70,7 +71,6 @@ namespace shopapp.business.Concrete
             await _genericRepository.CommitAsync();
             return Response<NoDataDTO>.Success(204);
         }
-
         public async Task<Response<IEnumerable<TDTO>>> Where(Expression<Func<T, bool>> predicate)
         {
             var list =await _genericRepository.GetWhere(predicate).ToListAsync();

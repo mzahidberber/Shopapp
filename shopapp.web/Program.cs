@@ -1,26 +1,41 @@
+using Castle.DynamicProxy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
+using NLog.Web;
 using shopapp.business.Concrete;
 using shopapp.core.Business.Abstract;
+using shopapp.core.CrossCuttingConcers.Caching;
+using shopapp.core.CrossCuttingConcers.Caching.Microsoft;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.Entity.Concrete;
+using shopapp.core.Extensions;
 using shopapp.dataaccess.Concrete.EntityFramework;
 using shopapp.web.EmailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+//builder.Logging.AddConsole();
+builder.Host.UseNLog();
 
-builder.Services.AddScoped(typeof(IProductRepository), typeof(EfProductRepository));
-builder.Services.AddScoped(typeof(ICategoryRepository), typeof(EfCategoryRepository));
-builder.Services.AddScoped(typeof(ICartRepository), typeof(EfCartRepository));
-builder.Services.AddScoped(typeof(ICartItemRepository), typeof(EfCartItemRepository));
-builder.Services.AddScoped(typeof(IProductService), typeof(ProductService));
-builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
-builder.Services.AddScoped(typeof(ICartService), typeof(CartService));
-builder.Services.AddScoped(typeof(ICartItemService), typeof(CartItemService));
+builder.Services.AddSingleton<ProxyGenerator>();
+builder.Services.AddProxyScoped<IProductRepository, EfProductRepository>();
+builder.Services.AddProxyScoped<ICategoryRepository, EfCategoryRepository>();
+builder.Services.AddProxyScoped<ICartRepository, EfCartRepository>();
+builder.Services.AddProxyScoped<ICartItemRepository, EfCartItemRepository>();
+
+builder.Services.AddProxyScoped<IProductService, ProductService>();
+builder.Services.AddProxyScoped<ICategoryService, CategoryService>();
+builder.Services.AddProxyScoped<ICartService, CartService>();
+builder.Services.AddProxyScoped<ICartItemService, CartItemService>();
+
+builder.Services.AddProxyScoped<ICacheManager, MemoryCacheManager>();
+
+
+builder.Services.AddMemoryCache();
+
+
 builder.Services.AddTransient<ShopContext>();
 
 
@@ -80,7 +95,6 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

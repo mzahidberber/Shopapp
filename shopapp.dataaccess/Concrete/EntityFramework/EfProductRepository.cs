@@ -1,10 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using shopapp.core.Aspects.Caching;
+using shopapp.core.Aspects.Logging;
+using shopapp.core.CrossCuttingConcers.Caching.Microsoft;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.Entity.Concrete;
 using System.Linq.Expressions;
 
 namespace shopapp.dataaccess.Concrete.EntityFramework
 {
+    [LogAspect(Priority = 1)]
     public class EfProductRepository : EfGenericRepository<Product>,IProductRepository
     {
         public EfProductRepository(ShopContext context) : base(context)
@@ -12,6 +16,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         }
         public IQueryable<Product> WherePage(int page,int pageSize, Expression<Func<Product, bool>>? filter)
         {
+
             if(filter == null)
                 return _dbSet.Skip((page - 1) * pageSize).Take(pageSize);
             else

@@ -1,27 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using shopapp.core.Aspects.Caching;
+using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
+using shopapp.core.CrossCuttingConcers.Caching;
+using shopapp.core.CrossCuttingConcers.Caching.Microsoft;
 using shopapp.core.DTOs.Concrete;
-using shopapp.core.Entity.Concrete;
+using shopapp.core.Reflection;
 using shopapp.web.Mapper;
 using shopapp.web.Models.Entity;
 using shopapp.web.ViewModels;
 
 namespace shopapp.web.Controllers
 {
-	public class ProductController:Controller
+    [LogAspectController]
+    public class ProductController:Controller
     {
 		private IProductService _productService { get; set; }
 		private ICategoryService _categoryService { get; set; }
 		private IConfiguration _configuration { get; set; }
-		public ProductController(IProductService productService, ICategoryService categoryService, IConfiguration configuration)
+        public ICacheManager _cacheManager { get; set; }
+        public ProductController(IProductService productService, ICategoryService categoryService, IConfiguration configuration, ICacheManager cacheManager)
         {
             this._productService = productService;
             this._categoryService = categoryService;
             this._configuration = configuration;
+            this._cacheManager = cacheManager;
         }
-		public async Task<IActionResult> Index() 
+
+        [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
+        public async Task<IActionResult> Index() 
         {
+            var key = Reflection.CreateCacheKey(typeof(ProductController), "Index");
+            if (_cacheManager.IsAdd(key))
+                return _cacheManager.Get<IActionResult>(key);
+
+
             var products = await this._productService.GetAllAsync();
             var categories = await this._categoryService.GetAllAsync();
             return View(new ProductAndCategories { 
@@ -29,14 +43,28 @@ namespace shopapp.web.Controllers
                 Products = ObjectMapper.Mapper.Map<List<ProductModel>>(products.data.ToList()), });
         }
 
-		public async Task<IActionResult> Details(int id)
+        [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
+        public async Task<IActionResult> Details(int id)
         {
+            var key = Reflection.CreateCacheKey(typeof(ProductController), "Details",id);
+            if (_cacheManager.IsAdd(key))
+                return _cacheManager.Get<IActionResult>(key);
+
+            
+            
             var product = await this._productService.GetByIdWithCategoriesAsync(id);
             return View(ObjectMapper.Mapper.Map<ProductModel>(product.data));
         }
 
-		public async Task<IActionResult> List(string category,int page=1)
+
+        [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
+        public async Task<IActionResult> List(string? category=null,int page=1)
         {
+            var key = Reflection.CreateCacheKey(typeof(ProductController), "List", category ?? "<Null>",page);
+            if (_cacheManager.IsAdd(key))
+                return _cacheManager.Get<IActionResult>(key);
+
+
             if (RouteData.Values["action"].ToString() == "List")
             {
                 ViewBag.SelectedCategory = RouteData?.Values["id"];
@@ -57,9 +85,16 @@ namespace shopapp.web.Controllers
                 Products = ObjectMapper.Mapper.Map<List<ProductModel>>(product.Product.ToList())
 			});
         }
+
+        [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
         [HttpGet]
 		public async Task<IActionResult> Create()
         {
+            var key = Reflection.CreateCacheKey(typeof(ProductController), "Create");
+            if (_cacheManager.IsAdd(key))
+                return _cacheManager.Get<IActionResult>(key);
+
+
             var categories= await this._categoryService.GetAllAsync();
             ViewBag.Categories = new SelectList(categories.data,"Id","Name");
             return View(new ProductModel());
@@ -89,9 +124,15 @@ namespace shopapp.web.Controllers
             return View(product);
         }
 
+        [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
         [HttpGet]
 		public async Task<IActionResult> Edit(int id)
         {
+            var key = Reflection.CreateCacheKey(typeof(ProductController), "Edit",id);
+            if (_cacheManager.IsAdd(key))
+                return _cacheManager.Get<IActionResult>(key);
+
+
             var categories = await this._categoryService.GetAllAsync();
             ViewBag.Categories = new SelectList(categories.data.ToList(), "Id", "Name");
             var product = this._productService.GetByIdWithCategoriesAsync(id).Result.data;
@@ -112,8 +153,14 @@ namespace shopapp.web.Controllers
             return RedirectToAction("list");
         }
 
-		public async Task<IActionResult> Search(string q)
+        [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
+        public async Task<IActionResult> Search(string q)
         {
+            var key = Reflection.CreateCacheKey(typeof(ProductController), "Search", q);
+            if (_cacheManager.IsAdd(key))
+                return _cacheManager.Get<IActionResult>(key);
+
+
             if (RouteData.Values["action"].ToString() == "List")
                 ViewBag.SelectedCategory = RouteData?.Values["id"];
             if (q == null)

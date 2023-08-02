@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using shopapp.core.Aspects.Logging;
 using shopapp.core.Entity.Concrete;
 using shopapp.web.Mapper;
 using shopapp.web.Models;
@@ -12,7 +13,8 @@ using System.Text.Json;
 namespace shopapp.web.Controllers
 {
     [Authorize(Roles ="Admin")]
-	public class AdminController:Controller
+    [LogAspectController]
+    public class AdminController:Controller
     {
         private readonly ILogger<HomeController> _logger;
         private RoleManager<UserRole> _roleManager;
@@ -29,6 +31,7 @@ namespace shopapp.web.Controllers
         {
             return View();
         }
+
 
 		public async Task<IActionResult> RoleList()
         {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
 using shopapp.core.Entity.Concrete;
 using shopapp.web.Extensions;
@@ -10,6 +11,7 @@ using shopapp.web.Models.Entity;
 namespace shopapp.web.Controllers
 {
     //[Authorize]
+    [LogAspectController]
     public class CartController : Controller
     {
         private ICartService _cartService;
