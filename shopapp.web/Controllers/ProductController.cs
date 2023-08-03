@@ -111,7 +111,7 @@ namespace shopapp.web.Controllers
                     //isime bak
                     var extension = Path.GetExtension(file.FileName);
                     var randomName = string.Format($"{Guid.NewGuid()}{extension}");
-                    product.ImageUrl = randomName;
+                    product.HomeImageUrl = randomName;
                     var path = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\img",randomName);
                     using(var stream=new FileStream(path, FileMode.Create))
                     {

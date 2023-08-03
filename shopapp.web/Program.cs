@@ -1,4 +1,6 @@
 using Castle.DynamicProxy;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -10,6 +12,7 @@ using shopapp.core.CrossCuttingConcers.Caching.Microsoft;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.Entity.Concrete;
 using shopapp.core.Extensions;
+using shopapp.core.Validation;
 using shopapp.dataaccess.Concrete.EntityFramework;
 using shopapp.web.EmailService;
 
@@ -95,6 +98,13 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<ProductValidator>();
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -27,7 +27,7 @@
                             {
                                 <tr>
                                     <th scope="row">@(Model.Products.IndexOf(@p) + 1)</th>
-                                    <td><a href="/product/details/@p.Id"><img class="productImg" src="~/img/@p.ImageUrl"></a></td>
+                                    <td><a href="/product/details/@p.Id"><img class="productImg" src="~/img/@p.HomeImageUrl"></a></td>
                                     <td><a href="/product/details/@p.Id">@p.Name</a></td>
                                     <td><a href="/product/details/@p.Id">@p.Description</a></td>
                                     <td><a href="/product/details/@p.Id">@p.Price</a></td>

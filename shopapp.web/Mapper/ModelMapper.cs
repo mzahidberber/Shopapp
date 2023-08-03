@@ -15,6 +15,7 @@ namespace shopapp.web.Mapper
             CreateMap<UserRoleModel, UserRole>().ReverseMap();
             CreateMap<OrderModel, OrderDTO>().ReverseMap();
             CreateMap<UserModel, UserDTO>().ReverseMap();
+            CreateMap<ImageModel, ImageDTO>().ReverseMap();
         }
     }
 }

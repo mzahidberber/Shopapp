@@ -8,6 +8,7 @@ namespace shopapp.web.Models.Entity
 		public ProductModel()
         {
             this.ProductCategories = new List<ProductCategoryModel>();
+            this.Images = new List<ImageModel>();
         }
 
 		public int Id { get; set; }
@@ -27,7 +28,7 @@ namespace shopapp.web.Models.Entity
         [Required(ErrorMessage = "Description Required")]
 		public string Description { get; set; }
 
-		public string? ImageUrl { get; set; }
+		public string? HomeImageUrl { get; set; }
 
         [Required(ErrorMessage = "Stock Required")]
 		public int? Stock { get; set; }
@@ -35,5 +36,6 @@ namespace shopapp.web.Models.Entity
         public bool IsApprove { get; set; }
         public bool IsHome { get; set; }
         public List<ProductCategoryModel> ProductCategories { get; set; }
+        public List<ImageModel> Images { get; set; }
     }
 }

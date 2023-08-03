@@ -26,6 +26,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Image> Images { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -39,6 +40,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             builder.ApplyConfiguration(new OrderMapping());
             //builder.ApplyConfiguration(new CartMapping());
             builder.ApplyConfiguration(new CartItemMapping());
+            builder.ApplyConfiguration(new ImageMapping());
 
             builder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>()

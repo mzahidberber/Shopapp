@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
 using shopapp.web.EmailService;
-using shopapp.web.Extensions;
+using shopapp.web.Helpers;
 using shopapp.web.Models;
 
 namespace shopapp.web.Controllers
@@ -27,60 +26,52 @@ namespace shopapp.web.Controllers
             _emailSender = emailSender;
             _cartService = cartService;
         }
-		//[AllowAnonymous]
-		public IActionResult Login(string ReturnUrl = null)
+
+
+		public IActionResult Login(string? ReturnUrl = null)
         {
             return View(new LoginModel()
             {
                 ReturnUrl = ReturnUrl
             });
         }
+        
+        //[ValidateAntiForgeryToken]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-
 		public async Task<IActionResult> Login(LoginModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
             var user=await _userManager.FindByNameAsync(model.UserName);
             if (user == null)
             {
-                ModelState.AddModelError("", "Bu kullanıcı adı ile daha önce hesap oluşturulmamıs.");
+                TempDataMessage.CreateMessage(TempData,"SingInMessage",message: "Username or password is incorrect.");
                 return View(model);
             }
 
             if(!await _userManager.IsEmailConfirmedAsync(user))
             {
-                ModelState.AddModelError("", "Lütfen Hesabınızı onaylayınız!");
+                TempDataMessage.CreateMessage(TempData, "SingInMessage", message: "Please confirm your account.");
                 return View(model);
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
-            if (result.Succeeded)
-            {
-                return Redirect(model.ReturnUrl??"~/");
-            }
-            ModelState.AddModelError("", "Girilen kullanıcı adı veya parola yanlış");
+            
+            if (result.Succeeded) return Redirect(model.ReturnUrl??"~/");
+            
+            TempDataMessage.CreateMessage(TempData, "SingInMessage", message: "Username or password is incorrect.");
             return View(model);
         }
         [HttpGet]
+        public IActionResult Register() => View(new RegisterModel());
 
-		public IActionResult Register()
-        {
-            return View(new RegisterModel());
-        }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
 		public async Task<IActionResult> Register(RegisterModel model)
         {
             if(!ModelState.IsValid)
-            {
                 return View(model);
-            }
+
             var user = new User()
             {
                 FirstName = model.FirstName,
@@ -88,7 +79,6 @@ namespace shopapp.web.Controllers
                 UserName = model.UserName,
                 Email = model.Email,
             };
-
             var result=await _userManager.CreateAsync(user,model.Password);
             if(result.Succeeded)
             {
@@ -99,42 +89,30 @@ namespace shopapp.web.Controllers
                     userId=user.Id,
                     token=code
                 });
-                //Console.WriteLine(url);
                 //email
-                await this._emailSender.SendEmailAsync(user.Email,"Hesabınızı onaylayınız.",$"Lütfen Hesabınızı onaylamak için linke <a href='http://localhost:5119{url}'>tıklayınız</a>");
+                //url degiştir
+                await this._emailSender.SendEmailAsync(user.Email, "ShopApp - Confirm your account.", $"Please confirm your account.<a href='http://localhost:5119{url}'>Link</a>");
 
+                TempDataMessage.CreateMessage(TempData, key: "message", message: "User created.Please confirm your account.");
                 return RedirectToAction("Login", "Account");
             }
+            TempDataMessage.CreateMessage(TempData, key: "SingInMessage", message: "An unknown error has occurred.Please try again.");
 
-            ModelState.AddModelError("","Bilinmeyen bir hata oldu!");
-                
             return View(model);
         }
 
 		public async Task<IActionResult> Logout()
         {
-			
-			await _signInManager.SignOutAsync();
-			TempData.Put("message", new AlertMessage()
-			{
-				Title = "Çıkış yapıldı",
-				Message = "Çıkış yapıldı",
-				AlertType = "success"
-			});
-			return Redirect("~/");
-        
+            await _signInManager.SignOutAsync();
+            TempDataMessage.CreateMessage(TempData,key:"message",message: "Logged out.");
+            return RedirectToAction("Login", "Account");
         }
 
 		public async Task<IActionResult> ConfirmEmail(string userId,string token)
         {
             if(userId==null || token == null)
             {
-                TempData.Put("message", new AlertMessage()
-                {
-                    Title="Geçersiz Token",
-                    Message="Geçersiz Token",
-                    AlertType="danger"
-                });
+                TempDataMessage.CreateMessage(TempData, "message", message: "Token invalid",alertType:"danger");
                 return View();
             }
             var user = await _userManager.FindByIdAsync(userId);
@@ -145,40 +123,30 @@ namespace shopapp.web.Controllers
                 {
                     //cart oluştur
                     await _cartService.AddAsync(new CartDTO(){ UserId = userId });
-					TempData.Put("message", new AlertMessage()
-					{
-						Title = "Hesabını onaylandı",
-						Message = "Hesabını onaylandı",
-						AlertType = "success"
-					});
-					return View();
+                    TempDataMessage.CreateMessage(TempData,key:"message",message:"Your account has been confirmed.");
+                    return View();
                 }
                 
             }
-			TempData.Put("message", new AlertMessage()
-			{
-				Title = "Hesabını onaylanmadı",
-				Message = "Hesabını onaylanmadı",
-				AlertType = "warning"
-			});
-			return View();
-
-        }
-
-		public async  Task<IActionResult> ForgetPassword()
-        {
+            TempDataMessage.CreateMessage(TempData, "message", message: "Your account has been not confirmed.");
             return View();
+
         }
+
+        public IActionResult ForgetPassword() => View();
+
         [HttpPost]
 		public async Task<IActionResult> ForgetPassword(string email)
         {
             if(string.IsNullOrEmpty(email))
             {
+                TempDataMessage.CreateMessage(TempData, "SingInMessage", message: "Email required.");
                 return View();
             }
             var user=await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
+                TempDataMessage.CreateMessage(TempData, "SingInMessage", message: "Email not found.");
                 return View();
             }
 
@@ -191,18 +159,16 @@ namespace shopapp.web.Controllers
                 token = code
             });
             //email
-            await this._emailSender.SendEmailAsync(email, "Reset Password", $"Parolanızı yenilemek için linke <a href='http://localhost:5119{url}'>tıklayınız</a>");
+            //Urli degiştir
+            await this._emailSender.SendEmailAsync(email, "Reset Password", $"Click on the link to reset your password.<a href='http://localhost:5119{url}'>Link</a>");
 
             return RedirectToAction("Login", "Account");
         }
 
-		public async Task<IActionResult> ResetPassword(string userId,string token)
+		public IActionResult ResetPassword(string userId,string token)
         {
             if(userId==null || token == null)
-            {
                 return RedirectToAction("Index", "Home");
-            }
-            var model = new ResetPasswordModel { Token = token };
             return View();
         }
 
@@ -210,27 +176,24 @@ namespace shopapp.web.Controllers
 		public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
         {
             if(!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                return RedirectToAction("Index", "Home");
+                TempDataMessage.CreateMessage(TempData, "SingInMessage", message: "User not found.");
+                return View();
             }
             var result=await _userManager.ResetPasswordAsync(user,model.Token ,model.Password);
 
-            if(result.Succeeded)
-            {
+            if (result.Succeeded)
                 return RedirectToAction("Login", "Account");
-            }
+            else
+                TempDataMessage.CreateMessage(TempData, "SingInMessage", message:string.Join("\n- ",result.Errors.Select(x=>x.Description)));
+                
             return View(model);
         }
 
-		public IActionResult AccessDenied()
-        {
-            return View();
-        }
+		public IActionResult AccessDenied() => View();
     }
 }

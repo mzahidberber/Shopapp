@@ -1,23 +1,50 @@
 ﻿@model LoginModel
-<h1>Login</h1>
-<form asp-controller="Account" asp-action="Login" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl"/>
-    <div class="form-group">
-        <label for="UserName">UserName</label>
-        <input asp-for="UserName" value="@Model.UserName" class="form-control">
-        <span asp-validation-for="UserName" class="text-danger"></span>
-    </div>
 
-    <div class="form-group">
-        <label for="Password">Password</label>
-        <input asp-for="Password" value="@Model.Password" class="form-control"></input>
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <button class="btn btn-primary" type="submit">Login</button>
-    <a href="/account/forgetpassword" class="btn btn-primary">Forget Password</a>
+<div class="container d-flex flex-column justify-content-center" style="height:35rem;" >
+    
+    <div class="singCard">
+        <div style="width:18rem;">
+            @if (TempData["SingInMessage"] != null)
+            {
+                <partial name="_resultMessage" model="@(TempData.Get<AlertMessage>("SingInMessage"))" />
+            }
+        </div>
+        
+        <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Sign in</h5>
+                <form asp-controller="Account" asp-action="Login" method="post" class="mt-3">
+                    @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                    <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+                    <div class="form-group">
+                        <input asp-for="UserName" value="@Model.UserName" placeHolder="Username" class="form-control">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
 
-</form>
+                    <div class="form-group mt-3">
+                        <input asp-for="Password" value="@Model.Password" placeHolder="Password" class="form-control"></input>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mt-3">
+                    <a href="/account/forgetpassword">Forgot password?</a>
+
+                    </div>
+                    <div class="row">
+                        <div class="mt-3 col-12">
+                            <button class="btn btn-primary w-100" type="submit">Sign in</button>
+
+                        </div>
+                    </div>
+                    
+                    
+
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
 
 @section Scripts
     {

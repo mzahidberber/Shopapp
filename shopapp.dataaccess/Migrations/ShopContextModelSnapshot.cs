@@ -206,6 +206,26 @@ namespace shopapp.dataaccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -233,7 +253,7 @@ namespace shopapp.dataaccess.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("HomeImageUrl")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -266,7 +286,7 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = 1,
                             Description = "Güzel laptop",
-                            ImageUrl = "1.jpg",
+                            HomeImageUrl = "1.jpg",
                             IsApprove = false,
                             IsHome = false,
                             Name = "Laptop",
@@ -278,7 +298,7 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = 2,
                             Description = "Güzel laptop",
-                            ImageUrl = "2.jpg",
+                            HomeImageUrl = "2.jpg",
                             IsApprove = false,
                             IsHome = false,
                             Name = "Tablet",
@@ -391,7 +411,7 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "890a37ea-6c1a-4679-8723-0d4ab655efed",
+                            ConcurrencyStamp = "37828d17-07b7-4495-91dc-7aa70e26f6b7",
                             Email = "adminuser@shopapp.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -399,9 +419,9 @@ namespace shopapp.dataaccess.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMİNUSER@SHOPAPP.COM",
                             NormalizedUserName = "ADMİN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDNHEi+/flxvEIp47iefywaJ2aOfLefS+8pDaHOpJ+WeyPVXw4Tz5NpLqhzS+SO2vw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKwMTsjjrvoa3Nfi+3oRmjMpIIOrqktaDC5SGf2A6C+oNubk8aQttxS4AdMqpwz1GQ==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "d68a53fd-a4dd-4977-a440-ea8286cf055a",
+                            SecurityStamp = "57d03d47-a896-4c23-b5b7-e5bf17ca9a18",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -511,6 +531,17 @@ namespace shopapp.dataaccess.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.Image", b =>
+                {
+                    b.HasOne("shopapp.core.Entity.Concrete.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Order", b =>
                 {
                     b.HasOne("shopapp.core.Entity.Concrete.User", "User")
@@ -553,6 +584,8 @@ namespace shopapp.dataaccess.Migrations
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Product", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("ProductCategories");
                 });
 
