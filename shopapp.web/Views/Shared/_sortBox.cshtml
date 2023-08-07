@@ -1,16 +1,32 @@
-﻿@model List<Sort>
+﻿@model SortInfo
 
 <div class="dropdown show border ">
-    <a class="btn btn-light dropdown-toggle sortName" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        @Model[0].Name
+
+    <a class="btn btn-light dropdown-toggle sortName" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @(Model.Sorts.Find(x=>x.Value==Model.SelectedSort)?.Name)
     </a>
 
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        @foreach (var s in Model)
+        @foreach (var s in Model.Sorts)
         {
-            <a class="dropdown-item sortValue btn btn-light" name="@s.Value" href="#" style="text-align: start;">
-                @s.Name
-            </a>
+            <form action="/product" method="get">
+                @if (Model.SelectedCategory.Length != 0)
+                {
+                    @foreach (var c in Model.SelectedCategory)
+                    {
+                        <input type="hidden" value="@c" name="c">
+                    }
+                    
+                }
+                @if (Model.SelectedPrice != null)
+                {
+                    <input type="hidden" value="@Model.SelectedPrice" name="prc">
+                }
+                
+                
+                <input type="hidden" value="@s.Value" name="s">
+                <button type="submit" class="btn btn-light dropdown-item sortValue">@s.Name</button>
+            </form>
         }
     </div>
 </div>

@@ -137,7 +137,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "product",
-    pattern: "product/{category?}",
+    pattern: "product",
     defaults: new { controller = "Product", action = "List" });
 
 

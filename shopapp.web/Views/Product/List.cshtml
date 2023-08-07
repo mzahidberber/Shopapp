@@ -1,7 +1,6 @@
 ﻿@model ProductAndCategories
 
 
-
 <div class="container">
     <div class="row">
         <div class="col-2">
@@ -12,6 +11,9 @@
             
             @await Html.PartialAsync("_filter",new FilterInfo{
                 Categories=Model.Categories,
+            SelectedPrice=ViewBag.SelectedPrice,
+                SelectedSort=ViewBag.Sort,
+                SelectedCategories=ViewBag.SelectedCategories,
                 FilterPrice=new FilterPrice{
                     LeastPrice=100,
                     MostPrice=500
@@ -23,12 +25,18 @@
         <div class="col-10">
             <div class="mt-1 mb-1">
                     <div class="d-flex justify-content-end">
-                        @await Html.PartialAsync("_sortBox",new List<Sort>{
-                        new Sort{Name="Suggested",Value="1"},
-                    new Sort{Name="Descending by Price",Value="2"},
-                    new Sort{Name="Increasing by Price",Value="3"},
-                    new Sort{Name="Top Seller",Value="4"},
-                    new Sort{Name="Most Liked",Value="5"},
+                        @await Html.PartialAsync("_sortBox",new SortInfo{
+                            Sorts=new List<Sort>{
+                                new Sort{Name="Suggested",Value=1},
+                                new Sort{Name="Descending by Price",Value=2},
+                                new Sort{Name="Increasing by Price",Value=3},
+                                new Sort{Name="Top Seller",Value=4},
+                                new Sort{Name="Most Liked",Value=5},
+                    },
+                    SelectedCategory=ViewBag.SelectedCategories,
+                    SelectedPage=ViewBag.Page,
+                    SelectedPrice=ViewBag.SelectedPrice,
+                    SelectedSort=ViewBag.Sort
                         })
 
                 </div>

@@ -16,6 +16,9 @@ namespace shopapp.web.ViewModels
         public int ItemsPerPage { get; set; }
         public int CurrentPage { get; set; }
         public string CurrentCategory { get; set; }
+        public string[] SelectedCategories { get; set; }
+        public string SelectedPrice { get; set; }
+        public int SelectedSort { get; set; }
 
         public int TotalPages()
         {

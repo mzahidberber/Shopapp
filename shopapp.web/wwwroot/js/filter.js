@@ -30,3 +30,43 @@ function btnClick(ev, btn) {
         })
     }
 }
+
+
+$('#leastInput').on('change', inputTextChange)
+$('#mostInput').on('change', inputTextChange)
+
+function inputTextChange(ev) {
+    if (ev.target.id == "leastInput") {
+        if ($('#mostInput').val() == "") {
+            $('#mostInput').val($('#leastInput').val())
+        }
+    }
+    if (ev.target.id == "mostInput") {
+        if ($('#leastInput').val() == "") {
+            $('#leastInput').val("0")
+        }
+        if ($('#mostInput').val() == "") {
+            $('#mostInput').val($('#leastInput').val())
+        }
+    }
+    if (parseInt($('#leastInput').val()) > parseInt($('#mostInput').val())) {
+        $('#mostInput').val($('#leastInput').val())
+    }
+    $(".prcRadio input").prop("checked", false);
+    $('#prcInput').val(`${$('#leastInput').val()}-${$('#mostInput').val()}`)
+    $('#prcInput').attr("name", "prc")
+}
+
+$('.prcRadio input').on('change', function () {
+    var input = $(this)
+    $.each($('.prcRadio input'), function () {
+        if ($(this)[0] != input[0]) {
+            $(this).prop("checked", false)
+        }
+    })
+    var prc = $(this).parent().find('label').text()
+    $('#prcInput').val(prc)
+    $('#leastInput').val(prc.split("-")[0])
+    $('#mostInput').val(prc.split("-")[1])
+    $('#prcInput').attr("name", "prc")
+})

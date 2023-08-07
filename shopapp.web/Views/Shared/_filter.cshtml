@@ -1,5 +1,7 @@
 ﻿@model FilterInfo
 
+<form asp-action="List" asp-controller="Product" method="get">
+<input type="hidden" value="@Model.SelectedSort" name="s">
 <div class="mt-2">
     <button id="categoryBtn" type="button" class="btn btn-ligth w-100" style="text-align: start;">
         <div class="row">
@@ -24,19 +26,9 @@
                 @foreach (var category in Model.Categories)
                 {
                     <div class="categoryInput">
-                        <input type="checkbox" name="selectedFilters" value="">
-                        <label class="ms-2" for="">@category.Name</label>
+                            <input type="checkbox" name="c" value=@category.Url @(Model.SelectedCategories.Any(x => x == category.Url) ? "checked" : "")>
+                            <label class="ms-2" for="@category.Name">@category.Name</label>
                     </div>
-
-                    @*<div class="custom-control custom-checkbox">
-                        <input type="checkbox"
-                               class="custom-control-input"
-                               name="selectedRoles"
-                               value="@rolename"
-                               id="@rolename"
-                        @(Model.SelectedRoles.Any(i => i == rolename) ? "checked" : "")>
-                        <label class="custom-control-label" for="@rolename">@rolename</label>
-                    </div>*@
                 }
 
             </div>
@@ -55,24 +47,30 @@
             </div>
 
         </button>
-        <div id="priceDiv" class="border p-3 mt-2 overflow-auto" style="display:none;height:200px;">
+            <div id="priceDiv" class="border p-3 mt-2 overflow-auto" style="height:200px;" >
 
             <div class="input-group d-flex">
 
-                <div class="input-group mb-3 mt-2">
-                    <input type="text" class="form-control" placeholder="Least">
-                    <input type="text" class="form-control" placeholder="Most">
-                </div>
+                    <div class="input-group mb-3 mt-2">
+                        <input type="number" class="form-control" min="0" placeholder="En Az" id="leastInput" @(Model.SelectedPrice != null ? $"value={Model.SelectedPrice.Split("-")[0]}" : "") oninput="this.value =
+                               !!this.value && Math.abs(this.value)>= 0 ? Math.abs(this.value) : null">
+                        <input type="number" class="form-control" min="0" placeholder="En Çok" id="mostInput" @(Model.SelectedPrice != null ? $"value={Model.SelectedPrice.Split("-")[1]}" : "") oninput="this.value =
+                               !!this.value && Math.abs(this.value)>= 0 ? Math.abs(this.value) : null">
+                        <input type="hidden" id="prcInput" @(Model.SelectedPrice != null ? $"value={Model.SelectedPrice} name=prc" : "")>
+                    </div>
             </div>
             <div style="display: inline;" class="d-flex flex-column">
+                    <div class="input-group">
+
+                    
                 @for (int i = Model.FilterPrice.LeastPrice; i < Model.FilterPrice.MostPrice; i += Model.FilterPrice.CalculateInvertalPrice())
                 {
-                    <div>
-                        <input type="checkbox">
-                        <label class="ms-2" for="">@i - @(i + Model.FilterPrice.CalculateInvertalPrice())</label>
+                        <div class="prcRadio">
+                                <input type="radio" @(Model.SelectedPrice == $"{i}-{i + Model.FilterPrice.CalculateInvertalPrice()}" ? "checked" : "")>
+                        <label class="ms-2">@i-@(i + Model.FilterPrice.CalculateInvertalPrice())</label>
                     </div>
                 }
-
+                    </div>
             </div>
         </div>
     </div>
@@ -80,3 +78,5 @@
 </div>
 <hr>
 <button class="btn btn-light mt-2 w-100 border">Filter</button>
+</form>
+

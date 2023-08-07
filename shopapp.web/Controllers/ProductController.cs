@@ -60,22 +60,25 @@ namespace shopapp.web.Controllers
         }
 
 
-        [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
-        public async Task<IActionResult> List(string? category = null, int page = 1)
+        //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
+        public async Task<IActionResult> List(string[]? c=null,string? prc=null,int s=1, int p = 1)
         {
-            var key = Reflection.CreateCacheKey(typeof(ProductController), "List", category ?? "<Null>", page);
-            if (_cacheManager.IsAdd(key))
-                return _cacheManager.Get<IActionResult>(key);
+            ViewBag.Sort = s;
+            ViewBag.Page = p;
+            ViewBag.SelectedCategories = c;
+            ViewBag.SelectedPrice=prc;
+            //var key = Reflection.CreateCacheKey(typeof(ProductController), "List", category ?? "<Null>", page);
+            //if (_cacheManager.IsAdd(key))
+            //    return _cacheManager.Get<IActionResult>(key);
 
 
-            if (RouteData.Values["action"].ToString() == "List")
-            {
-                ViewBag.SelectedCategory = RouteData?.Values["id"];
-            }
+            //if (RouteData.Values["action"].ToString() == "List")
+            //{
+            //    ViewBag.SelectedCategory = RouteData?.Values["id"];
+            //}
             var product = new ProductDTOAndTotalCount();
             var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
-            if (category == null) product = this._productService.WherePage(page, pageSize).Result.data;
-            else product = this._productService.WherePage(page, pageSize, x => x.ProductCategories.Any(x => x.Category.Url == category)).Result.data;
+            product = this._productService.WherePage(p, pageSize).Result.data;
             var categories = await this._categoryService.GetAllAsync();
             return View(new ProductAndCategories
             {
@@ -83,9 +86,12 @@ namespace shopapp.web.Controllers
                 {
                     Url="/product",
                     TotalItems = product.TotalCount,
-                    CurrentPage = page,
+                    CurrentPage = p,
                     ItemsPerPage = pageSize,
-                    CurrentCategory = category
+                    CurrentCategory = "",
+                    SelectedCategories=c,
+                    SelectedPrice=prc,
+                    SelectedSort=s
                 },
                 Categories = ObjectMapper.Mapper.Map<List<CategoryModel>>(categories.data.ToList()),
                 Products = ObjectMapper.Mapper.Map<List<ProductModel>>(product.Product.ToList())

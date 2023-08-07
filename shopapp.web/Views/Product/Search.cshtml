@@ -9,8 +9,11 @@
 
         @await Html.PartialAsync("_filter",new FilterInfo{
             Categories=Model.Categories,
-            LeastPrice=100,
-            MostPrice=500
+            FilterPrice=new FilterPrice{
+                LeastPrice=100,
+                MostPrice=500
+            }
+           
         })
         
 

@@ -8,6 +8,9 @@ public class FilterInfo
     public List<CategoryModel> Categories { get; set; }
     public FilterPrice FilterPrice { get; set; }
     public Filter FilterSort { get; set; }
+    public string SelectedPrice { get; set; }
+    public int SelectedSort { get; set; }
+    public string[] SelectedCategories { get; set; }
 }
 
 public class FilterPrice
