@@ -1,0 +1,16 @@
+﻿@model List<Sort>
+
+<div class="dropdown show border ">
+    <a class="btn btn-light dropdown-toggle sortName" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @Model[0].Name
+    </a>
+
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @foreach (var s in Model)
+        {
+            <a class="dropdown-item sortValue btn btn-light" name="@s.Value" href="#" style="text-align: start;">
+                @s.Name
+            </a>
+        }
+    </div>
+</div>

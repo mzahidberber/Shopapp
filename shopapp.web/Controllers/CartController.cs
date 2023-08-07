@@ -5,7 +5,7 @@ using shopapp.core.Business.Abstract;
 using shopapp.core.Entity.Concrete;
 using shopapp.web.Extensions;
 using shopapp.web.Mapper;
-using shopapp.web.Models;
+using shopapp.web.Models.Cart;
 using shopapp.web.Models.Entity;
 
 namespace shopapp.web.Controllers
@@ -25,15 +25,15 @@ namespace shopapp.web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var cart=HttpContext.Session.Get<CartModel>("Cart");
+            var cart = HttpContext.Session.Get<CartModel>("Cart");
             return View(cart ?? new CartModel());
         }
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int productId,int quantity)
+        public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
-            var cart=HttpContext.Session.Get<CartModel>("Cart");
+            var cart = HttpContext.Session.Get<CartModel>("Cart");
             var product = await _productService.GetByIdAsync(productId);
-            
+
             if (cart == null)
             {
                 var newCart = new CartModel()
@@ -42,7 +42,7 @@ namespace shopapp.web.Controllers
                     {
                         new CartItemModel() {
                             Product=ObjectMapper.Mapper.Map<ProductModel>(product.data),
-                            ProductId = productId, 
+                            ProductId = productId,
                             Quantity = quantity}
                     }
                 };
@@ -53,10 +53,12 @@ namespace shopapp.web.Controllers
                 var index = cart.CartItems.FindIndex(x => x.ProductId == productId);
                 if (index < 0)
                 {
-                    cart.CartItems.Add(new CartItemModel { 
-                        Product= ObjectMapper.Mapper.Map<ProductModel>(product.data), 
-                        ProductId = productId, 
-                        Quantity = quantity });
+                    cart.CartItems.Add(new CartItemModel
+                    {
+                        Product = ObjectMapper.Mapper.Map<ProductModel>(product.data),
+                        ProductId = productId,
+                        Quantity = quantity
+                    });
                 }
                 else
                 {
@@ -65,7 +67,7 @@ namespace shopapp.web.Controllers
                 HttpContext.Session.Set<CartModel>("Cart", cart);
             }
 
-            
+
             return RedirectToAction("Index");
         }
 
@@ -73,7 +75,7 @@ namespace shopapp.web.Controllers
         public IActionResult DeleteToCart(int productId)
         {
             var cart = HttpContext.Session.Get<CartModel>("Cart");
-            cart.CartItems.Remove(cart.CartItems.First(x=>x.ProductId==productId));
+            cart.CartItems.Remove(cart.CartItems.First(x => x.ProductId == productId));
             HttpContext.Session.Set<CartModel>("Cart", cart);
             return RedirectToAction("Index");
         }

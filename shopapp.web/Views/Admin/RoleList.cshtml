@@ -1,11 +1,21 @@
 ﻿
 @model List<UserRoleModel>
 
+@section Scripts{
+    <script>
+        $('#deleteModel').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('bsRoleid')
+            var modal = $(this)
+            modal.find('#deleteInput').val(recipient)
+        })
+    </script>
+}
+
 <div class="row">
     <div class="col-md-12">
-        <h1 class="h3">Role Lists</h1>
-        <hr>
-        <a class="btn btn-primary btn-sm" href="/admin/role/create">Create Role</a>
+        <h1 class="h3 mt-3">Role List</h1>
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createModel">Create Role</button>
         <table class="table table-bordered mt-3">
             <thead>
                 <tr>
@@ -13,7 +23,6 @@
                     <td style="width: 500px;">Id</td>
                     <td >Role Name</td>
                     <td style="width: 160px;"></td>
-                    <td></td>
                 </tr>
             </thead>
             <tbody>
@@ -25,12 +34,22 @@
                             <td>@item.Id</td>
                             <td>@item.Name</td>
                             <td>
-                                <a href="/admin/role/@item.Id" class="btn btn-primary btn-sm mr-2">Edit</a>
+                                
+                                <div class="d-flex justify-content-center">
+                                    <a href="/admin/role/@item.Id" class="btn btn-primary btn-sm me-2 ">Edit</a>
+                                    @if (item.Name != "Admin")
+                                    {
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-roleid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
 
-                                <form action="/admin/role/delete" method="POST" style="display: inline;">
-                                    <input type="hidden" name="RoleId" value="@item.Id">
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form>
+                                       @* <form action="/admin/role/delete/@item.Id" method="POST" style="display: inline;">
+                                            <input type="hidden" name="RoleId" value="@item.Id">
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>*@
+                                    }
+                                </div>
+                                
+                                
+                                
                             </td>
                         </tr>
                     }
@@ -46,4 +65,56 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="modal fade" id="deleteModel" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModelLabel">Delete Role</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body">
+                <h3>Are you sure?</h3>
+                </div>
+                <div class="modal-footer">
+                    <form asp-controller="Admin" asp-action="RoleDelete" style="display: inline;">
+                        <input id="deleteInput" type="hidden" name="roleId" value="">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+
+                </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createModel" tabindex="-1" aria-labelledby="createModelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createModelLabel">Create Role</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form asp-controller="Admin" asp-action="RoleCreate" method="POST">
+            <div class="modal-body">
+               <div class="form-group row">
+                   <div class="col-sm-12">
+                       <input class="form-control w-100" placeHolder="Role Name" name="Name">
+                   </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <div class="form-group row">
+                   <div class="col-sm-12 ">
+                       <button type="submit" class="btn btn-primary mt-3 w-100">Save Role</button>
+                   </div>
+                </div>
+            
+           </div>
+
+        </form>
+    </div>
+  </div>
 </div>

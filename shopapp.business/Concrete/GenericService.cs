@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using shopapp.business.Concrete.Mapper;
-using shopapp.core.Aspects.Logging;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Abstract;
@@ -9,7 +8,7 @@ using System.Linq.Expressions;
 namespace shopapp.business.Concrete
 {
     public class GenericService<T, TDTO>
-        where T : class, IEntity,new()
+        where T : class, IEntity, new()
         where TDTO : class
     {
         private readonly IGenericRepository<T> _genericRepository;
@@ -73,9 +72,9 @@ namespace shopapp.business.Concrete
         }
         public async Task<Response<IEnumerable<TDTO>>> Where(Expression<Func<T, bool>> predicate)
         {
-            var list =await _genericRepository.GetWhere(predicate).ToListAsync();
+            var list = await _genericRepository.GetWhere(predicate).ToListAsync();
             await _genericRepository.CommitAsync();
             return Response<IEnumerable<TDTO>>.Success(ObjectMapper.Mapper.Map<IEnumerable<TDTO>>(list), 200);
         }
     }
-   }
+}

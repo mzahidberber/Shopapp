@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NLog;
+﻿using NLog;
 using System.Runtime.Caching;
 using System.Text.RegularExpressions;
 

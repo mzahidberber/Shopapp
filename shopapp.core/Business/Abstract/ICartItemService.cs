@@ -3,7 +3,7 @@ using shopapp.core.Entity.Concrete;
 
 namespace shopapp.core.Business.Abstract
 {
-    public interface ICartItemService : IGenericService<CartItem,CartItemDTO>
+    public interface ICartItemService : IGenericService<CartItem, CartItemDTO>
     {
     }
 }

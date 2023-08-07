@@ -43,7 +43,7 @@ builder.Services.AddTransient<ShopContext>();
 
 
 builder.Services.AddScoped<IEmailSender, SmtpEmailSender>(
-    i =>new SmtpEmailSender(
+    i => new SmtpEmailSender(
         builder.Configuration["EmailSender:Host"],
         builder.Configuration.GetValue<int>("EmailSender:Port"),
         builder.Configuration.GetValue<bool>("EmailSender:EnableSSL"),
@@ -63,20 +63,20 @@ builder.Services.AddSession();
 builder.Services.AddIdentity<User, UserRole>().AddEntityFrameworkStores<ShopContext>().AddDefaultTokenProviders();
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.Password.RequireDigit=true;
-    options.Password.RequireLowercase=true;
-    options.Password.RequireUppercase=true;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 8;
-    options.Password.RequireNonAlphanumeric=true;
+    options.Password.RequireNonAlphanumeric = true;
 
     options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(5);
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.AllowedForNewUsers = true;
 
     //options.User.AllowedUserNameCharacters = "";
     options.User.RequireUniqueEmail = true;
-    options.SignIn.RequireConfirmedEmail=true;
-    options.SignIn.RequireConfirmedPhoneNumber=false;
+    options.SignIn.RequireConfirmedEmail = true;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
 
 });
 
@@ -90,8 +90,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie = new CookieBuilder
     {
         HttpOnly = true,
-        Name=".ShopApp.Security.Cookie",
-        SameSite=SameSiteMode.Strict
+        Name = ".ShopApp.Security.Cookie",
+        SameSite = SameSiteMode.Strict
     };
 });
 
@@ -120,8 +120,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider=new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"node_modules")),
-    RequestPath=new PathString("/modules")
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "node_modules")),
+    RequestPath = new PathString("/modules")
 });
 
 app.UseRouting();
@@ -131,9 +131,9 @@ app.UseAuthorization();
 app.UseSession();
 
 app.MapControllerRoute(
-	name: "productcreate",
-	pattern: "product/create",
-	defaults: new { controller = "Product", action = "Create" });
+    name: "productcreate",
+    pattern: "product/create",
+    defaults: new { controller = "Product", action = "Create" });
 
 app.MapControllerRoute(
     name: "product",
@@ -152,19 +152,29 @@ app.MapControllerRoute(
     defaults: new { controller = "Checkout", action = "Index" });
 
 app.MapControllerRoute(
-	name: "cart",
-	pattern: "cart",
-	defaults: new { controller = "Cart", action = "Index" });
+    name: "cart",
+    pattern: "cart",
+    defaults: new { controller = "Cart", action = "Index" });
 
 app.MapControllerRoute(
-	name: "adminroles",
-	pattern: "admin/role/list",
-	defaults: new { controller = "Admin", action = "RoleList" });
+    name: "adminproductlist",
+    pattern: "admin/product",
+    defaults: new { controller = "Admin", action = "ProductList" });
 
 app.MapControllerRoute(
-	name: "adminrolecreate",
-	pattern: "admin/role/create",
-    defaults: new {controller="Admin",action="RoleCreate"});
+    name: "adminroledelete",
+    pattern: "admin/role/delete",
+    defaults: new { controller = "Admin", action = "RoleDelete" });
+
+app.MapControllerRoute(
+    name: "adminroles",
+    pattern: "admin/role",
+    defaults: new { controller = "Admin", action = "RoleList" });
+
+app.MapControllerRoute(
+    name: "adminrolecreate",
+    pattern: "admin/role/create",
+    defaults: new { controller = "Admin", action = "RoleCreate" });
 
 app.MapControllerRoute(
     name: "adminroleedit",

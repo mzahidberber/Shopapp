@@ -1,52 +1,41 @@
 ﻿@model ProductAndCategories
+
+
+
 <div class="container">
     <div class="row">
         <div class="col-2">
+            @*
+            @await Html.PartialAsync("_search")
             @await Html.PartialAsync("_categories",Model.Categories)
-            @await Html.PartialAsync("_search",Model.Categories)
+            *@
+            
+            @await Html.PartialAsync("_filter",new FilterInfo{
+                Categories=Model.Categories,
+                FilterPrice=new FilterPrice{
+                    LeastPrice=100,
+                    MostPrice=500
+                }
+                
+            })
 
         </div>
         <div class="col-10">
-            <div class="row">
-                <div class="mt-1 me-2 ms-2">
-                    <table class="table table-light">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-
-                                <th scope="col">Price</th>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Order</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var p in Model.Products)
-                            {
-                                <tr>
-                                    <th scope="row">@(Model.Products.IndexOf(@p) + 1)</th>
-                                    <td><a href="/product/details/@p.Id"><img class="productImg" src="~/img/@p.HomeImageUrl"></a></td>
-                                    <td><a href="/product/details/@p.Id">@p.Name</a></td>
-                                    <td><a href="/product/details/@p.Id">@p.Description</a></td>
-                                    <td><a href="/product/details/@p.Id">@p.Price</a></td>
-                                    <td><a href="/product/details/@p.Id">@p.Stock</a></td>
-                                    <td>
-                                        <button class="btn btn-light p-1">
-                                            <i class="fa-solid fa-cart-shopping fa-lg"></i>
-                                        </button>
-                                        <input type="number" name="value" id="age" min="0" max="20" step="1" value="1">
-
-                                    </td>
-                                </tr>
-                            }
-
-                        </tbody>
-                    </table>
-
+            <div class="mt-1 mb-1">
+                    <div class="d-flex justify-content-end">
+                        @await Html.PartialAsync("_sortBox",new List<Sort>{
+                        new Sort{Name="Suggested",Value="1"},
+                    new Sort{Name="Descending by Price",Value="2"},
+                    new Sort{Name="Increasing by Price",Value="3"},
+                    new Sort{Name="Top Seller",Value="4"},
+                    new Sort{Name="Most Liked",Value="5"},
+                        })
 
                 </div>
+            </div>
+            
+            <div class="row mt-1 me-2 ms-2">
+                @await Html.PartialAsync("_productList",Model.Products)
             </div>
 
             @await Html.PartialAsync("_page",Model.PageInfo)

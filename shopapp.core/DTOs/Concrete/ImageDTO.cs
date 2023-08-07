@@ -2,7 +2,7 @@
 
 namespace shopapp.core.DTOs.Concrete;
 
-public class ImageDTO:IDTO
+public class ImageDTO : IDTO
 {
     public int Id { get; set; }
     public string Url { get; set; }

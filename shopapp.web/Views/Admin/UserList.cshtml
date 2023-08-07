@@ -11,14 +11,23 @@
         });
 
     </script>
+
+    <script>
+        $('#deleteModel').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('bsUserid')
+            var modal = $(this)
+            modal.find('#deleteInput').val(recipient)
+        })
+    </script>
 }
 
 <div class="row">
     <div class="col-md-12">
-        <h1 class="h3">User Lists</h1>
+        <h1 class="h3 mt-3">User List</h1>
         <hr>
-        <a class="btn btn-primary btn-sm" href="/admin/user/create">Create User</a>
-        <table id="myTable" class="table table-bordered mt-3">
+        <a class="btn btn-primary btn-sm  mb-3" href="/admin/user/create">Create User</a>
+        <table id="myTable" class="table table-striped">
             <thead>
                 <tr>
                     <td>FirstName</td>
@@ -34,7 +43,7 @@
                 {
                     @foreach (var item in Model)
                     {
-                        <tr class="@(item.EmailConfirmed?"":"bg-warning")">
+                        <tr class="@(item.EmailConfirmed?"":"table-warning")">
                             <td>@item.FirstName</td>
                             <td>@item.LastName</td>
                             <td>@item.UserName</td>
@@ -42,11 +51,8 @@
                             <td>@item.EmailConfirmed</td>
                             <td>
                                 <a href="/admin/user/@item.Id" class="btn btn-primary btn-sm mr-2">Edit</a>
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
 
-                                <form action="/admin/user/delete" method="POST" style="display: inline;">
-                                    <input type="hidden" name="UserId" value="@item.Id">
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form>
                             </td>
                         </tr>
                     }
@@ -63,3 +69,30 @@
         </table>
     </div>
 </div>
+
+@await Html.PartialAsync("_areYouSureModel",new AreYouSureModel{
+    ActionName="UserDelete",ControllerName="Admin",ParametreName="UserId"
+})
+
+@*<div class="modal fade" id="deleteModel" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModelLabel">Delete Role</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3>Are you sure?</h3>
+            </div>
+            <div class="modal-footer">
+                <form asp-controller="Admin" asp-action="UserDelete" style="display: inline;">
+                    <input id="deleteInput" type="hidden" name="UserId" value="">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>*@

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace shopapp.web.Models
+namespace shopapp.web.Models.Account
 {
-	public class RegisterModel
+    public class RegisterModel
     {
         [Required(ErrorMessage = "First name is required.")]
         public string FirstName { get; set; }
@@ -18,11 +18,11 @@ namespace shopapp.web.Models
         [Display(Name = "Password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        
+
         [DataType(DataType.Password)]
         [Compare("Password")]
-		public string RePassword { get; set; }
-        
+        public string RePassword { get; set; }
+
         [DataType(DataType.EmailAddress)]
         [Required(ErrorMessage = "Email is required.")]
         public string Email { get; set; }

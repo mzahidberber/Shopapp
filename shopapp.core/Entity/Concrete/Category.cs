@@ -2,7 +2,7 @@
 
 namespace shopapp.core.Entity.Concrete
 {
-    public class Category:IEntity
+    public class Category : IEntity
     {
         public Category()
         {

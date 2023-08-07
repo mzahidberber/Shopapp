@@ -3,7 +3,7 @@ using shopapp.core.Entity.Concrete;
 
 namespace shopapp.core.DTOs.Concrete
 {
-    public class CategoryDTO:IDTO
+    public class CategoryDTO : IDTO
     {
         public CategoryDTO()
         {

@@ -1,6 +1,6 @@
 ﻿namespace shopapp.core.Aspects.Logging
 {
-    public class HandleAspect:Aspect
+    public class HandleAspect : Aspect
     {
     }
 }

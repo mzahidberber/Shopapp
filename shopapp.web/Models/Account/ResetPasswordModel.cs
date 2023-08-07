@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace shopapp.web.Models
+namespace shopapp.web.Models.Account
 {
-	public class ResetPasswordModel
+    public class ResetPasswordModel
     {
-		public string Token { get; set; } = null!;
+        public string Token { get; set; } = null!;
 
         [Required(ErrorMessage = "Email is required.")]
-        [DataType(DataType.EmailAddress,ErrorMessage = "Email is not correct.")]
-		public string Email { get; set; } = null!;
+        [DataType(DataType.EmailAddress, ErrorMessage = "Email is not correct.")]
+        public string Email { get; set; } = null!;
 
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]

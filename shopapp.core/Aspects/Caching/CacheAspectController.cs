@@ -3,13 +3,13 @@ using shopapp.core.CrossCuttingConcers.Caching;
 
 namespace shopapp.core.Aspects.Caching
 {
-    public class CacheAspectController: ActionFilterAttribute
+    public class CacheAspectController : ActionFilterAttribute
     {
         private Type _cacheType;
         private int _cacheByMinute;
         private ICacheManager _cacheManager;
         private List<string> _arguments;
-        public CacheAspectController(Type cacheType, int cacheByMinute = 60):base()
+        public CacheAspectController(Type cacheType, int cacheByMinute = 60) : base()
         {
             _cacheType = cacheType;
             _cacheByMinute = cacheByMinute;
@@ -47,8 +47,8 @@ namespace shopapp.core.Aspects.Caching
                 context.ActionDescriptor.RouteValues["action"]
             );
 
-            var key = string.Format("{0}({1})",methodName,string.Join(",",_arguments));
-            
+            var key = string.Format("{0}({1})", methodName, string.Join(",", _arguments));
+
             if (!_cacheManager.IsAdd(key))
                 _cacheManager.Add(key, context.Result, _cacheByMinute);
         }

@@ -5,7 +5,7 @@ using shopapp.web.Models.Entity;
 
 namespace shopapp.web.Mapper
 {
-    internal class ModelMapper:Profile
+    internal class ModelMapper : Profile
     {
         public ModelMapper()
         {
@@ -15,6 +15,7 @@ namespace shopapp.web.Mapper
             CreateMap<UserRoleModel, UserRole>().ReverseMap();
             CreateMap<OrderModel, OrderDTO>().ReverseMap();
             CreateMap<UserModel, UserDTO>().ReverseMap();
+            CreateMap<UserModel, User>().ReverseMap();
             CreateMap<ImageModel, ImageDTO>().ReverseMap();
         }
     }

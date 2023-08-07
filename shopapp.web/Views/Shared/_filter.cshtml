@@ -1,0 +1,82 @@
+﻿@model FilterInfo
+
+<div class="mt-2">
+    <button id="categoryBtn" type="button" class="btn btn-ligth w-100" style="text-align: start;">
+        <div class="row">
+            <div class="col-md-10">
+                Categories
+            </div>
+            <div class="col-md-2">
+                <i id="categoryArrow" class="fa-solid fa-caret-down ms-2"></i>
+            </div>
+        </div>
+
+    </button>
+
+    <div id="categoryDiv" class="border p-3 mt-2 overflow-auto" style="height: 200px;">
+
+        <div class="input-group">
+            <div class="input-group mb-3 mt-2">
+                <input type="text" class="form-control" id="categorySearch" placeholder="Search">
+            </div>
+
+            <div style="display: inline;" class="categoryInputs d-flex flex-column">
+                @foreach (var category in Model.Categories)
+                {
+                    <div class="categoryInput">
+                        <input type="checkbox" name="selectedFilters" value="">
+                        <label class="ms-2" for="">@category.Name</label>
+                    </div>
+
+                    @*<div class="custom-control custom-checkbox">
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               name="selectedRoles"
+                               value="@rolename"
+                               id="@rolename"
+                        @(Model.SelectedRoles.Any(i => i == rolename) ? "checked" : "")>
+                        <label class="custom-control-label" for="@rolename">@rolename</label>
+                    </div>*@
+                }
+
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="mt-2">
+        <button id="priceBtn" type="button" class="btn btn-ligth w-100" style="text-align: start;">
+            <div class="row">
+                <div class="col-md-10">
+                    Price
+                </div>
+                <div class="col-md-2">
+                    <i id="priceArrow" class="fa-solid fa-caret-up ms-2"></i>
+                </div>
+            </div>
+
+        </button>
+        <div id="priceDiv" class="border p-3 mt-2 overflow-auto" style="display:none;height:200px;">
+
+            <div class="input-group d-flex">
+
+                <div class="input-group mb-3 mt-2">
+                    <input type="text" class="form-control" placeholder="Least">
+                    <input type="text" class="form-control" placeholder="Most">
+                </div>
+            </div>
+            <div style="display: inline;" class="d-flex flex-column">
+                @for (int i = Model.FilterPrice.LeastPrice; i < Model.FilterPrice.MostPrice; i += Model.FilterPrice.CalculateInvertalPrice())
+                {
+                    <div>
+                        <input type="checkbox">
+                        <label class="ms-2" for="">@i - @(i + Model.FilterPrice.CalculateInvertalPrice())</label>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<hr>
+<button class="btn btn-light mt-2 w-100 border">Filter</button>

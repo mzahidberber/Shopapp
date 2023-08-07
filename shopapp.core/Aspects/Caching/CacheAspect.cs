@@ -3,14 +3,14 @@ using shopapp.core.CrossCuttingConcers.Caching;
 
 namespace shopapp.core.Aspects.Caching
 {
-    public class CacheAspect:Aspect
+    public class CacheAspect : Aspect
     {
         private Type _cacheType;
         private int _cacheByMinute;
         private ICacheManager _cacheManager;
         public CacheAspect(Type cacheType, int cacheByMinute = 60)
         {
-            _cacheType=cacheType;
+            _cacheType = cacheType;
             _cacheByMinute = cacheByMinute;
         }
         public override void OnBefore(IInvocation invocation)
@@ -32,12 +32,12 @@ namespace shopapp.core.Aspects.Caching
                 invocation.ReturnValue = _cacheManager.Get<object>(key);
                 Console.WriteLine(invocation.ReturnValue);
             }
-                
+
         }
 
         public override void OnAfter(IInvocation invocation)
         {
-            var methodName=invocation.Method.Name;
+            var methodName = invocation.Method.Name;
             var arguments = invocation.Arguments;
 
             var key = string.Format("{0}({1})", methodName,
@@ -48,7 +48,7 @@ namespace shopapp.core.Aspects.Caching
 
 
 
-            _cacheManager.Add(key, invocation.ReturnValue,_cacheByMinute);
+            _cacheManager.Add(key, invocation.ReturnValue, _cacheByMinute);
 
         }
     }

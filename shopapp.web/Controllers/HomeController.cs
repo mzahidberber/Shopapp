@@ -26,21 +26,21 @@ namespace shopapp.web.Controllers
             _categoryService = categoryService;
             _cacheManager = cacheManager;
         }
-        
-        [CacheAspectController(typeof(MemoryCacheManager),cacheByMinute:1440)]
+
+        [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
         public async Task<IActionResult> Index()
         {
             var key = Reflection.CreateCacheKey(typeof(HomeController), "Index");
             if (_cacheManager.IsAdd(key))
                 return _cacheManager.Get<IActionResult>(key);
-           
-            
-            var products=await _productService.Where(x=>x.IsApprove==true && x.IsHome==true);
-            var categories=await _categoryService.GetAllAsync();
+
+
+            var products = await _productService.Where(x => x.IsApprove == true && x.IsHome == true);
+            var categories = await _categoryService.GetAllAsync();
             return View(new ProductAndCategories
             {
-                Products= ObjectMapper.Mapper.Map<List<ProductModel>>(products.data),
-                Categories=ObjectMapper.Mapper.Map<List<CategoryModel>>(categories.data)
+                Products = ObjectMapper.Mapper.Map<List<ProductModel>>(products.data),
+                Categories = ObjectMapper.Mapper.Map<List<CategoryModel>>(categories.data)
             });
         }
 

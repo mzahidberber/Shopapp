@@ -2,7 +2,7 @@
 
 namespace shopapp.core.DataAccess.Abstract
 {
-    public interface ICategoryRepository:IGenericRepository<Category>
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
     }
 }

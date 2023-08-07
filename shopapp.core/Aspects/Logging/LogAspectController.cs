@@ -1,10 +1,9 @@
-﻿using Castle.DynamicProxy;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;
 
 namespace shopapp.core.Aspects.Logging
 {
-    public class LogAspectController: ActionFilterAttribute
+    public class LogAspectController : ActionFilterAttribute
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         public override void OnActionExecuting(ActionExecutingContext filterContext)

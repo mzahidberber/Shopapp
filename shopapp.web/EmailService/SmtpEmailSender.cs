@@ -10,7 +10,7 @@ namespace shopapp.web.EmailService
         private bool _enabledSSL { get; set; }
         private string _username { get; set; }
         private string _password { get; set; }
-        public SmtpEmailSender(string host,int port, bool enabledSSL, string username, string password)
+        public SmtpEmailSender(string host, int port, bool enabledSSL, string username, string password)
         {
             _host = host;
             _port = port;
@@ -26,7 +26,7 @@ namespace shopapp.web.EmailService
                 Credentials = new NetworkCredential(this._username, this._password),
                 EnableSsl = this._enabledSSL
 
-            
+
             };
 
             return client.SendMailAsync(new MailMessage(this._username, email, subject, htmlMessage)

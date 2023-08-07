@@ -2,7 +2,7 @@
 
 namespace shopapp.core.Aspects
 {
-    public class Aspect:BaseAspect
+    public class Aspect : BaseAspect
     {
         public override void Intercept(IInvocation invocation)
         {

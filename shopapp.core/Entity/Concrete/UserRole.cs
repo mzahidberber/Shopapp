@@ -2,9 +2,9 @@
 
 namespace shopapp.core.Entity.Concrete
 {
-    public class UserRole:IdentityRole
+    public class UserRole : IdentityRole
     {
-        public UserRole():base(){}
-        public UserRole(string name):base(roleName:name) { }
+        public UserRole() : base() { }
+        public UserRole(string name) : base(roleName: name) { }
     }
 }

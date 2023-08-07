@@ -1,14 +1,21 @@
-﻿
+﻿@{
+    var currentUrl = Context.Request.Path.ToString().ToLower();
+    
+}
 <div class="container">
 
     <nav class="navbar m-1 p-2 d-block navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow p-0 ">
         <div class="row">
             <div class="col-md-3"> <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ShopApp</a></div>
             <div class="col-md-6">
-                <form class="form-inline d-flex ">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success ms-2" type="submit">Search</button>
-                </form>
+                @if(!currentUrl.Contains("admin") && !currentUrl.Contains("account"))
+                {
+                    <form id="searchNav" class="form-inline d-flex" action="/search" method="get">
+                        <input name="q" class="form-control mr-sm-2" type="text" placeholder="Search">
+                        <button class="btn btn-outline-success ms-2" type="submit">Search</button>
+                    </form>
+                }
+                
             </div>
             <div class="col-md-3">
                 <ul class="navbar-nav justify-content-end">
@@ -52,6 +59,7 @@
         
         
 </nav>
+</div>
 @if (User.Identity.IsAuthenticated)
                 {
                     @if (User.IsInRole("Admin"))
@@ -63,6 +71,7 @@
             <a class="nav-link text-dark me-2 ms-2" asp-area="" asp-controller="Admin" asp-action="RoleList">Roles</a>
             <a class="nav-link text-dark me-2 ms-2" asp-area="" asp-controller="Admin" asp-action="UserList">Users</a>
             <a class="nav-link text-dark me-2 ms-2" asp-area="" asp-controller="Product" asp-action="Create">Add Product</a>
+            <a class="nav-link text-dark me-2 ms-2" asp-area="" asp-controller="Admin" asp-action="ProductList">Products</a>
                        
                     
 

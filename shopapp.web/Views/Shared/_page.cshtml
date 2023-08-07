@@ -6,7 +6,7 @@
                 @if (Model.CurrentCategory != null)
                 {
                     <li class="page-item @(1>=Model.CurrentPage?"disabled":"")">
-                        <a class="page-link" href="/product/@Model.CurrentCategory?page=@(Model.CurrentPage-1)" aria-label="Previous">
+                        <a class="page-link" href="@Model.Url/@Model.CurrentCategory?page=@(Model.CurrentPage-1)" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">Previous</span>
                         </a>
@@ -15,7 +15,7 @@
                 else
                 {
                     <li class="page-item @(1>=Model.CurrentPage?"disabled":"")">
-                        <a class="page-link" href="/product?page=@(Model.CurrentPage-1)" aria-label="Previous">
+                        <a class="page-link" href="@Model.Url?page=@(Model.CurrentPage-1)" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">Previous</span>
                         </a>
@@ -29,7 +29,7 @@
 
                 @if (cp - 5 > 0)
                 {
-                    <li class="page-item"><a class="page-link" href="/product?page=@(cp-5)">@(cp - 5)</a></li>
+                    <li class="page-item"><a class="page-link" href="@Model.Url?page=@(cp-5)">@(cp - 5)</a></li>
                 }
 
 
@@ -38,22 +38,22 @@
                 {
                     @if (Model.CurrentCategory != null)
                     {
-                        <li class="page-item @(@Model.CurrentPage==i+1?"active":"")"><a class="page-link" href="/product/@Model.CurrentCategory?page=@(i+1)">@(i + 1)</a></li>
+                        <li class="page-item @(@Model.CurrentPage==i+1?"active":"")"><a class="page-link" href="@Model.Url/@Model.CurrentCategory?page=@(i+1)">@(i + 1)</a></li>
                     }
                     else
                     {
-                        <li class="page-item @(@Model.CurrentPage==i+1?"active":"")"><a class="page-link" href="/product?page=@(i+1)">@(i + 1)</a></li>
+                        <li class="page-item @(@Model.CurrentPage==i+1?"active":"")"><a class="page-link" href="@Model.Url?page=@(i+1)">@(i + 1)</a></li>
                     }
 
                 }
                 @if (cp + 5 <= total)
                 {
-                    <li class="page-item"><a class="page-link" href="/product?page=@(cp+5)">@(cp + 5)</a></li>
+                    <li class="page-item"><a class="page-link" href="@Model.Url?page=@(cp+5)">@(cp + 5)</a></li>
                 }
                 @if (Model.CurrentCategory != null)
                 {
                     <li class="page-item @(Model.TotalPages()<=Model.CurrentPage?"disabled":"")">
-                        <a class="page-link" href="/product/@Model.CurrentCategory?page=@(Model.CurrentPage+1)" aria-label="Next">
+                        <a class="page-link" href="@Model.Url/@Model.CurrentCategory?page=@(Model.CurrentPage+1)" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                             <span class="sr-only">Next</span>
                         </a>
@@ -62,7 +62,7 @@
                 else
                 {
                     <li class="page-item @(Model.TotalPages()<=Model.CurrentPage?"disabled":"")">
-                        <a class="page-link" href="/product?page=@(Model.CurrentPage+1)" aria-label="Next">
+                        <a class="page-link" href="@Model.Url?page=@(Model.CurrentPage+1)" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                             <span class="sr-only">Next</span>
                         </a>

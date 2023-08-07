@@ -4,9 +4,9 @@ using shopapp.core.Entity.Concrete;
 
 namespace shopapp.business.Concrete.Mapper
 {
-    internal class DTOMapper:Profile
+    internal class DTOMapper : Profile
     {
-        public DTOMapper() 
+        public DTOMapper()
         {
             CreateMap<ProductDTO, Product>().ReverseMap();
             CreateMap<CategoryDTO, Category>().ReverseMap();

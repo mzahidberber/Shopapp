@@ -8,6 +8,6 @@ internal class ImageMapping : IEntityTypeConfiguration<Image>
 {
     public void Configure(EntityTypeBuilder<Image> builder)
     {
-        builder.HasOne(x=>x.Product).WithMany(x=>x.Images).HasForeignKey(x=>x.ProductId);
+        builder.HasOne(x => x.Product).WithMany(x => x.Images).HasForeignKey(x => x.ProductId);
     }
 }

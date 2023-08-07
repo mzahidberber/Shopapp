@@ -1,0 +1,20 @@
+﻿@model List<ProductModel>
+
+@foreach (var p in Model)
+{
+
+    <div class="col-md-3 mt-1 p-1 d-flex justify-content-center">
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top btn" src="~/img/@p.HomeImageUrl">
+            <div class="card-body">
+                <h5 class="card-title h6">@p.Name</h5>
+                <p class="card-text">@p.Price &#8378</p>
+                <a class="btn btn-primary"> Add Basket</a>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+

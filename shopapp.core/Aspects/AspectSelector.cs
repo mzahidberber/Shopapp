@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace shopapp.core.Aspects
 {
-    public class AspectSelector: IInterceptorSelector
+    public class AspectSelector : IInterceptorSelector
     {
         public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
         {

@@ -2,7 +2,7 @@
 
 namespace shopapp.web.ViewModels
 {
-	public class ProductAndCategories
+    public class ProductAndCategories
     {
         public PageInfo PageInfo { get; set; }
         public List<ProductModel> Products { get; set; }
@@ -11,6 +11,7 @@ namespace shopapp.web.ViewModels
 
     public class PageInfo
     {
+        public string Url { get; set; }
         public int TotalItems { get; set; }
         public int ItemsPerPage { get; set; }
         public int CurrentPage { get; set; }
@@ -18,7 +19,7 @@ namespace shopapp.web.ViewModels
 
         public int TotalPages()
         {
-            return (int)Math.Ceiling((decimal)TotalItems/ItemsPerPage);
+            return (int)Math.Ceiling((decimal)TotalItems / ItemsPerPage);
         }
     }
 }

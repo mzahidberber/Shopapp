@@ -3,7 +3,7 @@ using shopapp.core.Entity.Concrete;
 
 namespace shopapp.core.DTOs.Concrete
 {
-    public class OrderDTO:IDTO
+    public class OrderDTO : IDTO
     {
         public int Id { get; set; }
         public string UserId { get; set; } = null!;

@@ -2,7 +2,7 @@
 
 namespace shopapp.core.Entity.Concrete;
 
-public class Image:IEntity
+public class Image : IEntity
 {
     public int Id { get; set; }
     public string Url { get; set; }

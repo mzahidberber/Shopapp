@@ -4,11 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using shopapp.core.Entity.Concrete;
 using shopapp.dataaccess.Concrete.EntityFramework.Mapping;
-using System.Reflection.Emit;
 
 namespace shopapp.dataaccess.Concrete.EntityFramework
 {
-    public class ShopContext:IdentityDbContext<User,UserRole,string>
+    public class ShopContext : IdentityDbContext<User, UserRole, string>
     {
         public IConfiguration _configuration { get; set; }
         public ShopContext(IConfiguration configuration)

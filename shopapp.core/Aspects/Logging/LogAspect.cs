@@ -3,10 +3,10 @@ using NLog;
 
 namespace shopapp.core.Aspects.Logging
 {
-    public class LogAspect:Aspect
+    public class LogAspect : Aspect
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        
+
         public override void OnBefore(IInvocation invocation)
         {
             var message = string.Format("{0} | {1} | {2} | {3}",

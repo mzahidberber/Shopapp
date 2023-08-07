@@ -9,7 +9,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework.Mapping
         public void Configure(EntityTypeBuilder<CartItem> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.HasOne(x=>x.Cart).WithMany(x=>x.CartItems).HasForeignKey(x=>x.CartId);
+            builder.HasOne(x => x.Cart).WithMany(x => x.CartItems).HasForeignKey(x => x.CartId);
         }
     }
 }
