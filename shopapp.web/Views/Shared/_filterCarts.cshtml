@@ -1,0 +1,61 @@
+﻿@model PageInfo
+<div class="d-flex">
+    @foreach (var filter in @ViewBag.SelectedCategories)
+    {
+        <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
+            <h6 class="m-0">@filter</h6>
+            <form action=@ViewBag.Url method="get" class="d-flex" style="align-items:center;">
+                @if (@ViewBag.SelectedCategories.Length != 0)
+                {
+                    @foreach (var c in @ViewBag.SelectedCategories)
+                    {
+                        if (c != filter)
+                        {
+                            <input type="hidden" value="@c" name="c">
+                        }
+
+                    }
+
+                }
+                @if (@ViewBag.SelectedPrice != null)
+                {
+                    <input type="hidden" value="@ViewBag.SelectedPrice" name="prc">
+                }
+                @if (@ViewBag.Sort != 1)
+                {
+                    <input type="hidden" value="@ViewBag.Sort" name="s">
+                }
+                <button type="submit" class="btn-close" style="width:5px;height:5px;"></button>
+            </form>
+
+        </div>
+
+    }
+
+    @if (@ViewBag.SelectedPrice != null)
+    {
+        <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
+            <h6 class="m-0">@ViewBag.SelectedPrice</h6>
+                <form action=@ViewBag.Url method="get" class="d-flex" style="align-items:center;">
+                @if (@ViewBag.SelectedCategories.Length != 0)
+                {
+                    @foreach (var c in @ViewBag.SelectedCategories)
+                    {
+                        <input type="hidden" value="@c" name="c">
+
+                    }
+
+                }
+                @if (@ViewBag.Sort != 1)
+                {
+                    <input type="hidden" value="@ViewBag.Sort" name="s">
+
+                }
+                <button type="submit" class="btn-close"></button>
+            </form>
+
+        </div>
+
+    }
+
+</div>

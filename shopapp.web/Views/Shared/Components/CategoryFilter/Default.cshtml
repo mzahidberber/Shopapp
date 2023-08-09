@@ -1,0 +1,39 @@
+﻿@model List<CategoryModel>
+
+
+<button id="categoryBtn" type="button" class="btn btn-ligth w-100" style="text-align: start;">
+    <div class="row">
+        <div class="col-md-10">
+            Categories
+        </div>
+        <div class="col-md-2">
+            <i id="categoryArrow" class="fa-solid fa-caret-down ms-2"></i>
+        </div>
+    </div>
+
+</button>
+
+<div id="categoryDiv" class="border p-3 mt-2 overflow-auto" style="height: 220px;">
+
+    <div class="input-group">
+        <div class="input-group mb-3 mt-2">
+            <input type="text" class="form-control" id="categorySearch" placeholder="Search">
+        </div>
+
+        <div style="display: inline;" class="categoryInputs d-flex flex-column">
+            @foreach (var category in Model)
+            {
+                <div class="categoryInput">
+                    @{
+                        var selectedCategories = (string[])ViewBag.SelectedCategories;
+
+                    }
+
+                    <input type="checkbox" name="c" value=@category.Url @(selectedCategories.Any(x => x == category.Url) ? "checked" : "")>
+                    <label class="ms-2" for="@category.Name">@category.Name</label>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

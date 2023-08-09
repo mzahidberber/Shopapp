@@ -4,5 +4,6 @@
     {
         public IEnumerable<ProductDTO> Product { get; set; }
         public int TotalCount { get; set; }
+        public double MaxPrice { get; set; }
     }
 }

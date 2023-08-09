@@ -37,19 +37,19 @@ $('#mostInput').on('change', inputTextChange)
 
 function inputTextChange(ev) {
     if (ev.target.id == "leastInput") {
-        if ($('#mostInput').val() == "") {
-            $('#mostInput').val($('#leastInput').val())
+        if ($('#leastInput').val() == "" && $('#mostInput').val() != "") {
+            $('#leastInput').val("0")
+        }
+        if ($('#leastInput').val() == ""){
+            $('#leastInput').val("0")
         }
     }
     if (ev.target.id == "mostInput") {
         if ($('#leastInput').val() == "") {
             $('#leastInput').val("0")
         }
-        if ($('#mostInput').val() == "") {
-            $('#mostInput').val($('#leastInput').val())
-        }
     }
-    if (parseInt($('#leastInput').val()) > parseInt($('#mostInput').val())) {
+    if ($('#mostInput').val() != "" && parseInt($('#leastInput').val()) > parseInt($('#mostInput').val())) {
         $('#mostInput').val($('#leastInput').val())
     }
     $(".prcRadio input").prop("checked", false);

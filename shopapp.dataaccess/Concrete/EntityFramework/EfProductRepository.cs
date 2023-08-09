@@ -12,13 +12,18 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         public EfProductRepository(ShopContext context) : base(context)
         {
         }
-        public IQueryable<Product> WherePage(int page, int pageSize, Expression<Func<Product, bool>>? filter)
+        public IQueryable<Product> WherePage(int page, int pageSize,int sort, Expression<Func<Product, bool>>? filter)
         {
 
             if (filter == null)
                 return _dbSet.Skip((page - 1) * pageSize).Take(pageSize);
             else
-                return _dbSet.Where(filter).Skip((page - 1) * pageSize).Take(pageSize);
+                if(sort==2)
+                    return _dbSet.Where(filter).OrderBy(x=>x.Price).Skip((page - 1) * pageSize).Take(pageSize);
+                else if(sort==3)
+                    return _dbSet.Where(filter).OrderByDescending(x => x.Price).Skip((page - 1) * pageSize).Take(pageSize);
+                else
+                    return _dbSet.Where(filter).Skip((page - 1) * pageSize).Take(pageSize);
         }
         public async Task<Product> GetByIdWithCategoriesAsync(int id)
         {

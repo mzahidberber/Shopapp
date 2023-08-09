@@ -1,0 +1,32 @@
+﻿@model List<Sort>
+
+<div class="dropdown show border ">
+
+    <a class="btn btn-light dropdown-toggle sortName" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @(Model.Find(x => x.Value == ViewBag.Sort)?.Name)
+    </a>
+
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @foreach (var s in Model)
+        {
+            <form action=@ViewBag.Url method="get">
+                @if (@ViewBag.SelectedCategories.Length != 0)
+                {
+                    @foreach (var c in @ViewBag.SelectedCategories)
+                    {
+                        <input type="hidden" value="@c" name="c">
+                    }
+
+                }
+                @if (@ViewBag.SelectedPrice != null)
+                {
+                    <input type="hidden" value="@ViewBag.SelectedPrice" name="prc">
+                }
+
+
+                <input type="hidden" value="@s.Value" name="s">
+                <button type="submit" class="btn btn-light dropdown-item sortValue">@s.Name</button>
+            </form>
+        }
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using shopapp.core.Aspects.Caching;
 using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
@@ -39,7 +40,7 @@ namespace shopapp.web.Controllers
 
             var products = await this._productService.GetAllAsync();
             var categories = await this._categoryService.GetAllAsync();
-            return View(new ProductAndCategories
+            return View(new ProductList
             {
                 Categories = ObjectMapper.Mapper.Map<List<CategoryModel>>(categories.data.ToList()),
                 Products = ObjectMapper.Mapper.Map<List<ProductModel>>(products.data.ToList()),
@@ -61,39 +62,87 @@ namespace shopapp.web.Controllers
 
 
         //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
-        public async Task<IActionResult> List(string[]? c=null,string? prc=null,int s=1, int p = 1)
+        public async Task<IActionResult> List(string[] c,string? prc=null,int s=1, int p = 1)
         {
+            //var key = Reflection.CreateCacheKey(typeof(ProductController), "List", c, prc??"<Null>",s,p);
+            //if (_cacheManager.IsAdd(key))
+            //    return _cacheManager.Get<IActionResult>(key);
+
             ViewBag.Sort = s;
             ViewBag.Page = p;
             ViewBag.SelectedCategories = c;
             ViewBag.SelectedPrice=prc;
-            //var key = Reflection.CreateCacheKey(typeof(ProductController), "List", category ?? "<Null>", page);
-            //if (_cacheManager.IsAdd(key))
-            //    return _cacheManager.Get<IActionResult>(key);
+            ViewBag.Url = "/product";
 
-
-            //if (RouteData.Values["action"].ToString() == "List")
-            //{
-            //    ViewBag.SelectedCategory = RouteData?.Values["id"];
-            //}
-            var product = new ProductDTOAndTotalCount();
             var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
-            product = this._productService.WherePage(p, pageSize).Result.data;
-            var categories = await this._categoryService.GetAllAsync();
-            return View(new ProductAndCategories
+
+            ProductDTOAndTotalCount product;
+
+            if (c.Length > 0)
+            {
+                if (prc != null)
+                {
+                    var prcList = prc.Split("-");
+                    if (prcList[1] != "")
+                    {
+                        product = this._productService.WherePage(p, pageSize, s, x =>
+                            x.Price <= Convert.ToDouble(prcList[1]) &&
+                            x.Price >= Convert.ToDouble(prcList[0]) &&
+                            x.ProductCategories.Any(p => c.Any(x => x == p.Category.Url))
+                        ).Result.data;
+                    }else
+                    {
+                        product = this._productService.WherePage(p, pageSize, s, x =>
+                            x.Price >= Convert.ToDouble(prcList[0]) &&
+                            x.ProductCategories.Any(p => c.Any(x => x == p.Category.Url))
+                        ).Result.data;
+                    }
+                    
+                }
+                else
+                {
+
+                    product = this._productService.WherePage(p, pageSize, s, x =>
+                        x.ProductCategories.Any(p => c.Any(x => x == p.Category.Url))
+                    ).Result.data;
+                }
+            }
+            else
+            {
+                if (prc != null)
+                {
+                    var prcList = prc.Split("-");
+                    if (prcList[1] !="")
+                    {
+                        product = this._productService.WherePage(p, pageSize, s, x =>
+                            x.Price <= Convert.ToDouble(prcList[1]) &&
+                            x.Price >= Convert.ToDouble(prcList[0])
+                        ).Result.data;
+                    }
+                    else
+                    {
+                        product = this._productService.WherePage(p, pageSize, s, x =>
+                            x.Price >= Convert.ToDouble(prcList[0])
+                        ).Result.data;
+                    }
+                }
+                else
+                {
+
+                    product = this._productService.WherePage(p, pageSize, s).Result.data;
+                }
+            }
+
+
+            return View(new ProductList
             {
                 PageInfo = new PageInfo
                 {
-                    Url="/product",
                     TotalItems = product.TotalCount,
                     CurrentPage = p,
-                    ItemsPerPage = pageSize,
-                    CurrentCategory = "",
-                    SelectedCategories=c,
-                    SelectedPrice=prc,
-                    SelectedSort=s
+                    ItemsPerPage = pageSize
                 },
-                Categories = ObjectMapper.Mapper.Map<List<CategoryModel>>(categories.data.ToList()),
+                MostPrice = Convert.ToInt32(product.MaxPrice),
                 Products = ObjectMapper.Mapper.Map<List<ProductModel>>(product.Product.ToList())
             });
         }
@@ -173,7 +222,7 @@ namespace shopapp.web.Controllers
                 q = "";
             var product = await _productService.Where(x => x.Description.ToLower().Contains(q.ToLower()) || x.Name.ToLower().Contains(q.ToLower()));
             var categories = await this._categoryService.GetAllAsync();
-            return View(new ProductAndCategories
+            return View(new ProductList
             {
                 //PageInfo = new PageInfo
                 //{

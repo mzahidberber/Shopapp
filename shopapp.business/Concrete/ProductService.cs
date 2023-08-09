@@ -36,14 +36,16 @@ namespace shopapp.business.Concrete
             var result = new Dictionary<string, int>() { { "data", count } };
             return Response<Dictionary<string, int>>.Success(result, 200);
         }
-        public async Task<Response<ProductDTOAndTotalCount>> WherePage(int page, int pageSize, Expression<Func<Product, bool>>? predicate = null)
+        public async Task<Response<ProductDTOAndTotalCount>> WherePage(int page, int pageSize,int sort, Expression<Func<Product, bool>>? predicate = null)
         {
-            var products = ObjectMapper.Mapper.Map<List<ProductDTO>>(await _genericRepository.WherePage(page, pageSize, predicate).ToListAsync());
+            var products = ObjectMapper.Mapper.Map<List<ProductDTO>>(await _genericRepository.WherePage(page, pageSize,sort, predicate).ToListAsync());
             var count = await _genericRepository.GetCountByCategory(predicate);
+            var mostPrice = await _genericRepository.GetAll().MaxAsync(x=>x.Price);
             await _genericRepository.CommitAsync();
-            return Response<ProductDTOAndTotalCount>.Success(new ProductDTOAndTotalCount { Product = products, TotalCount = count }, 200);
+            return Response<ProductDTOAndTotalCount>.Success(new ProductDTOAndTotalCount { Product = products, TotalCount = count ,MaxPrice= mostPrice }, 200);
         }
 
+       
         public async Task<Response<IEnumerable<ProductDTO>>> WhereWithCategories(Expression<Func<Product, bool>> predicate)
         {
             var products = ObjectMapper.Mapper.Map<List<ProductDTO>>(await _genericRepository.WhereWithCategories(predicate).ToListAsync());

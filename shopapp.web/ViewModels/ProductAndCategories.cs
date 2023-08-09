@@ -1,24 +1,22 @@
 ﻿using shopapp.web.Models.Entity;
+using shopapp.web.Models.Shared;
 
 namespace shopapp.web.ViewModels
 {
-    public class ProductAndCategories
+    public class ProductList
     {
         public PageInfo PageInfo { get; set; }
+
+        public int MostPrice { get; set; }
         public List<ProductModel> Products { get; set; }
         public List<CategoryModel> Categories { get; set; }
     }
 
     public class PageInfo
     {
-        public string Url { get; set; }
         public int TotalItems { get; set; }
         public int ItemsPerPage { get; set; }
         public int CurrentPage { get; set; }
-        public string CurrentCategory { get; set; }
-        public string[] SelectedCategories { get; set; }
-        public string SelectedPrice { get; set; }
-        public int SelectedSort { get; set; }
 
         public int TotalPages()
         {

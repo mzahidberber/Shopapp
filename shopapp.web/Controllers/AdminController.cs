@@ -275,24 +275,25 @@ namespace shopapp.web.Controllers
 
         public async Task<IActionResult> ProductList(string? category = null, int page = 1)
         {
-            if (RouteData.Values["action"].ToString() == "ProductList")
-            {
-                ViewBag.SelectedCategory = RouteData?.Values["id"];
-            }
-            var product = new ProductDTOAndTotalCount();
-            var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
-            if (category == null) product = this._productService.WherePage(page, pageSize).Result.data;
-            else product = this._productService.WherePage(page, pageSize, x => x.ProductCategories.Any(x => x.Category.Url == category)).Result.data;
-            ViewBag.PageInfo = new PageInfo
-            {
-                Url = "/admin/product",
-                TotalItems = product.TotalCount,
-                CurrentPage = page,
-                ItemsPerPage = pageSize,
-                CurrentCategory = category
-            };
-            ViewBag.Categories= ObjectMapper.Mapper.Map<List<CategoryModel>>(this._categoryService.GetAllAsync().Result.data);
-            return View(ObjectMapper.Mapper.Map<List<ProductModel>>(product.Product));
+            return View();
+            //if (RouteData.Values["action"].ToString() == "ProductList")
+            //{
+            //    ViewBag.SelectedCategory = RouteData?.Values["id"];
+            //}
+            //var product = new ProductDTOAndTotalCount();
+            //var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
+            //if (category == null) product = this._productService.WherePage(page, pageSize).Result.data;
+            //else product = this._productService.WherePage(page, pageSize, x => x.ProductCategories.Any(x => x.Category.Url == category)).Result.data;
+            //ViewBag.PageInfo = new PageInfo
+            //{
+            //    Url = "/admin/product",
+            //    TotalItems = product.TotalCount,
+            //    CurrentPage = page,
+            //    ItemsPerPage = pageSize,
+            //    CurrentCategory = category
+            //};
+            //ViewBag.Categories= ObjectMapper.Mapper.Map<List<CategoryModel>>(this._categoryService.GetAllAsync().Result.data);
+            //return View(ObjectMapper.Mapper.Map<List<ProductModel>>(product.Product));
         }
 
 
