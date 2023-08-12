@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using shopapp.web.Models.Shared;
+using shopapp.web.ViewModels;
 
 namespace shopapp.web.ViewComponents
 {
@@ -9,9 +10,13 @@ namespace shopapp.web.ViewComponents
             new Sort{Name="Suggested",Value=1},
             new Sort{Name="Descending by Price",Value=2},
             new Sort { Name = "Increasing by Price", Value = 3 }};
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(PageInfo pageInfo)
         {
-            return View(SortTypes);
+            return View(new SortInfo
+            {
+                PageInfo = pageInfo,
+                Sort = SortTypes
+            });
         }
     }
 }

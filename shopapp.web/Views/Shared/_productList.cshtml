@@ -1,15 +1,38 @@
 ﻿@model List<ProductModel>
 
+<style>
+    .cartText{
+        text-decoration: none;
+        color: black;
+    }
+
+
+</style>
+
 @foreach (var p in Model)
 {
 
     <div class="col-md-3 mt-1 p-1 d-flex justify-content-center">
         <div class="card" style="width: 18rem;">
-            <img class="card-img-top btn" src="~/img/@p.HomeImageUrl">
+            <a href="/product/details/@p.Id">
+                <img class="card-img-top" src="~/img/@p.HomeImageUrl">
+            </a>
+            
             <div class="card-body">
-                <h5 class="card-title h6">@p.Name</h5>
-                <p class="card-text">@p.Price &#8378</p>
-                <a class="btn btn-primary"> Add Basket</a>
+                <a href="/product/details/@p.Id" class="cartText">
+                    <h5 class="card-title h6" >@p.Name</h5>
+                    <p class="card-text">@p.Price &#8378</p>
+                </a>
+                <form asp-controller="Cart" asp-action="AddToCart" method="post" style="display:inline;" class="form-inline">
+                    <input type="hidden" name="productId" value="@p.Id">
+                    <div class="input-group mb-3" style="width:100px;">
+                        <button class="btn btn-primary p-1" type="submit">
+                            Add Basket
+                        </button>
+                    </div>
+
+
+                </form>
             </div>
         </div>
     </div>

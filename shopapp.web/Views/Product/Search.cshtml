@@ -1,35 +1,37 @@
-﻿@model ProductList
+﻿@model ProductInfo
 
-<div class="row">
-    <div class="col-2">
-        @*
-        @await Html.PartialAsync("_categories",Model.Categories)
-        @await Html.PartialAsync("_search")
-        *@
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+            <div class="sticky-top">@await Html.PartialAsync("_filter",Model.PageInfo)</div>
+        </div>
+        <div class="col-10">
+            <div class="mt-1 mb-1">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="h5">@Model.PageInfo.TotalItems products found</h3>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-end">
+                            @await Component.InvokeAsync("Sort",new { pageInfo = Model.PageInfo})
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @await Html.PartialAsync("_filterCarts",Model.PageInfo)
+                </div>
 
-        @*@await Html.PartialAsync("_filter",new FilterInfo{
-            Categories=Model.Categories,
-            FilterPrice=new FilterPrice{
-                LeastPrice=100,
-                MostPrice=500
-            }*@
-           
-        })
-        
+            </div>
 
-    </div>
-    <div class="col-10">
+            <div class="row mt-1 me-2 ms-2">
+                @await Html.PartialAsync("_productList",Model.Products)
+            </div>
 
-        <div class="row mt-1 me-2 ms-2">
-            @await Html.PartialAsync("_productList",Model.Products)
+            <div class="d-flex justify-content-center mt-2">
+                @await Html.PartialAsync("_page",Model.PageInfo)
+            </div>
+
         </div>
 
-
     </div>
-    @*@await Html.PartialAsync("_page",Model.PageInfo)*@
-
 </div>
-
-
-
-

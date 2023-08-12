@@ -37,10 +37,9 @@ namespace shopapp.web.Controllers
 
             var products = await _productService.Where(x => x.IsApprove == true && x.IsHome == true);
             var categories = await _categoryService.GetAllAsync();
-            return View(new ProductList
+            return View(new ProductInfo
             {
-                Products = ObjectMapper.Mapper.Map<List<ProductModel>>(products.data),
-                Categories = ObjectMapper.Mapper.Map<List<CategoryModel>>(categories.data)
+                Products = ObjectMapper.Mapper.Map<List<ProductModel>>(products.data)
             });
         }
 

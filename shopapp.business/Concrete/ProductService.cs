@@ -29,7 +29,18 @@ namespace shopapp.business.Concrete
             return Response<ProductDTO>.Success(ObjectMapper.Mapper.Map<ProductDTO>(product), 200);
         }
 
-        public async Task<Response<Dictionary<string, int>>> GetCountByCategory(string categoryUrl)
+		public async Task<Response<ProductDTO>> GetByIdWithCategoriesAndImagesAsync(int id)
+		{
+			var product = await _genericRepository.GetByIdWithCategoriesAndImagesAsync(id);
+			await _genericRepository.CommitAsync();
+			if (product == null)
+			{
+				return Response<ProductDTO>.Fail("Id Not Found", 404, true);
+			}
+			return Response<ProductDTO>.Success(ObjectMapper.Mapper.Map<ProductDTO>(product), 200);
+		}
+
+		public async Task<Response<Dictionary<string, int>>> GetCountByCategory(string categoryUrl)
         {
             var count = await _genericRepository.GetWhere(x => x.ProductCategories.Any(x => x.Category.Url == categoryUrl)).CountAsync();
             await _genericRepository.CommitAsync();

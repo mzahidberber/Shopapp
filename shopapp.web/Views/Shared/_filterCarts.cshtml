@@ -1,13 +1,17 @@
 ﻿@model PageInfo
 <div class="d-flex">
-    @foreach (var filter in @ViewBag.SelectedCategories)
+    @foreach (var filter in @Model.Selected.Categories)
     {
         <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
             <h6 class="m-0">@filter</h6>
-            <form action=@ViewBag.Url method="get" class="d-flex" style="align-items:center;">
-                @if (@ViewBag.SelectedCategories.Length != 0)
+            <form action=@Model.Url method="get" class="d-flex" style="align-items:center;">
+                @if (@Model.Selected.Search != null)
                 {
-                    @foreach (var c in @ViewBag.SelectedCategories)
+                    <input type="hidden" value=@Model.Selected.Search name="q">
+                }
+                @if (Model.Selected.Categories.Length != 0)
+                {
+                    @foreach (var c in Model.Selected.Categories)
                     {
                         if (c != filter)
                         {
@@ -17,13 +21,42 @@
                     }
 
                 }
-                @if (@ViewBag.SelectedPrice != null)
+                @if (@Model.Selected.Price != null)
                 {
-                    <input type="hidden" value="@ViewBag.SelectedPrice" name="prc">
+                    <input type="hidden" value=@Model.Selected.Price name="prc">
                 }
-                @if (@ViewBag.Sort != 1)
+                @if (@Model.Selected.Sort != 1)
                 {
-                    <input type="hidden" value="@ViewBag.Sort" name="s">
+                    <input type="hidden" value=@Model.Selected.Sort name="s">
+                }
+                <button type="submit" class="btn-close" style="width:5px;height:5px;"></button>
+            </form>
+
+        </div>
+
+    }
+    @if (Model.Selected.Search != null)
+    {
+        <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
+            <h6 class="m-0">@Model.Selected.Search</h6>
+            <form action=@Model.Url method="get" class="d-flex" style="align-items:center;">
+                @if (Model.Selected.Categories.Length != 0)
+                {
+                    @foreach (var c in Model.Selected.Categories)
+                    {
+                        <input type="hidden" value="@c" name="c">
+
+                    }
+
+                }
+                @if (Model.Selected.Price != null)
+                {
+                    <input type="hidden" value=@Model.Selected.Price name="prc">
+                }
+                @if (Model.Selected.Sort != 1)
+                {
+                    <input type="hidden" value=@Model.Selected.Sort name="s">
+
                 }
                 <button type="submit" class="btn-close" style="width:5px;height:5px;"></button>
             </form>
@@ -32,23 +65,27 @@
 
     }
 
-    @if (@ViewBag.SelectedPrice != null)
+    @if (Model.Selected.Price != null)
     {
         <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
-            <h6 class="m-0">@ViewBag.SelectedPrice</h6>
-                <form action=@ViewBag.Url method="get" class="d-flex" style="align-items:center;">
-                @if (@ViewBag.SelectedCategories.Length != 0)
+            <h6 class="m-0">@Model.Selected.Price</h6>
+                <form action=@Model.Url method="get" class="d-flex" style="align-items:center;">
+                @if (Model.Selected.Search != null)
                 {
-                    @foreach (var c in @ViewBag.SelectedCategories)
+                    <input type="hidden" value=@Model.Selected.Search name="q">
+                }
+                @if (Model.Selected.Categories.Length != 0)
+                {
+                    @foreach (var c in @Model.Selected.Categories)
                     {
                         <input type="hidden" value="@c" name="c">
 
                     }
 
                 }
-                @if (@ViewBag.Sort != 1)
+                @if (Model.Selected.Sort != 1)
                 {
-                    <input type="hidden" value="@ViewBag.Sort" name="s">
+                    <input type="hidden" value=@Model.Selected.Sort name="s">
 
                 }
                 <button type="submit" class="btn-close"></button>

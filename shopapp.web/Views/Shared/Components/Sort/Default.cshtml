@@ -1,26 +1,30 @@
-﻿@model List<Sort>
+﻿@model SortInfo
 
 <div class="dropdown show border ">
 
     <a class="btn btn-light dropdown-toggle sortName" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        @(Model.Find(x => x.Value == ViewBag.Sort)?.Name)
+        @(Model.Sort.Find(x => x.Value == Model.PageInfo.Selected.Sort)?.Name)
     </a>
 
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        @foreach (var s in Model)
+        @foreach (var s in Model.Sort)
         {
-            <form action=@ViewBag.Url method="get">
-                @if (@ViewBag.SelectedCategories.Length != 0)
+            <form action=@Model.PageInfo.Url method="get">
+                @if (Model.PageInfo.Selected.Search != null)
                 {
-                    @foreach (var c in @ViewBag.SelectedCategories)
+                    <input type="hidden" value=@Model.PageInfo.Selected.Search name="q">
+                }
+                @if (Model.PageInfo.Selected.Categories.Length != 0)
+                {
+                    @foreach (var c in @Model.PageInfo.Selected.Categories)
                     {
                         <input type="hidden" value="@c" name="c">
                     }
 
                 }
-                @if (@ViewBag.SelectedPrice != null)
+                @if (Model.PageInfo.Selected.Price != null)
                 {
-                    <input type="hidden" value="@ViewBag.SelectedPrice" name="prc">
+                    <input type="hidden" value=@Model.PageInfo.Selected.Price name="prc">
                 }
 
 

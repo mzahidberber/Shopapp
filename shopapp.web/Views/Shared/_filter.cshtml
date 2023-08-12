@@ -1,9 +1,13 @@
-﻿@model int
+﻿@model PageInfo
 
-<form action=@ViewBag.Url method="get">
-    <input type="hidden" value="@ViewBag.Sort" name="s">
+<form action=@Model.Url method="get">
+    <input type="hidden" value="@Model.Selected.Sort" name="s">
+    @if (Model.Selected.Search != null)
+    {
+        <input type="hidden" value=@Model.Selected.Search name="q">
+    }
     <div class="mt-2">
-        @await Component.InvokeAsync("CategoryFilter")
+        @await Component.InvokeAsync("CategoryFilter",new { selectedCategories=Model.Selected.Categories })
     </div>
     <hr>
     <div class="mt-2">
@@ -23,20 +27,20 @@
             <div class="input-group d-flex">
 
                     <div class="input-group mb-3 mt-2">
-                        <input type="number" class="form-control" min="0" placeholder="Least" id="leastInput" @(ViewBag.SelectedPrice != null ? $"value={ViewBag.SelectedPrice.Split("-")[0]}" : "") oninput="">
-                        <input type="number" class="form-control" min="0" placeholder="Most" id="mostInput" @(ViewBag.SelectedPrice != null ? $"value={ViewBag.SelectedPrice.Split("-")[1]}" : "")>
-                        <input type="hidden" id="prcInput" @(ViewBag.SelectedPrice != null ? $"value={ViewBag.SelectedPrice} name=prc" : "")>
+                    <input type="number" class="form-control" min="0" placeholder="Least" id="leastInput" @(Model.Selected.Price != null ? $"value={Model.Selected.Price.Split("-")[0]}" : "") oninput="">
+                    <input type="number" class="form-control" min="0" placeholder="Most" id="mostInput" @(Model.Selected.Price != null ? $"value={Model.Selected.Price.Split("-")[1]}" : "")>
+                    <input type="hidden" id="prcInput" @(@Model.Selected.Price != null ? $"value={@Model.Selected.Price} name=prc" : "")>
                     </div>
             </div>
             <div style="display: inline;" class="d-flex flex-column">
                 @{
-                    var invertalprice = (Model - 0) / 4;
+                    var invertalprice = (Model.MostPrice - 0) / 4;
                 }
                     
-                @for (int i = 0; i < Model; i += invertalprice)
+                @for (int i = 0; i < Model.MostPrice; i += invertalprice)
                 {
                         <div class="prcRadio">
-                        <input type="radio" @(ViewBag.SelectedPrice == $"{i}-{i + invertalprice}" ? "checked" : "")>
+                        <input type="radio" @(Model.Selected.Price == $"{i}-{i + invertalprice}" ? "checked" : "")>
                         <label class="ms-2">@i-@(i + invertalprice)</label>
                     </div>
                 }
