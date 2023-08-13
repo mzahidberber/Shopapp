@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using shopapp.core.Entity.Concrete;
+using System.ComponentModel.DataAnnotations;
 
 namespace shopapp.web.Models.Entity
 {
@@ -6,8 +7,9 @@ namespace shopapp.web.Models.Entity
     {
         public ProductModel()
         {
-            this.ProductCategories = new List<ProductCategoryModel>();
             this.Images = new List<ImageModel>();
+            this.SubCategoryFeatureValues = new List<SubCategoryFeatureValueModel>();
+
         }
 
         public int Id { get; set; }
@@ -34,7 +36,20 @@ namespace shopapp.web.Models.Entity
 
         public bool IsApprove { get; set; }
         public bool IsHome { get; set; }
-        public List<ProductCategoryModel> ProductCategories { get; set; }
         public List<ImageModel> Images { get; set; }
+
+        public int BrandId { get; set; }
+        public BrandModel Brand { get; set; }
+
+        public int CategoryId { get; set; }
+        public CategoryModel Category { get; set; }
+
+        public int SubCategoryId { get; set; }
+        public SubCategoryModel SubCategory { get; set; }
+
+        public int MainCategoryId { get; set; }
+        public MainCategoryModel MainCategory { get; set; }
+
+        public List<SubCategoryFeatureValueModel> SubCategoryFeatureValues { get; set; }
     }
 }

@@ -128,6 +128,130 @@ namespace shopapp.dataaccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.Brand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("Brands");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Dell",
+                            SubCategoryId = 1,
+                            Url = "dell"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Asus",
+                            SubCategoryId = 1,
+                            Url = "asus"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Dell",
+                            SubCategoryId = 2,
+                            Url = "dell"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Asus",
+                            SubCategoryId = 2,
+                            Url = "asus"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Dell",
+                            SubCategoryId = 3,
+                            Url = "dell"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Asus",
+                            SubCategoryId = 3,
+                            Url = "asus"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Dell",
+                            SubCategoryId = 4,
+                            Url = "dell"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Asus",
+                            SubCategoryId = 4,
+                            Url = "asus"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Samsung",
+                            SubCategoryId = 5,
+                            Url = "samsung"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Apple",
+                            SubCategoryId = 5,
+                            Url = "apple"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Apple",
+                            SubCategoryId = 6,
+                            Url = "apple"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Lenova",
+                            SubCategoryId = 6,
+                            Url = "lenova"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Vestel",
+                            SubCategoryId = 7,
+                            Url = "vestel"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Samsung",
+                            SubCategoryId = 7,
+                            Url = "samsung"
+                        });
+                });
+
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Cart", b =>
                 {
                     b.Property<int>("Id")
@@ -173,6 +297,9 @@ namespace shopapp.dataaccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("MainCategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -183,26 +310,45 @@ namespace shopapp.dataaccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MainCategoryId");
+
                     b.ToTable("Categories");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Name = "Elektronik",
-                            Url = "elektronik"
+                            MainCategoryId = 1,
+                            Name = "Notebook",
+                            Url = "notebook"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "TV",
-                            Url = "tv"
+                            MainCategoryId = 1,
+                            Name = "Masaüstü Bilgisayar",
+                            Url = "masaustupc"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Bilgisayar",
-                            Url = "bilgisayar"
+                            MainCategoryId = 2,
+                            Name = "Cep Telefonu",
+                            Url = "ceptelefonu"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            MainCategoryId = 2,
+                            Name = "Tablet",
+                            Url = "tablet"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            MainCategoryId = 3,
+                            Name = "Televizyon",
+                            Url = "televizyon"
                         });
                 });
 
@@ -224,6 +370,45 @@ namespace shopapp.dataaccess.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.MainCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MainCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Bilgisayar",
+                            Url = "bilgisayar"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Telefon",
+                            Url = "telefon"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "TV",
+                            Url = "tv"
+                        });
                 });
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Order", b =>
@@ -249,6 +434,12 @@ namespace shopapp.dataaccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -263,14 +454,23 @@ namespace shopapp.dataaccess.Migrations
                     b.Property<bool>("IsHome")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("MainCategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
                     b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
@@ -279,59 +479,286 @@ namespace shopapp.dataaccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("MainCategoryId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("SubCategoryId");
+
                     b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
+                            BrandId = 1,
+                            CategoryId = 1,
                             Description = "Güzel laptop",
                             HomeImageUrl = "1.jpg",
                             IsApprove = false,
                             IsHome = false,
-                            Name = "Laptop",
+                            MainCategoryId = 1,
+                            Name = "Dell Laptop",
                             Price = 10.0,
                             Stock = 1,
+                            SubCategoryId = 1,
+                            Url = "dell-laptop"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BrandId = 8,
+                            CategoryId = 4,
+                            Description = "Güzel tablet",
+                            HomeImageUrl = "2.jpg",
+                            IsApprove = false,
+                            IsHome = false,
+                            MainCategoryId = 2,
+                            Name = "Lenova Tablet",
+                            Price = 101.0,
+                            Stock = 2,
+                            SubCategoryId = 5,
+                            Url = "lenova-tablet"
+                        });
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.SubCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("SubCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            Name = "Laptop",
                             Url = "laptop"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Güzel laptop",
-                            HomeImageUrl = "2.jpg",
-                            IsApprove = false,
-                            IsHome = false,
+                            CategoryId = 1,
+                            Name = "Oyun Bilgisayarı",
+                            Url = "oyunpc"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 2,
+                            Name = "Masaüstü",
+                            Url = "masaustu"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 2,
+                            Name = "Oyun Bilgisayarı",
+                            Url = "oyunpc"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 3,
+                            Name = "Akıllı Telefon",
+                            Url = "akillitelefon"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 4,
                             Name = "Tablet",
-                            Price = 101.0,
-                            Stock = 2,
                             Url = "tablet"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 5,
+                            Name = "Full HD",
+                            Url = "fullhd"
                         });
                 });
 
-            modelBuilder.Entity("shopapp.core.Entity.Concrete.ProductCategory", b =>
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.SubCategoryFeature", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("SubCategoryFeatures");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Ekran Kartı",
+                            SubCategoryId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "İşlemci",
+                            SubCategoryId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "İşlemci",
+                            SubCategoryId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Ekran Kartı",
+                            SubCategoryId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "İşlemci",
+                            SubCategoryId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Ekran Kartı",
+                            SubCategoryId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "İşlemci",
+                            SubCategoryId = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Ekran Kartı",
+                            SubCategoryId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Kamera",
+                            SubCategoryId = 5
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Hafıza",
+                            SubCategoryId = 5
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "İşlemci",
+                            SubCategoryId = 6
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Ekran Kartı",
+                            SubCategoryId = 6
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Ekran Boyutu",
+                            SubCategoryId = 7
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Çözünürlük",
+                            SubCategoryId = 7
+                        });
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.SubCategoryFeatureValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoryId", "ProductId");
+                    b.Property<int>("SubCategoryFeatureId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCategories");
+                    b.HasIndex("SubCategoryFeatureId");
+
+                    b.ToTable("SubCategoryFeatureValues");
 
                     b.HasData(
                         new
                         {
-                            CategoryId = 1,
-                            ProductId = 1
+                            Id = 1,
+                            ProductId = 1,
+                            SubCategoryFeatureId = 1,
+                            Value = "GTX 3060"
                         },
                         new
                         {
-                            CategoryId = 2,
-                            ProductId = 2
+                            Id = 2,
+                            ProductId = 1,
+                            SubCategoryFeatureId = 2,
+                            Value = "Intel i7"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ProductId = 2,
+                            SubCategoryFeatureId = 9,
+                            Value = "Intel i7"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ProductId = 2,
+                            SubCategoryFeatureId = 10,
+                            Value = "GT 360"
                         });
                 });
 
@@ -411,7 +838,7 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "37828d17-07b7-4495-91dc-7aa70e26f6b7",
+                            ConcurrencyStamp = "b3405efb-8211-4780-ab08-130e102a422b",
                             Email = "adminuser@shopapp.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -419,9 +846,9 @@ namespace shopapp.dataaccess.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMİNUSER@SHOPAPP.COM",
                             NormalizedUserName = "ADMİN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKwMTsjjrvoa3Nfi+3oRmjMpIIOrqktaDC5SGf2A6C+oNubk8aQttxS4AdMqpwz1GQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJGzK+T/8FCEu1ylPUzc2e+HFXOwe1ZLkBZJgqCatxmbHagZJUa2rA8cmYmD4SJ8SQ==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "57d03d47-a896-4c23-b5b7-e5bf17ca9a18",
+                            SecurityStamp = "d1e853e2-80d6-498c-9b8d-a0680180049b",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -512,6 +939,17 @@ namespace shopapp.dataaccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.Brand", b =>
+                {
+                    b.HasOne("shopapp.core.Entity.Concrete.SubCategory", "SubCategory")
+                        .WithMany("Brands")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubCategory");
+                });
+
             modelBuilder.Entity("shopapp.core.Entity.Concrete.CartItem", b =>
                 {
                     b.HasOne("shopapp.core.Entity.Concrete.Cart", "Cart")
@@ -529,6 +967,17 @@ namespace shopapp.dataaccess.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.Category", b =>
+                {
+                    b.HasOne("shopapp.core.Entity.Concrete.MainCategory", "MainCategory")
+                        .WithMany("Categories")
+                        .HasForeignKey("MainCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MainCategory");
                 });
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Image", b =>
@@ -553,23 +1002,89 @@ namespace shopapp.dataaccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("shopapp.core.Entity.Concrete.ProductCategory", b =>
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.Product", b =>
                 {
+                    b.HasOne("shopapp.core.Entity.Concrete.Brand", "Brand")
+                        .WithMany("Products")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("shopapp.core.Entity.Concrete.Category", "Category")
-                        .WithMany("ProductCategories")
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("shopapp.core.Entity.Concrete.Product", "Product")
-                        .WithMany("ProductCategories")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("shopapp.core.Entity.Concrete.MainCategory", "MainCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("MainCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("shopapp.core.Entity.Concrete.Order", null)
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("shopapp.core.Entity.Concrete.SubCategory", "SubCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("MainCategory");
+
+                    b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.SubCategory", b =>
+                {
+                    b.HasOne("shopapp.core.Entity.Concrete.Category", "Category")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.SubCategoryFeature", b =>
+                {
+                    b.HasOne("shopapp.core.Entity.Concrete.SubCategory", "SubCategory")
+                        .WithMany("SubCategoryFeatures")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.SubCategoryFeatureValue", b =>
+                {
+                    b.HasOne("shopapp.core.Entity.Concrete.Product", "Product")
+                        .WithMany("SubCategoryFeatureValues")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("shopapp.core.Entity.Concrete.SubCategoryFeature", "SubCategoryFeature")
+                        .WithMany("SubCategoryFeatureValues")
+                        .HasForeignKey("SubCategoryFeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("SubCategoryFeature");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.Brand", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Cart", b =>
@@ -579,14 +1094,42 @@ namespace shopapp.dataaccess.Migrations
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Category", b =>
                 {
-                    b.Navigation("ProductCategories");
+                    b.Navigation("Products");
+
+                    b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.MainCategory", b =>
+                {
+                    b.Navigation("Categories");
+
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.Order", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Product", b =>
                 {
                     b.Navigation("Images");
 
-                    b.Navigation("ProductCategories");
+                    b.Navigation("SubCategoryFeatureValues");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.SubCategory", b =>
+                {
+                    b.Navigation("Brands");
+
+                    b.Navigation("Products");
+
+                    b.Navigation("SubCategoryFeatures");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.SubCategoryFeature", b =>
+                {
+                    b.Navigation("SubCategoryFeatureValues");
                 });
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.User", b =>

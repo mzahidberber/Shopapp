@@ -1,6 +1,33 @@
 ﻿@model ProductInfo
 
+<style>
+    .NavLink{
+        text-decoration:none;
+        color:black;
+    }
+</style>
+
 <div class="container">
+    @await Component.InvokeAsync("NavMainCategory")
+    <div class="d-flex mt-3">
+        @if (Model.PageInfo.Selected.SelectedMainCategory != null)
+        {
+            <h6 class="ms-2">></h6>
+            <a class="ms-2 NavLink" href="/@Model.PageInfo.Selected.SelectedMainCategory.Url">@Model.PageInfo.Selected.SelectedMainCategory.Name</a>
+            @if (Model.PageInfo.Selected.SelectedCategory != null)
+            {
+                <h6 class="ms-2">></h6>
+                <a class="ms-2 NavLink" href="/@Model.PageInfo.Selected.SelectedCategory.Url">@Model.PageInfo.Selected.SelectedCategory.Name</a>
+                @if (Model.PageInfo.Selected.SelectedSubCategory != null)
+                {
+                    <h6 class="ms-2">></h6>
+                    <a class="ms-2 NavLink" href="/@Model.PageInfo.Selected.SelectedSubCategory.Url">@Model.PageInfo.Selected.SelectedSubCategory.Name</a>
+
+                }
+            }
+        }
+    </div>
+    
     <div class="row">
         <div class="col-2">
             <div class="sticky-top">@await Html.PartialAsync("_filter",Model.PageInfo)</div>

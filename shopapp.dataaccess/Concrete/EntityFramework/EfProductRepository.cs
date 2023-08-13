@@ -29,8 +29,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         {
             var entity = await _dbSet
                 .Where(x => x.Id == id)
-                .Include(x => x.ProductCategories)
-                .ThenInclude(x => x.Category)
+                .Include(x => x.Category)
                 .SingleOrDefaultAsync();
             if (entity != null)
             {
@@ -43,9 +42,27 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
 		{
 			var entity = await _dbSet
 				.Where(x => x.Id == id)
-				.Include(x => x.ProductCategories)
-				.ThenInclude(x => x.Category)
+				.Include(x => x.Category)
                 .Include(x=>x.Images)
+				.SingleOrDefaultAsync();
+			if (entity != null)
+			{
+				_context.Entry(entity).State = EntityState.Detached;
+			}
+			return entity;
+		}
+
+		public async Task<Product> GetByIdWithAttAsync(int id)
+		{
+			var entity = await _dbSet
+				.Where(x => x.Id == id)
+                .Include(x=>x.MainCategory)
+				.Include(x => x.Category)
+				.Include(x => x.SubCategory)
+				.Include(x => x.Brand)
+				.Include(x => x.SubCategoryFeatureValues)
+				.ThenInclude(x => x.SubCategoryFeature)
+				.Include(x => x.Images)
 				.SingleOrDefaultAsync();
 			if (entity != null)
 			{
@@ -57,8 +74,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
 		public IQueryable<Product> WhereWithCategories(Expression<Func<Product, bool>> filter)
         {
             return _dbSet.Where(filter)
-                    .Include(x => x.ProductCategories)
-                    .ThenInclude(x => x.Category)
+                    .Include(x => x.Category)
                     .AsQueryable();
         }
 

@@ -1,0 +1,82 @@
+﻿@model List<MainCategoryModel>
+
+
+
+<style>
+    .navBtn {
+        text-decoration: none;
+        color: black;
+    }
+
+    .navCategory {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index:20000;
+        background-color:white;
+    }
+
+        .navCategory .category {
+            color: black;
+            text-decoration: none;
+            font-size: medium;
+        }
+
+        .navCategory .subCategory {
+            color: grey;
+            font-size: small;
+            text-decoration: none;
+        }
+</style>
+<div style="position: relative;
+    width: auto;">
+
+    <div class="d-flex justify-content-center">
+        @foreach (var mc in Model)
+        {
+            <a href="/@mc.Url" class="ms-2 navBtn" data-id=@mc.Id>@mc.Name</a>
+
+        }
+    </div>
+    <hr class="m-1">
+    @foreach (var mc in Model)
+    {
+        <div class="navCategory p-2 border border-secondary rounded" id=@mc.Id>
+            <div class="row">
+                @foreach (var c in mc.Categories)
+                {
+                    <div class="col-md-4 d-flex flex-column">
+                        <a href="/@c.Url" class="ms-2 category">@c.Name</a>
+                        @foreach (var sc in c.SubCategories)
+                        {
+                            <a href="/@sc.Url" class="ms-2 subCategory">@sc.Name</a>
+                        }
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+</div>
+
+
+<script>
+    $('.navBtn').on('mouseenter', function () {
+        
+        var divs = $('.navCategory')
+        for (let i = 0; i < divs.length; i++) {
+            const element = divs[i];    
+            if (element.id.toString() != $(this).data("id").toString()) {
+                element.style.display = "none"
+            }
+        }
+        $(`#${$(this).data("id")}`).toggle()
+    })
+
+    $('.navCategory').on('mouseleave', function () {
+        $(this).css("display", "none")
+    })
+
+</script>
+

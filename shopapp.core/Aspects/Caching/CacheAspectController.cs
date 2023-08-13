@@ -48,7 +48,6 @@ namespace shopapp.core.Aspects.Caching
             );
 
             var key = string.Format("{0}({1})", methodName, string.Join(",", _arguments));
-
             if (!_cacheManager.IsAdd(key))
                 _cacheManager.Add(key, context.Result, _cacheByMinute);
         }

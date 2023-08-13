@@ -27,11 +27,13 @@ builder.Services.AddProxyScoped<IProductRepository, EfProductRepository>();
 builder.Services.AddProxyScoped<ICategoryRepository, EfCategoryRepository>();
 builder.Services.AddProxyScoped<ICartRepository, EfCartRepository>();
 builder.Services.AddProxyScoped<ICartItemRepository, EfCartItemRepository>();
+builder.Services.AddProxyScoped<IMainCategoryRepository, EfMainCategoryRepository>();
 
 builder.Services.AddProxyScoped<IProductService, ProductService>();
 builder.Services.AddProxyScoped<ICategoryService, CategoryService>();
 builder.Services.AddProxyScoped<ICartService, CartService>();
 builder.Services.AddProxyScoped<ICartItemService, CartItemService>();
+builder.Services.AddProxyScoped<IMainCategoryService, MainCategoryService>();
 
 builder.Services.AddProxyScoped<ICacheManager, MemoryCacheManager>();
 
@@ -136,6 +138,16 @@ app.MapControllerRoute(
     defaults: new { controller = "Product", action = "Create" });
 
 app.MapControllerRoute(
+	name: "default",
+	pattern: "",
+	defaults: new { controller = "Home", action = "Index" });
+
+app.MapControllerRoute(
+	name: "product",
+	pattern: "{category}",
+	defaults: new { controller = "Product", action = "Index" });
+
+app.MapControllerRoute(
     name: "product",
     pattern: "product",
     defaults: new { controller = "Product", action = "Index" });
@@ -197,8 +209,11 @@ app.MapControllerRoute(
     defaults: new { controller = "Admin", action = "UserEdit" });
 
 
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
 
 app.Run();

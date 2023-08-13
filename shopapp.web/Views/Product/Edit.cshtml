@@ -2,7 +2,7 @@
 <form action="/product/edit" method="post">
     <input type="hidden" name="Id" value="@Model.Id">
     
-    @foreach (var p in @Model.ProductCategories)
+    @*@foreach (var p in @Model.ProductCategories)
     {
         <div class="form-group">
             <label for="@p.CategoryId">Category</label>
@@ -10,7 +10,7 @@
                 <option selected disabled>Select</option>
             </select>
         </div>
-    }
+    }*@
     
     <div class="form-group">
         <label for="Name">Name</label>

@@ -14,11 +14,19 @@
                 {
                     <input type="hidden" value=@Model.PageInfo.Selected.Search name="q">
                 }
-                @if (Model.PageInfo.Selected.Categories.Length != 0)
+                @if (Model.PageInfo.Selected.SubCategories.Count != 0)
                 {
-                    @foreach (var c in @Model.PageInfo.Selected.Categories)
+                    @foreach (var c in @Model.PageInfo.Selected.SubCategories)
                     {
                         <input type="hidden" value="@c" name="c">
+                    }
+
+                }
+                @if (Model.PageInfo.Selected.Brands.Count != 0)
+                {
+                    @foreach (var b in @Model.PageInfo.Selected.Brands)
+                    {
+                        <input type="hidden" value=@b name="b">
                     }
 
                 }

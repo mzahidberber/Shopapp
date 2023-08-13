@@ -130,7 +130,7 @@
                                         <td>@item.IsApprove</td>
                                         <td>@item.IsHome</td>
                                         <td>@item.Images.Count()</td>
-                                        <td>@item.ProductCategories.Count()</td>
+                                        @*<td>@item.ProductCategories.Count()</td>*@
                                         <td>
                                             <a href="/admin/user/@item.Id" class="btn btn-primary btn-sm mr-2">Edit</a>
                                             <button type="button" class="btn btn-danger btn-sm" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>

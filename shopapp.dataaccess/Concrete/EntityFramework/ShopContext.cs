@@ -19,10 +19,14 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         //    _configuration = configuration;
         //}
 
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<MainCategory> MainCategories { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
+        public DbSet<SubCategoryFeature> SubCategoryFeatures { get; set; }
+        public DbSet<SubCategoryFeatureValue> SubCategoryFeatureValues { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Image> Images { get; set; }
@@ -33,9 +37,13 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new UserRoleMapping());
             builder.ApplyConfiguration(new UserMapping(_configuration));
+            builder.ApplyConfiguration(new MainCategoryMapping());
             builder.ApplyConfiguration(new CategoryMapping());
+            builder.ApplyConfiguration(new SubCategoryMapping());
+            builder.ApplyConfiguration(new SubCategoryFeatureMapping());
+            builder.ApplyConfiguration(new SubCategoryFeatureValueMapping());
+            builder.ApplyConfiguration(new BrandMapping());
             builder.ApplyConfiguration(new ProductMapping());
-            builder.ApplyConfiguration(new ProductCategoryMapping());
             builder.ApplyConfiguration(new OrderMapping());
             //builder.ApplyConfiguration(new CartMapping());
             builder.ApplyConfiguration(new CartItemMapping());
@@ -56,7 +64,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             var connectionString = "";
             if (environment == "Development")
             {
-                connectionString = _configuration.GetConnectionString("shopdb");
+                connectionString = _configuration.GetConnectionString("shopdb1");
             }
             else if (environment == "Production")
             {

@@ -1,6 +1,6 @@
 ﻿@model PageInfo
 <div class="d-flex">
-    @foreach (var filter in @Model.Selected.Categories)
+    @foreach (var filter in @Model.Selected.SubCategories)
     {
         <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
             <h6 class="m-0">@filter</h6>
@@ -9,13 +9,22 @@
                 {
                     <input type="hidden" value=@Model.Selected.Search name="q">
                 }
-                @if (Model.Selected.Categories.Length != 0)
+                @if (@Model.Selected.Brands != null)
                 {
-                    @foreach (var c in Model.Selected.Categories)
+                    @foreach (var b in Model.Selected.Brands)
+                    {
+                        <input type="hidden" value=@b name="b">
+
+                    }
+                    
+                }
+                @if (Model.Selected.SubCategories.Count != 0)
+                {
+                    @foreach (var c in Model.Selected.SubCategories)
                     {
                         if (c != filter)
                         {
-                            <input type="hidden" value="@c" name="c">
+                            <input type="hidden" value=@c name="c">
                         }
 
                     }
@@ -40,14 +49,22 @@
         <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
             <h6 class="m-0">@Model.Selected.Search</h6>
             <form action=@Model.Url method="get" class="d-flex" style="align-items:center;">
-                @if (Model.Selected.Categories.Length != 0)
+                @if (Model.Selected.SubCategories.Count != 0)
                 {
-                    @foreach (var c in Model.Selected.Categories)
+                    @foreach (var c in Model.Selected.SubCategories)
                     {
-                        <input type="hidden" value="@c" name="c">
+                        <input type="hidden" value=@c name="c">
 
                     }
 
+                }
+                @if (@Model.Selected.Brands != null)
+                {
+                    @foreach (var b in Model.Selected.Brands)
+                    {
+                        <input type="hidden" value=@Model.Selected.Brands name="b">
+
+                    }
                 }
                 @if (Model.Selected.Price != null)
                 {
@@ -69,19 +86,27 @@
     {
         <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
             <h6 class="m-0">@Model.Selected.Price</h6>
-                <form action=@Model.Url method="get" class="d-flex" style="align-items:center;">
+            <form action=@Model.Url method="get" class="d-flex" style="align-items:center;">
                 @if (Model.Selected.Search != null)
                 {
                     <input type="hidden" value=@Model.Selected.Search name="q">
                 }
-                @if (Model.Selected.Categories.Length != 0)
+                @if (Model.Selected.SubCategories.Count != 0)
                 {
-                    @foreach (var c in @Model.Selected.Categories)
+                    @foreach (var c in @Model.Selected.SubCategories)
                     {
-                        <input type="hidden" value="@c" name="c">
+                        <input type="hidden" value=@c name="c">
 
                     }
 
+                }
+                @if (@Model.Selected.Brands != null)
+                {
+                    @foreach (var b in Model.Selected.Brands)
+                    {
+                        <input type="hidden" value=@b name="b">
+
+                    }
                 }
                 @if (Model.Selected.Sort != 1)
                 {
@@ -89,6 +114,50 @@
 
                 }
                 <button type="submit" class="btn-close"></button>
+            </form>
+
+        </div>
+
+    }
+
+    @foreach (var filter in @Model.Selected.Brands)
+    {
+        <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
+            <h6 class="m-0">@filter</h6>
+            <form action=@Model.Url method="get" class="d-flex" style="align-items:center;">
+                @if (@Model.Selected.Search != null)
+                {
+                    <input type="hidden" value=@Model.Selected.Search name="q">
+                }
+                @if (@Model.Selected.Brands != null)
+                {
+                    @foreach (var b in Model.Selected.Brands)
+                    {
+                        if (b != filter)
+                        {
+                            <input type="hidden" value=@b name="b">
+                        }
+
+                    }
+                }
+                @if (Model.Selected.SubCategories.Count != 0)
+                {
+                    @foreach (var c in Model.Selected.SubCategories)
+                    {
+                      <input type="hidden" value=@c name="c">
+
+                    }
+
+                }
+                @if (@Model.Selected.Price != null)
+                {
+                    <input type="hidden" value=@Model.Selected.Price name="prc">
+                }
+                @if (@Model.Selected.Sort != 1)
+                {
+                    <input type="hidden" value=@Model.Selected.Sort name="s">
+                }
+                <button type="submit" class="btn-close" style="width:5px;height:5px;"></button>
             </form>
 
         </div>

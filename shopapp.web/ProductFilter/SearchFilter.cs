@@ -15,7 +15,7 @@ public class SearchFilter : IFilter
         return x => 
         x.Description.ToLower().Contains(Search.ToLower()) || 
         x.Name.ToLower().Contains(Search.ToLower()) || 
-        x.ProductCategories.Any(x=>x.Category.Name.ToLower()==Search.ToLower()) ||
-        x.ProductCategories.Any(x => x.Category.Url.ToLower() == Search.ToLower());
+        x.Category.Name.ToLower()==Search.ToLower() ||
+        x.Category.Url.ToLower() == Search.ToLower();
     }
 }

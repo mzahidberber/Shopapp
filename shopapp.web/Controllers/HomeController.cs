@@ -27,12 +27,12 @@ namespace shopapp.web.Controllers
             _cacheManager = cacheManager;
         }
 
-        [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
+        //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 1440)]
         public async Task<IActionResult> Index()
         {
-            var key = Reflection.CreateCacheKey(typeof(HomeController), "Index");
-            if (_cacheManager.IsAdd(key))
-                return _cacheManager.Get<IActionResult>(key);
+            //var key = Reflection.CreateCacheKey(typeof(HomeController), "Index");
+            //if (_cacheManager.IsAdd(key))
+            //    return _cacheManager.Get<IActionResult>(key);
 
 
             var products = await _productService.Where(x => x.IsApprove == true && x.IsHome == true);

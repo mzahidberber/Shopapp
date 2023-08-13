@@ -14,7 +14,14 @@ namespace shopapp.web.ViewModels
         public string? Search { get; set; }
         public int Sort { get; set; }
         public string? Price { get; set; }
-        public string[] Categories { get; set; }
+        public List<string> SubCategories { get; set; }
+        public string? Category { get; set; }
+        public int CategoryType { get; set; }
+        public List<string> Brands { get; set; }
+        public MainCategoryModel? SelectedMainCategory { get; set; }
+        public CategoryModel? SelectedCategory { get; set; }
+        public SubCategoryModel? SelectedSubCategory { get; set; }
+        public List<BrandModel>? SelectedBrands { get; set; }
         public int Page { get; set; }
     }
 
@@ -23,7 +30,7 @@ namespace shopapp.web.ViewModels
         public int TotalItems { get; set; }
         public int ItemsPerPage { get; set; }
         public int CurrentPage { get; set; }
-        public int MostPrice { get; set; }
+        public int? MostPrice { get; set; }
         public string Url { get; set; }
         public SelectedInfo Selected { get; set; }
 

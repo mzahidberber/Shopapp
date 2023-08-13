@@ -9,13 +9,17 @@ namespace shopapp.business.Concrete.Mapper
         public DTOMapper()
         {
             CreateMap<ProductDTO, Product>().ReverseMap();
-            CreateMap<CategoryDTO, Category>().ReverseMap();
             CreateMap<OrderDTO, Order>().ReverseMap();
             CreateMap<UserDTO, User>().ReverseMap();
             CreateMap<CartDTO, Cart>().ReverseMap();
             CreateMap<CartItemDTO, CartItem>().ReverseMap();
-            CreateMap<ProductCategoryDTO, ProductCategory>().ReverseMap();
             CreateMap<ImageDTO, Image>().ReverseMap();
+            CreateMap<CategoryDTO, Category>().ReverseMap();
+            CreateMap<SubCategoryDTO, SubCategory>().ReverseMap();
+            CreateMap<SubCategoryFeatureDTO, SubCategoryFeature>().ReverseMap();
+            CreateMap<SubCategoryFeatureValueDTO, SubCategoryFeatureValue>().ReverseMap();
+            CreateMap<MainCategoryDTO, MainCategory>().ReverseMap();
+            CreateMap<BrandDTO, Brand>().ReverseMap();
         }
     }
 }

@@ -11,11 +11,18 @@
             {
                 <input type="hidden" value=@Model.Selected.Search name="q">
             }
-            @if (Model.Selected.Categories.Length != 0)
+            @if (Model.Selected.SubCategories.Count != 0)
             {
-                @foreach (var c in Model.Selected.Categories)
+                @foreach (var c in Model.Selected.SubCategories)
                 {
                     <input type="hidden" value="@c" name="c">
+                }
+            }
+            @if (Model.Selected.Brands.Count != 0)
+            {
+                @foreach (var b in Model.Selected.Brands)
+                {
+                    <input type="hidden" value=@b name="b">
                 }
             }
             @if (Model.Selected.Price != null)

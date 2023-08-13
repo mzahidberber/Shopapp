@@ -1,5 +1,14 @@
 ﻿@model PageInfo
+<style>
+    .NavLink {
+        text-decoration: none;
+        color: black;
+    }
 
+    .NavLink:hover {
+        color: blue;
+    }
+</style>
 <form action=@Model.Url method="get">
     <input type="hidden" value="@Model.Selected.Sort" name="s">
     @if (Model.Selected.Search != null)
@@ -7,8 +16,106 @@
         <input type="hidden" value=@Model.Selected.Search name="q">
     }
     <div class="mt-2">
-        @await Component.InvokeAsync("CategoryFilter",new { selectedCategories=Model.Selected.Categories })
+        @*@await Component.InvokeAsync("CategoryFilter",new { selectedCategories=Model.Selected.SubCategories })*@
+        <button id="categoryBtn" type="button" class="btn btn-ligth w-100" style="text-align: start;">
+            <div class="row">
+                <div class="col-md-10">
+                    Categories
+                </div>
+                <div class="col-md-2">
+                    <i id="categoryArrow" class="fa-solid fa-caret-@(Model.Selected.CategoryType==3?"down":"up")  ms-2"></i>
+                </div>
+            </div>
+
+        </button>
+
+        <div id="categoryDiv" class="border p-3 mt-2 overflow-auto" style="height: 220px;@(Model.Selected.CategoryType==3?"display:none;":"")">
+
+            <div class="input-group">
+                
+                @if (Model.Selected.CategoryType < 3)
+                {
+                    <div class="input-group mb-3 mt-2">
+                        <input type="text" class="form-control" id="categorySearch" placeholder="Search">
+                    </div>
+
+                }
+
+
+                <div style="display: inline;" class="categoryInputs d-flex flex-column">
+                    @if (Model.Selected.CategoryType == 1)
+                    {
+                        @foreach (var category in Model.Selected.SelectedMainCategory.Categories)
+                        {
+                            
+                            <div class="categoryInput">
+                                <a class="NavLink mt-1" href="/@category.Url">@category.Name</a>
+                            </div>
+                        }
+                    }
+                    @if (Model.Selected.CategoryType == 2)
+                    {
+                        @foreach (var category in Model.Selected.SelectedCategory.SubCategories)
+                        {
+                            <div class="categoryInput">
+
+                                <input type="checkbox" name="c" value=@category.Url @(Model.Selected.SubCategories.Any(x => x == category.Url) ? "checked" : "")>
+                                <label class="ms-2" for="@category.Name">@category.Name</label>
+                            </div>
+                        }
+                    }
+
+                    @if (Model.Selected.CategoryType == 3)
+                    {
+                        <div class="categoryInput">
+                            <a class="NavLink mt-1" href="/@Model.Selected.SelectedSubCategory.Url">@Model.Selected.SelectedSubCategory.Name</a>
+                        </div>
+                            
+                    }
+                    
+
+                </div>
+            </div>
+        </div>
     </div>
+    <hr>
+    <div class="mt-2">
+        <button id="brandBtn" type="button" class="btn btn-ligth w-100" style="text-align: start;">
+            <div class="row">
+                <div class="col-md-10">
+                    Brands
+                </div>
+                <div class="col-md-2">
+                    <i id="brandArrow" class="fa-solid fa-caret-@(Model.Selected.CategoryType==3?"up":"down") ms-2"></i>
+                </div>
+            </div>
+
+        </button>
+        <div id="brandDiv" class="border p-3 mt-2 overflow-auto" style="height: 220px;@(Model.Selected.CategoryType==3?"display:block;":"display:none;")">
+
+            <div class="input-group">
+                <div class="input-group mb-3 mt-2">
+                    <input type="text" class="form-control" id="brandSearch" placeholder="Search">
+                </div>
+
+
+                <div style="display: inline;" class="brandInputs d-flex flex-column">
+                    
+                        @foreach (var brand in Model.Selected.SelectedBrands)
+                        {
+                            <div class="brandInput">
+
+                                <input type="checkbox" name="b" value=@brand.Url @(Model.Selected.Brands.Any(x => x == brand.Url) ? "checked" : "")>
+                                <label class="ms-2" for="@brand.Name">@brand.Name</label>
+                            </div>
+                        }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <hr>
     <div class="mt-2">
         <button id="priceBtn" type="button" class="btn btn-ligth w-100" style="text-align: start;">
@@ -17,12 +124,12 @@
                     Price
                 </div>
                 <div class="col-md-2">
-                    <i id="priceArrow" class="fa-solid fa-caret-up ms-2"></i>
+                    <i id="priceArrow" class="fa-solid fa-caret-down ms-2"></i>
                 </div>
             </div>
 
         </button>
-            <div id="priceDiv" class="border p-3 mt-2 overflow-auto" style="height:220px;" >
+        <div id="priceDiv" class="border p-3 mt-2 overflow-auto" style="height:220px;display:none;">
 
             <div class="input-group d-flex">
 
@@ -37,7 +144,7 @@
                     var invertalprice = (Model.MostPrice - 0) / 4;
                 }
                     
-                @for (int i = 0; i < Model.MostPrice; i += invertalprice)
+                @for (int i = 0; i < (Model.MostPrice??0); i += invertalprice??0)
                 {
                         <div class="prcRadio">
                         <input type="radio" @(Model.Selected.Price == $"{i}-{i + invertalprice}" ? "checked" : "")>
@@ -52,4 +159,100 @@
 <hr>
 <button class="btn btn-light mt-2 w-100 border">Filter</button>
 </form>
+
+
+<script>
+    $('#categoryBtn').click(function (ev) { btnClick(ev, "category") })
+    $('#priceBtn').click(function (ev) { btnClick(ev, "price") })
+    $('#brandBtn').click(function (ev) { btnClick(ev, "brand") })
+    $('.sortValue').click(function () {
+        $('.sortName').text($(this).text())
+    })
+
+    $('#categorySearch').on("input", function () {
+        var value = $(this).val()
+        var inputs = $('.categoryInputs').find(".categoryInput")
+        for (let i = 0; i < inputs.length; i++) {
+            const element = inputs[i];
+            if (!$(element).text().toLowerCase().includes(value.toLowerCase())) {
+                $(element).css("display", "none")
+            } else {
+                $(element).css("display", "block")
+            }
+
+        }
+    })
+
+    $('#brandSearch').on("input", function () {
+        var value = $(this).val()
+        var inputs = $('.brandInputs').find(".brandInput")
+        for (let i = 0; i < inputs.length; i++) {
+            const element = inputs[i];
+            if (!$(element).text().toLowerCase().includes(value.toLowerCase())) {
+                $(element).css("display", "none")
+            } else {
+                $(element).css("display", "block")
+            }
+
+        }
+    })
+
+    function btnClick(ev, btn) {
+        if (btn == "category") {
+            $('#categoryDiv').toggle(() => {
+                $('#categoryArrow').toggleClass('fa-caret-up fa-caret-down')
+            })
+        }
+        if (btn == "price") {
+            $('#priceDiv').toggle(() => {
+                $('#priceArrow').toggleClass('fa-caret-up fa-caret-down')
+            })
+        }
+        if (btn == "brand") {
+            $('#brandDiv').toggle(() => {
+                $('#brandArrow').toggleClass('fa-caret-up fa-caret-down')
+            })
+        }
+    }
+
+
+    $('#leastInput').on('change', inputTextChange)
+    $('#mostInput').on('change', inputTextChange)
+
+    function inputTextChange(ev) {
+        if (ev.target.id == "leastInput") {
+            if ($('#leastInput').val() == "" && $('#mostInput').val() != "") {
+                $('#leastInput').val("0")
+            }
+            if ($('#leastInput').val() == "") {
+                $('#leastInput').val("0")
+            }
+        }
+        if (ev.target.id == "mostInput") {
+            if ($('#leastInput').val() == "") {
+                $('#leastInput').val("0")
+            }
+        }
+        if ($('#mostInput').val() != "" && parseInt($('#leastInput').val()) > parseInt($('#mostInput').val())) {
+            $('#mostInput').val($('#leastInput').val())
+        }
+        $(".prcRadio input").prop("checked", false);
+        $('#prcInput').val(`${$('#leastInput').val()}-${$('#mostInput').val()}`)
+        $('#prcInput').attr("name", "prc")
+    }
+
+    $('.prcRadio input').on('change', function () {
+        var input = $(this)
+        $.each($('.prcRadio input'), function () {
+            if ($(this)[0] != input[0]) {
+                $(this).prop("checked", false)
+            }
+        })
+        var prc = $(this).parent().find('label').text()
+        $('#prcInput').val(prc)
+        $('#leastInput').val(prc.split("-")[0])
+        $('#mostInput').val(prc.split("-")[1])
+        $('#prcInput').attr("name", "prc")
+    })
+</script>
 
