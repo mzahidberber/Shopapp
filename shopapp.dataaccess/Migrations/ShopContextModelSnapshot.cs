@@ -504,7 +504,7 @@ namespace shopapp.dataaccess.Migrations
                             MainCategoryId = 1,
                             Name = "Dell Laptop",
                             Price = 10.0,
-                            Stock = 1,
+                            Stock = 0,
                             SubCategoryId = 1,
                             Url = "dell-laptop"
                         },
@@ -520,7 +520,7 @@ namespace shopapp.dataaccess.Migrations
                             MainCategoryId = 2,
                             Name = "Lenova Tablet",
                             Price = 101.0,
-                            Stock = 2,
+                            Stock = 0,
                             SubCategoryId = 5,
                             Url = "lenova-tablet"
                         });
@@ -576,7 +576,7 @@ namespace shopapp.dataaccess.Migrations
                             Id = 4,
                             CategoryId = 2,
                             Name = "Oyun Bilgisayarı",
-                            Url = "oyunpc"
+                            Url = "oyun-pc"
                         },
                         new
                         {
@@ -838,7 +838,7 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b3405efb-8211-4780-ab08-130e102a422b",
+                            ConcurrencyStamp = "df11b0a8-f0c9-47d4-9cea-4af417d5504e",
                             Email = "adminuser@shopapp.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -846,9 +846,9 @@ namespace shopapp.dataaccess.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMİNUSER@SHOPAPP.COM",
                             NormalizedUserName = "ADMİN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJGzK+T/8FCEu1ylPUzc2e+HFXOwe1ZLkBZJgqCatxmbHagZJUa2rA8cmYmD4SJ8SQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECH0Z29Wf8xSTyMDgXVmjL9vPHqt11gLM5V7o0jXtAPTLDxxCOzqYRUtTc2PQzLpew==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "d1e853e2-80d6-498c-9b8d-a0680180049b",
+                            SecurityStamp = "9bc893ab-3217-4e82-88b3-d18c69c4eb97",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });

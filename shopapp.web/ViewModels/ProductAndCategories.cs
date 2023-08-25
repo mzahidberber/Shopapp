@@ -14,7 +14,7 @@ namespace shopapp.web.ViewModels
         public string? Search { get; set; }
         public int Sort { get; set; }
         public string? Price { get; set; }
-        public List<string> SubCategories { get; set; }
+        public List<string> SelectedSubCategories { get; set; }
         public string? Category { get; set; }
         public int CategoryType { get; set; }
         public List<string> Brands { get; set; }

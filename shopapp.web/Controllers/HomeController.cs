@@ -35,7 +35,7 @@ namespace shopapp.web.Controllers
             //    return _cacheManager.Get<IActionResult>(key);
 
 
-            var products = await _productService.Where(x => x.IsApprove == true && x.IsHome == true);
+            var products = await _productService.WhereWithAtt(x => x.IsApprove == true && x.IsHome == true);
             var categories = await _categoryService.GetAllAsync();
             return View(new ProductInfo
             {

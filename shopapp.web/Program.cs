@@ -136,11 +136,32 @@ app.MapControllerRoute(
     name: "productcreate",
     pattern: "product/create",
     defaults: new { controller = "Product", action = "Create" });
+app.MapControllerRoute(
+	name: "admin",
+	pattern: "admin",
+	defaults: new { controller = "Admin", action = "Index" });
+app.MapControllerRoute(
+    name: "products",
+    pattern: "products",
+    defaults: new { controller = "Product", action = "Products" });
+app.MapControllerRoute(
+    name: "search",
+    pattern: "search",
+    defaults: new { controller = "Product", action = "Search" });
+app.MapControllerRoute(
+	name: "detail",
+	pattern: "detail/{url}",
+	defaults: new { controller = "Product", action = "Details" });
+
+app.MapControllerRoute(
+	name: "cart",
+	pattern: "cart",
+	defaults: new { controller = "Cart", action = "Index" });
 
 app.MapControllerRoute(
 	name: "default",
 	pattern: "",
-	defaults: new { controller = "Home", action = "Index" });
+	defaults: new { controller = "Product", action = "Products" });
 
 app.MapControllerRoute(
 	name: "product",
@@ -153,10 +174,7 @@ app.MapControllerRoute(
     defaults: new { controller = "Product", action = "Index" });
 
 
-app.MapControllerRoute(
-    name: "search",
-    pattern: "search",
-    defaults: new { controller = "Product", action = "Search" });
+
 
 app.MapControllerRoute(
     name: "checkout",

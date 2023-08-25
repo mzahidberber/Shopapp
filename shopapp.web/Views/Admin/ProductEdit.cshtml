@@ -1,0 +1,73 @@
+﻿@model ProductModel
+<style>
+    #container {
+        width: 1000px;
+        margin: 20px auto;
+    }
+
+    .ck-editor__editable[role="textbox"] {
+        /* editing area */
+        min-height: 200px;
+    }
+
+    .ck-content .image {
+        /* block images */
+        max-width: 80%;
+        margin: 20px auto;
+    }
+</style>
+<form action="/product/edit" method="post">
+    <input type="hidden" name="Id" value="@Model.Id">
+    
+    @*@foreach (var p in @Model.ProductCategories)
+    {
+        <div class="form-group">
+            <label for="@p.CategoryId">Category</label>
+            <select asp-for="@p.CategoryId" asp-items="@ViewBag.Categories" class="form-control">
+                <option selected disabled>Select</option>
+            </select>
+        </div>
+    }*@
+    
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input asp-for="Name" value="@Model.Name" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="Url">Url</label>
+        <input asp-for="Url" value="@Model.Url" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="Price">Price</label>
+        <input asp-for="Price" value="@Model.Price" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea id="editor" asp-for="Description" value="@Model.Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="ImageUrl">ImageUrl</label>
+        <input asp-for="HomeImageUrl" value="@Model.HomeImageUrl" class="form-control">
+        <img src="~/img/@Model.HomeImageUrl" width="80">
+        <input type="file" name="file">
+        @*<span asp-validation-for="ImageUrl" class="text-danger"></span>*@
+    </div>
+    @*<div class="form-group">
+    <label for="exampleFormControlFile1">Example file input</label>
+    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+    </div>*@
+    <button class="btn btn-primary" type="submit">Submit</button>
+
+</form>
+
+<script src="/modules/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="/modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+<script src="/modules/ckeditor/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('editor', {
+        filebrowserUploadUrl: "/admin/UploadImage",
+        filebrowserBrowseUrl: "/admin/BrowseImages"
+    });
+</script>

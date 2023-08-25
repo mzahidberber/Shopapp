@@ -8,6 +8,7 @@ namespace shopapp.web.Models.Entity
         public ProductModel()
         {
             this.Images = new List<ImageModel>();
+            this.Stocks = new List<StockModel>();
             this.SubCategoryFeatureValues = new List<SubCategoryFeatureValueModel>();
 
         }
@@ -31,8 +32,6 @@ namespace shopapp.web.Models.Entity
 
         public string? HomeImageUrl { get; set; }
 
-        [Required(ErrorMessage = "Stock Required")]
-        public int? Stock { get; set; }
 
         public bool IsApprove { get; set; }
         public bool IsHome { get; set; }
@@ -51,5 +50,6 @@ namespace shopapp.web.Models.Entity
         public MainCategoryModel MainCategory { get; set; }
 
         public List<SubCategoryFeatureValueModel> SubCategoryFeatureValues { get; set; }
+        public List<StockModel> Stocks { get; set; }
     }
 }

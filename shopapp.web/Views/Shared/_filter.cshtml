@@ -59,7 +59,7 @@
                         {
                             <div class="categoryInput">
 
-                                <input type="checkbox" name="c" value=@category.Url @(Model.Selected.SubCategories.Any(x => x == category.Url) ? "checked" : "")>
+                                <input type="checkbox" name="c" value=@category.Url @(Model.Selected.SelectedSubCategories.Any(x => x == category.Url) ? "checked" : "")>
                                 <label class="ms-2" for="@category.Name">@category.Name</label>
                             </div>
                         }

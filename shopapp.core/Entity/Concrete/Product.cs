@@ -7,15 +7,19 @@ namespace shopapp.core.Entity.Concrete
         public Product()
         {
             this.Images = new List<Image>();
+            //this.Stocks = new List<Stock>();
             this.SubCategoryFeatureValues = new List<SubCategoryFeatureValue>();
         }
         public int Id { get; set; }
         public string Name { get; set; }
+
+
         public string Url { get; set; }
         public double Price { get; set; }
         public string Description { get; set; }
         public string HomeImageUrl { get; set; }
         public int Stock { get; set; }
+        
         public bool IsApprove { get; set; }
         public bool IsHome { get; set; }
 
@@ -33,6 +37,8 @@ namespace shopapp.core.Entity.Concrete
 
         public List<Image> Images { get; set; }
 
-        public List<SubCategoryFeatureValue> SubCategoryFeatureValues { get; set; }
+		//public List<Stock> Stocks { get; set; }
+
+		public List<SubCategoryFeatureValue> SubCategoryFeatureValues { get; set; }
     }
 }

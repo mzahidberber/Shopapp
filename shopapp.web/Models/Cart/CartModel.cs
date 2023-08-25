@@ -4,11 +4,15 @@ namespace shopapp.web.Models.Cart;
 
 public class CartModel
 {
+    public CartModel()
+    {
+        this.CartItems = new List<CartItemModel>();
+    }
     public int CartId { get; set; }
     public List<CartItemModel> CartItems { get; set; }
     public double TotalPrice()
     {
-        return CartItems.Sum(i => i.Product.Price ?? 0 * i.Quantity);
+        return CartItems.Sum(i => (i.Product.Price ?? 0) * i.Quantity);
     }
 }
 

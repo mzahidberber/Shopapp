@@ -7,9 +7,10 @@ public class FilterBuilder
 {
     List<Expression<Func<Product, bool>>> ExpressionList { get; set; } = new();
 
-    public void AddFilter(IFilter filter)
+    public FilterBuilder AddFilter(IFilter filter)
     {
         ExpressionList.Add(filter.Expression());
+        return this;
     }
 
     public Expression<Func<Product, bool>>? Build()

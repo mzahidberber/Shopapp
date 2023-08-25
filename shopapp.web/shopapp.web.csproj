@@ -26,6 +26,7 @@
   <ItemGroup>
     <Folder Include="Identity\" />
     <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\ckeditorimg\" />
   </ItemGroup>
 
 </Project>

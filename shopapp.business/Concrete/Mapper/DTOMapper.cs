@@ -20,6 +20,8 @@ namespace shopapp.business.Concrete.Mapper
             CreateMap<SubCategoryFeatureValueDTO, SubCategoryFeatureValue>().ReverseMap();
             CreateMap<MainCategoryDTO, MainCategory>().ReverseMap();
             CreateMap<BrandDTO, Brand>().ReverseMap();
+            CreateMap<StockDTO, Stock>().ReverseMap();
+            CreateMap<StockValueDTO, StockValue>().ReverseMap();
         }
     }
 }

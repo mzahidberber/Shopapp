@@ -3,6 +3,7 @@ using shopapp.business.Concrete.Mapper;
 using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
 using shopapp.core.DataAccess.Abstract;
+using shopapp.core.DTOs.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
 using System.Linq.Expressions;
@@ -16,6 +17,13 @@ public class ProductService : GenericService<Product, ProductDTO>, IProductServi
     public ProductService(IProductRepository genericRepository) : base(genericRepository)
     {
         _genericRepository = genericRepository;
+    }
+
+    public async Task<Response<IEnumerable<ProductDTO>>> WhereWithAtt(Expression<Func<Product, bool>> predicate)
+    {
+        var list = await _genericRepository.GetWhereWithAtt(predicate).ToListAsync();
+        await _genericRepository.CommitAsync();
+        return Response<IEnumerable<ProductDTO>>.Success(ObjectMapper.Mapper.Map<IEnumerable<ProductDTO>>(list), 200);
     }
 
     public async Task<Response<ProductDTO>> GetByIdWithCategoriesAsync(int id)
@@ -42,6 +50,17 @@ public class ProductService : GenericService<Product, ProductDTO>, IProductServi
 	public async Task<Response<ProductDTO>> GetByIdWithAttsAsync(int id)
 	{
 		var product = await _genericRepository.GetByIdWithAttAsync(id);
+		await _genericRepository.CommitAsync();
+		if (product == null)
+		{
+			return Response<ProductDTO>.Fail("Id Not Found", 404, true);
+		}
+		return Response<ProductDTO>.Success(ObjectMapper.Mapper.Map<ProductDTO>(product), 200);
+	}
+
+	public async Task<Response<ProductDTO>> GetByUrlWithAttsAsync(string url)
+	{
+		var product = await _genericRepository.GetByUrlWithAttAsync(url);
 		await _genericRepository.CommitAsync();
 		if (product == null)
 		{

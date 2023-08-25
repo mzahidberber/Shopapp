@@ -8,7 +8,56 @@
 	.price{
 		color:darkblue;
 	}
+	
+	.own-item{
+		height: 40rem;
+		position: relative;
+	}
+
+	.own-item .own-image {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	.carousel slide{
+		width:100%;
+		height:100%;
+	}
+	.carousel-indicators .carousel-indicators-item {
+		border: medium none;
+		border-radius: 0;
+		width: 4rem !important;
+		height: auto;
+		border: 1px solid black;
+		display: flex; 
+		align-items: center;
+		justify-content: center;
+	}
+	.carousel-indicators .carousel-indicators-item img {
+		max-width: 100%;
+		max-height: 100%;
+	}
+	.carousel-indicators .carousel-indicators-item .active img {
+		opacity: 0.7;
+	}
+
+	.carousel-control-prev-icon{
+		background-color:black;
+	}
+
+	.carousel-control-next-icon {
+		background-color: black;
+	}
+
+
 </style>
+<link rel="stylesheet" href="/modules/owl.carousel/dist/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="/modules/owl.carousel/dist/assets/owl.theme.default.min.css">
+
+
+
 @await Component.InvokeAsync("NavMainCategory")
 <div class="d-flex mt-3">
 		<h6 class="ms-2">></h6>
@@ -24,26 +73,40 @@
 </div>
 <div class="row">
 	
-	<div class="col-6 border rounded mt-3">
+	<div class="col-6 mt-3">
 		<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-			<ol class="carousel-indicators">
-				<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active">asd</li>
-				@for (int i = 1; i < Model.Images.Count; i++)
+			<div class="carousel-indicators">
+				@if (Model.Images.Count > 0)
 				{
-					<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to=@($"{i}")></li>
-				}
-			</ol>
-			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img class="d-block w-100" src="~/img/@Model.Images[0].Url" >
-				</div>
-				@for (int i = 1; i < Model.Images.Count; i++)
-				{
-					<div class="carousel-item">
-						<img class="d-block w-100" src="~/img/@Model.Images[i].Url">
+					<div data-bs-target="#carouselExampleIndicators " data-bs-slide-to="0" class="active carousel-indicators-item">
+						<img class="d-block w-100" src="~/img/@Model.Images[0].Url">
 					</div>
+
+					@for (int i = 1; i < Model.Images.Count; i++)
+					{
+						<div data-bs-target="#carouselExampleIndicators" data-bs-slide-to=@($"{i}") class="carousel-indicators-item">
+							<img class="d-block w-100" src="~/img/@Model.Images[i].Url">
+						</div>
+					}
 				}
 				
+				
+
+
+			</div>
+			<div class="carousel-inner">
+				@if (Model.Images.Count > 0)
+				{
+					<div class="carousel-item active own-item">
+						<img class="d-block w-100 own-image" src="~/img/@Model.Images[0].Url" >
+					</div>
+					@for (int i = 1; i < Model.Images.Count; i++)
+					{
+						<div class="carousel-item own-item">
+							<img class="d-block w-100 own-image"  src="~/img/@Model.Images[i].Url">
+					</div>
+				}
+				}
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
 				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -55,6 +118,8 @@
 			</a>
 		</div>
 
+		
+
 	</div>
 	
 	<div class="col-6 mt-3">
@@ -64,22 +129,43 @@
 		<h1 class="h2 mt-4">@Model.Name</h1>
 		<h1 class="h1 price mt-4">@(string.Format("{0:N0}", @Model.Price)) <span class="h6">TL</span></h1>
 
+		@foreach (var stock in Model.Stocks)
+		{
+			<div class="row mt-3">
+				<div class="col-md-10">
+					<div class="">
+						<h2 class="h6 ms-2">@stock.Name </h2>
+
+						@foreach (var stockvalue in stock.StockValues)
+						{
+							<input type="radio" class="btn-check" name=$"options{@Model.Stocks.IndexOf(stock)}" id=$"option{@Model.Stocks.IndexOf(stock)}{@stock.StockValues.IndexOf(stockvalue)}" autocomplete="off" checked>
+							<label class="btn btn-outline-secondary" for=$"option{@Model.Stocks.IndexOf(stock)}{@stock.StockValues.IndexOf(stockvalue)}">@stockvalue.Name</label>
+						}
+						
+					</div>
+				</div>
+			</div>
+		}
+		
 
 		@*@if (User.Identity.IsAuthenticated)
 		{*@
 		<form asp-controller="Cart" asp-action="AddToCart" method="post" class="form-inline mt-4">
 			<input type="hidden" name="productId" value="@Model.Id">
+			<input type="hidden" name="returnUrl" value=/detail/@Model.Url>
 			<div class="row">
 				
-				<div class="col-md-9 p-0 ps-2">
-					<button class="btn btn-primary btn-lg p-1 w-100" type="submit">
-						Add Basket
-					</button>
-				</div>
-				<div class="col-md-1 p-0">
-					<input class="form-control" type="number" name="quantity" id="age" min="0" max="20" step="1" value="1">
-				</div>
-				<div class="col-md-2 p-0">
+				<div class="col-md-10 p-0 ps-2">
+					<div class="input-group mb-3">
+						<div class="input-group-prepend" style="width:90%">
+							<button class="btn btn-primary btn-lg p-1 form-control" type="submit" aria-describedby="basic-addon1">
+								Add Basket
+							</button>
+						</div>
+						<input class="form-control" type="number" name="quantity" id="age" min="0" max="20" step="1" value="1">
+
+					</div>
+					
 				</div>
 			</div>
 
@@ -91,14 +177,20 @@
 			{
 				<div class="row">
 					<div class="col-md-10">
-						<hr class="m-2">
+						<hr class="m-1">
 						<div class="d-flex">
-							<h2 class="h5 ms-2">@f.SubCategoryFeature.Name : </h2>
-							<h2 class="h5 ms-2">@f.Value</h2>
+							<h2 class="h6 ms-2">@f.SubCategoryFeature.Name : </h2>
+							<h2 class="h6 ms-2">@f.Value</h2>
 						</div>
 					</div>
 				</div>
 			}
+			<div class="row">
+				<div class="col-md-10">
+					<hr class="m-1">
+				</div>
+			</div>
+			
 		</div>
 	</div>
 

@@ -10,11 +10,9 @@ using shopapp.core.DTOs.Concrete;
 using shopapp.core.Reflection;
 using shopapp.web.Mapper;
 using shopapp.web.Models.Entity;
-using shopapp.web.Models.Shared;
+using shopapp.web.Models.ProductModels;
 using shopapp.web.ProductFilter;
 using shopapp.web.ViewModels;
-using System.Reflection.Metadata;
-using System.Reflection;
 
 namespace shopapp.web.Controllers;
 
@@ -48,32 +46,30 @@ public class ProductController : Controller
 
 
     //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 60)]
-    public async Task<IActionResult> Details(int id)
+    public async Task<IActionResult> Details(string url)
     {
         //var key = Reflection.CreateCacheKey(typeof(ProductController), "Details", id);
         //if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
 
 
 
-        var product = await this._productService.GetByIdWithAttsAsync(id);
-        return View(ObjectMapper.Mapper.Map<ProductModel>(product.data));
+        var product = await this._productService.GetByUrlWithAttsAsync(url);
+        if (product.statusCode == 200)
+            return View(ObjectMapper.Mapper.Map<ProductModel>(product.data));
+        else
+            return View("Error");
     }
 
 
-    //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 60)]
-    public async Task<IActionResult> Index(string? category,List<string> c, List<string> b, string? prc=null,int s=1, int p = 1)
+    public async Task<SelectedCategoryModel> FindCategoryStatusAsync(string category)
     {
-        //var key = Reflection.CreateCacheKey(typeof(ProductController), "List",c, prc ?? "<Null>", s, p);
-        //if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
-
-        var categoryModels =await GetCategoriesAsync();
-        var main=categoryModels.FirstOrDefault(x => x.Url == category);
-        var cate=categoryModels.FirstOrDefault(x => x.Categories.Any(x=>x.Url==category));
-        var sub=categoryModels.FirstOrDefault(x => x.Categories.Any(x => x.SubCategories.Any(x=>x.Url==category)));
-
-
-        MainCategoryModel? SelectedMainCategory=null;
-        CategoryModel? SelectedCategory=null;
+        var categoryModels = await GetCategoriesAsync();
+        var main = categoryModels.FirstOrDefault(x => x.Url == category);
+        var cate = categoryModels.FirstOrDefault(x => x.Categories.Any(x => x.Url == category));
+        var sub = categoryModels.FirstOrDefault(x => x.Categories.Any(x => x.SubCategories.Any(x => x.Url == category)));
+        
+        MainCategoryModel? SelectedMainCategory = null;
+        CategoryModel? SelectedCategory = null;
         SubCategoryModel? SelectedSubCategory = null;
         IEnumerable<BrandModel>? SelectedBrands = null;
         int categoryType;
@@ -97,13 +93,33 @@ public class ProductController : Controller
         {
             categoryType = 3;
             SelectedMainCategory = sub;
-            SelectedCategory = SelectedMainCategory.Categories.FirstOrDefault(x => x.SubCategories.Any(x=>x.Url==category));
-            SelectedSubCategory=SelectedCategory.SubCategories.FirstOrDefault(x=>x.Url==category);
+            SelectedCategory = SelectedMainCategory.Categories.FirstOrDefault(x => x.SubCategories.Any(x => x.Url == category));
+            SelectedSubCategory = SelectedCategory.SubCategories.FirstOrDefault(x => x.Url == category);
             SelectedBrands = SelectedSubCategory.Brands;
         }
         else categoryType = 0;
 
-        var filterBuilder = new FilterBuilder();
+        return new SelectedCategoryModel
+        {
+            MainCategory=SelectedMainCategory,
+            CategoryType=categoryType,
+            Category=SelectedCategory,
+            SubCategory=SelectedSubCategory,
+            Brands=SelectedBrands
+        };
+    }
+
+    //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 60)]
+    public async Task<IActionResult> Index(string? category,List<string> c, List<string> b, string? prc=null,int s=1, int p = 1)
+    {
+        //var key = Reflection.CreateCacheKey(typeof(ProductController), "List",c, prc ?? "<Null>", s, p);
+        //if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
+
+        var selectedInfo=await FindCategoryStatusAsync(category);
+
+        if (selectedInfo.MainCategory == null) return NotFound();
+
+        var filterBuilder = new FilterBuilder().AddFilter(new IsApprove(true));
         if (category!=null) filterBuilder.AddFilter(new CategoryFilter(category));
         if (c.Count>0) filterBuilder.AddFilter(new SubCategoryFilter(c));
         if (b.Count > 0) filterBuilder.AddFilter(new BrandFilter(b));
@@ -112,7 +128,9 @@ public class ProductController : Controller
 
         var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
 
-        var product =await this._productService.WherePage(SelectedMainCategory.Url,p, pageSize, s, filter);
+        
+
+        var product =await this._productService.WherePage(selectedInfo.MainCategory.Url,p, pageSize, s, filter);
 
         
         return View(new ProductInfo
@@ -126,14 +144,14 @@ public class ProductController : Controller
                 Url= category,
                 Selected =new SelectedInfo 
                 { 
-                    SubCategories=c,
+                    SelectedSubCategories=c,
                     Category=category,
-                    CategoryType=categoryType,
                     Brands=b,
-                    SelectedCategory=SelectedCategory,
-                    SelectedMainCategory=SelectedMainCategory,
-                    SelectedSubCategory=SelectedSubCategory,
-                    SelectedBrands=SelectedBrands.GroupBy(x=>x.Name).Select(x=>x.First()).ToList(),
+                    CategoryType= selectedInfo.CategoryType,
+                    SelectedMainCategory= selectedInfo.MainCategory,
+                    SelectedCategory= selectedInfo.Category,
+                    SelectedSubCategory= selectedInfo.SubCategory,
+                    SelectedBrands= selectedInfo.Brands.GroupBy(x=>x.Name).Select(x=>x.First()).ToList(),
                     Sort=s,
                     Page=p,
                     Search=null,
@@ -144,84 +162,30 @@ public class ProductController : Controller
         });;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Create()
-    {
-        var categories = await this._categoryService.GetAllAsync();
-        ViewBag.Categories = new SelectList(categories.data, "Id", "Name");
-        return View(new ProductModel());
-    }
+    
 
-
-    [HttpPost]
-    public async Task<IActionResult> Create(ProductModel product, IFormFile file)
-    {
-        if (ModelState.IsValid)
-        {
-            if (file != null)
-            {
-                //isime bak
-                var extension = Path.GetExtension(file.FileName);
-                var randomName = string.Format($"{Guid.NewGuid()}{extension}");
-                product.HomeImageUrl = randomName;
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", randomName);
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-            }
-            await this._productService.AddAsync(ObjectMapper.Mapper.Map<ProductDTO>(product));
-            return RedirectToAction("Index");
-        }
-        return View(product);
-    }
-
-    [CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 60)]
-    [HttpGet]
-    public async Task<IActionResult> Edit(int id)
-    {
-        var key = Reflection.CreateCacheKey(typeof(ProductController), "Edit", id);
-        if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
-
-
-        var categories = await this._categoryService.GetAllAsync();
-        ViewBag.Categories = new SelectList(categories.data.ToList(), "Id", "Name");
-        var product = this._productService.GetByIdWithCategoriesAsync(id).Result.data;
-        return View(product);
-    }
-
-
-    [HttpPost]
-    public async Task<IActionResult> Edit(ProductDTO product)
-    {
-        //Console.WriteLine(product.ProductCategories.Count());
-        //foreach (var item in product.ProductCategories)
-        //{
-        //    Console.WriteLine(item.ProductId);
-        //    Console.WriteLine(item.CategoryId);
-        //}
-        await this._productService.Update(product, product.Id);
-        return RedirectToAction("Index");
-    }
+    
 
     //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 60)]
-    public async Task<IActionResult> Search(string? q, List<string> c, string? prc = null, int s = 1, int p = 1)
+    public async Task<IActionResult> Search(string? q, List<string> c, List<string> b, string? prc = null, int s = 1, int p = 1)
     {
         //var key = Reflection.CreateCacheKey(typeof(ProductController), "Search", q, c, prc ?? "<Null>", s, p);
         //if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
 
-        if (q == null) return RedirectToAction("Index");
+        if (q == null) return RedirectToAction("products");
 
-        var filterBuilder = new FilterBuilder();
+        var filterBuilder = new FilterBuilder().AddFilter(new IsApprove(true)).AddFilter(new SearchFilter(q));
         if (c.Count > 0) filterBuilder.AddFilter(new SubCategoryFilter(c));
+        if (b.Count > 0) filterBuilder.AddFilter(new BrandFilter(b));
         if (prc != null) filterBuilder.AddFilter(new PriceFilter(prc));
-        filterBuilder.AddFilter(new SearchFilter(q));
         var filter = filterBuilder.Build();
 
         var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
-        var product = await this._productService.WherePage("", p, pageSize, s, filter);
+        var product = await this._productService.WherePage(null, p, pageSize, s, filter);
 
 
+        var categoriesss =await GetCategoriesAsync();
+        var brands=categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories.SelectMany(x => x.Brands)));
         return View(new ProductInfo
         {
             PageInfo = new PageInfo
@@ -229,11 +193,21 @@ public class ProductController : Controller
                 TotalItems = product.data.TotalCount,
                 CurrentPage = p,
                 ItemsPerPage = pageSize,
-                MostPrice = Convert.ToInt32(product.data.MaxPrice),
+                MostPrice = product.data.MaxPrice != null ? Convert.ToInt32(product.data.MaxPrice) : null,
                 Url = "/search",
                 Selected = new SelectedInfo
                 {
-                    SubCategories = c,
+                    SelectedSubCategories = c,
+                    Category = null,
+                    Brands = b,
+                    CategoryType = 2,
+                    SelectedMainCategory = null,
+                    SelectedCategory = new CategoryModel
+                    {
+                        SubCategories=categoriesss.SelectMany(x=>x.Categories.SelectMany(x=>x.SubCategories)).GroupBy(x => x.Name).Select(x => x.First()).ToList(),
+                    },
+                    SelectedSubCategory = null,
+                    SelectedBrands = brands.GroupBy(x => x.Name).Select(x => x.First()).ToList(),
                     Sort = s,
                     Page = p,
                     Search = q,
@@ -242,5 +216,57 @@ public class ProductController : Controller
             },
             Products = ObjectMapper.Mapper.Map<List<ProductModel>>(product.data.Product.ToList())
         });
+
+
+    }
+    //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 60)]
+    public async Task<IActionResult> Products(List<string> c, List<string> b, string? prc = null, int s = 1, int p = 1)
+        {
+            //var key = Reflection.CreateCacheKey(typeof(ProductController), "Search", q, c, prc ?? "<Null>", s, p);
+            //if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
+
+
+            var filterBuilder = new FilterBuilder().AddFilter(new IsApprove(true));
+            if (c.Count > 0) filterBuilder.AddFilter(new SubCategoryFilter(c));
+            if (b.Count > 0) filterBuilder.AddFilter(new BrandFilter(b));
+            if (prc != null) filterBuilder.AddFilter(new PriceFilter(prc));
+            var filter = filterBuilder.Build();
+
+            var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
+            var product = await this._productService.WherePage(null, p, pageSize, s, filter);
+
+
+            var categoriesss = await GetCategoriesAsync();
+            var brands = categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories.SelectMany(x => x.Brands)));
+            return View(new ProductInfo
+            {
+                PageInfo = new PageInfo
+                {
+                    TotalItems = product.data.TotalCount,
+                    CurrentPage = p,
+                    ItemsPerPage = pageSize,
+                    MostPrice = product.data.MaxPrice != null ? Convert.ToInt32(product.data.MaxPrice) : null,
+                    Url = "/products",
+                    Selected = new SelectedInfo
+                    {
+                        SelectedSubCategories = c,
+                        Category = null,
+                        Brands = b,
+                        CategoryType = 2,
+                        SelectedMainCategory = null,
+                        SelectedCategory = new CategoryModel
+                        {
+                            SubCategories = categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories)).GroupBy(x => x.Name).Select(x => x.First()).ToList(),
+                        },
+                        SelectedSubCategory = null,
+                        SelectedBrands = brands.GroupBy(x => x.Name).Select(x => x.First()).ToList(),
+                        Sort = s,
+                        Page = p,
+                        Search = null,
+                        Price = prc,
+                    }
+                },
+                Products = ObjectMapper.Mapper.Map<List<ProductModel>>(product.data.Product.ToList())
+            });
     }
 }

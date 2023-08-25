@@ -30,6 +30,8 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Image> Images { get; set; }
+        //public DbSet<Stock> Stocks { get; set; }
+        //public DbSet<StockValue> StockValues { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -48,6 +50,8 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             //builder.ApplyConfiguration(new CartMapping());
             builder.ApplyConfiguration(new CartItemMapping());
             builder.ApplyConfiguration(new ImageMapping());
+            //builder.ApplyConfiguration(new StockMapping());
+            //builder.ApplyConfiguration(new StockValueMapping());
 
             builder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>()
@@ -64,7 +68,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             var connectionString = "";
             if (environment == "Development")
             {
-                connectionString = _configuration.GetConnectionString("shopdb1");
+                connectionString = _configuration.GetConnectionString("shopdb3");
             }
             else if (environment == "Production")
             {

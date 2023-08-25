@@ -12,7 +12,7 @@
     <script src="/modules/jquery/dist/jquery.min.js"></script>
     <script src="/modules/@("@popperjs")/core/dist/umd/popper.min.js"></script>
     <script src="/modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/modules/bootstrap/dist/js/bundle.min.js"></script>
+    <script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/modules/@("@fortawesome")/fontawesome-free/js/fontawesome.js"></script>
     <script src="/modules/@("@fortawesome")/fontawesome-free/js/brands.js"></script>
     <script src="/modules/@("@fortawesome")/fontawesome-free/js/solid.js"></script>
@@ -23,6 +23,22 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Css", required: false)
     <link rel="stylesheet" href="~/shopapp.web.styles.css" asp-append-version="true" />
+
+	<style>
+		.basket {
+			position: relative;
+		}
+
+		.basketDiv {
+			position: absolute;
+			right: 15px;
+			top:50px;
+			display: none;
+			z-index: 3000;
+			width:400px;
+			background-color: white;
+		}
+	</style>
 </head>
 <body>
     <header>
@@ -32,12 +48,78 @@
     
     <div class="container mt-1">
         <main role="main" class="pb-3">
+			@{
+				var cart = Context.Response.HttpContext.Session.Get<CartModel>("Cart");
+			}
+			<div id="cartInfo" data-cart=@(cart != null ? cart.CartItems.Count : 0)></div>
+			<div class="basketDiv border border-dark mt-3">
+				@if (cart != null)
+				{
+					@if (cart.CartItems.Count != 0)
+					{
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col"></th>
+									<th scope="col">Image</th>
+									<th scope="col">Name</th>
+									<th scope="col">Quantity</th>
+									<th scope="col">Price</th>
+								</tr>
+							</thead>
+							<tbody class="text-center">
+
+								@foreach (var p in cart.CartItems)
+								{
+									<tr>
+										<th scope="row">1</th>
+										<td><img src="~/img/@p.Product.HomeImageUrl" width="50"></td>
+										<td>@p.Product.Name</td>
+										<td>@p.Quantity</td>
+										<td>
+											@(
+												p.Quantity * p.Product.Price
+												)
+										</td>
+									</tr>
+								}
+
+
+
+
+
+							</tbody>
+						</table>
+					}
+
+
+
+				}
+				@if (cart == null || cart.CartItems.Count == 0)
+				{
+					<div class="alert alert-secondary m-2" role="alert">
+						No Product
+					</div>
+				}
+				<div class="d-flex align-items-end flex-column me-3 mb-3">
+					@if (cart != null)
+					{
+						@if (cart.CartItems.Count != 0)
+						{
+							<h6>Total : @cart.TotalPrice() TL</h6>
+						}
+					}
+
+				</div>
+
+			</div>
             
                     @if (TempData["message"] != null)
                     {
                         <partial name="_resultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
                     }
                     @RenderBody()
+			
             
         </main>
     </div>
@@ -47,9 +129,28 @@
             &copy; 2023 - ShopApp
         </div>
     </footer>
-    
-    
-    
+
+
+	<script>
+		var totalQty = $('#cartInfo').data("cart");
+
+		$('.icon')[0].setAttribute("value", totalQty);
+		$('.icon').on('mouseenter', function () {
+			console.log("asd")
+			var divs = $('.basketDiv')
+			for (let i = 0; i < divs.length; i++) {
+				const element = divs[i];
+				if (element.id != $(this)[0].innerText) {
+					element.style.display = "none"
+				}
+			}
+			$(`.basketDiv`).toggle()
+		})
+
+		$('.basketDiv').on('mouseleave', function () {
+			$(this).css("display", "none")
+		})
+	</script>
 
 
     <script src="~/js/site.js" asp-append-version="true"></script>

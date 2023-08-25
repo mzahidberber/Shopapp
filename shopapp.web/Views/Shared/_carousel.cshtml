@@ -14,7 +14,7 @@
                 </div>
                 <div class="card-body bottomAlign">
                     <h5 class="card-title">@Model[i].Name</h5>
-                    <a href="/product/details/@Model[i].Id" class="btn btn-primary">Detail</a>
+                    <a href="/detail/@Model[i].Url" class="btn btn-primary">Detail</a>
                 </div>
             </div>
             
@@ -41,7 +41,7 @@
                             
                         </div>
                         <div class="col-md-4">
-                            <p class="card-text">@Html.Raw(Model[i].Description)</p>
+                            @*<p class="card-text">@Html.Raw(Model[i].Description)</p>*@
                             
                         </div>
                         

@@ -6,6 +6,19 @@
         color: black;
     }
 
+    .imgParent{
+        position:relative;
+        height:16rem;
+        width:auto;
+    }
+
+    .imgParent .imgDiv{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
 
 </style>
 
@@ -13,26 +26,36 @@
 {
 
     <div class="col-md-3 mt-1 p-1 d-flex justify-content-center">
-        <div class="card" style="width: 18rem;">
-            <a href="/product/details/@p.Id">
-                <img class="card-img-top" src="~/img/@p.HomeImageUrl">
-            </a>
+        <div class="card " style="width: 18rem;">
+            <div class="imgParent">
+                <a href="/detail/@p.Url ">
+                    <img class="card-img-top imgDiv" src="~/img/@p.HomeImageUrl">
+                </a>
+            </div>
+            
             
             <div class="card-body">
-                <a href="/product/details/@p.Id" class="cartText">
-                    <h5 class="card-title h6" >@p.Name</h5>
-                    <p class="card-text">@p.Price &#8378</p>
+                <a href="/detail/@p.Url" class="cartText">
+                    <h2 class="card-title h6 m-0" style="color:gray;" >@p.Brand.Name</h2>
+                    <h2 class="card-title h5" >@p.Name</h2>
+                    <h3 class="card-text h6" style="color:darkblue;">@p.Price <span class="h6">TL</span></h3>
                 </a>
-                <form asp-controller="Cart" asp-action="AddToCart" method="post" style="display:inline;" class="form-inline">
+                @{
+                    var returnURl = Context.Request.Path+Context.Request.QueryString;
+                }
+                @*<form asp-controller="Cart" asp-action="AddToCart" method="post" style="display:inline;" class="form-inline">
                     <input type="hidden" name="productId" value="@p.Id">
+                    <input type="hidden" name="returnUrl" value=@returnURl>
+                    <input type="hidden" name="quantity" value="1">
                     <div class="input-group mb-3" style="width:100px;">
                         <button class="btn btn-primary p-1" type="submit">
                             Add Basket
                         </button>
+
                     </div>
 
 
-                </form>
+                </form>*@
             </div>
         </div>
     </div>

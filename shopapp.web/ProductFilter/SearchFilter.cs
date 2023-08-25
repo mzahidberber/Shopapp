@@ -12,10 +12,11 @@ public class SearchFilter : IFilter
     }
     public Expression<Func<Product, bool>> Expression()
     {
-        return x => 
-        x.Description.ToLower().Contains(Search.ToLower()) || 
-        x.Name.ToLower().Contains(Search.ToLower()) || 
-        x.Category.Name.ToLower()==Search.ToLower() ||
-        x.Category.Url.ToLower() == Search.ToLower();
+        return x =>
+        x.Brand.Name.ToLower().Contains(Search.ToLower()) ||
+        x.Name.ToLower().Contains(Search.ToLower()) ||
+        x.Category.Name.ToLower() == Search.ToLower() ||
+        x.MainCategory.Name.ToLower() == Search.ToLower() ||
+        x.SubCategory.Name.ToLower() == Search.ToLower();
     }
 }

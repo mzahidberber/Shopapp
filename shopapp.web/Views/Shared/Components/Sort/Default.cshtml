@@ -14,9 +14,9 @@
                 {
                     <input type="hidden" value=@Model.PageInfo.Selected.Search name="q">
                 }
-                @if (Model.PageInfo.Selected.SubCategories.Count != 0)
+                @if (Model.PageInfo.Selected.SelectedSubCategories.Count != 0)
                 {
-                    @foreach (var c in @Model.PageInfo.Selected.SubCategories)
+                    @foreach (var c in @Model.PageInfo.Selected.SelectedSubCategories)
                     {
                         <input type="hidden" value="@c" name="c">
                     }

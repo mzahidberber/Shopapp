@@ -11,40 +11,51 @@
             <h4>Cart Items</h4>
         </div>
     </div>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th></th>
-                <th>ProductName</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.CartItems)
-                {
+        @if (Model.CartItems.Count != 0)
+        {
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <td>
-                            <img src="~/img/@item.Product.HomeImageUrl" width="80"  alt="">
-                        </td>
-                        <td>@item.Product.Name</td>
-                        <td>@item.Product.Price</td>
-                        <td>@item.Quantity</td>
-                        <td>@(item.Quantity*@item.Product.Price)</td>
-                        <td>
-                            <form asp-controller="Cart" asp-action="DeleteToCart" method="post" style="display:inline;" class="form-inline">
-                                <input type="hidden" name="productId" value="@item.ProductId">
-                                <button class="btn btn-danger p-1" type="submit">Sil</button>
-                            </form>
-                        </td>
-
+                        <th></th>
+                        <th>ProductName</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <tr>
+                            <td>
+                                <img src="~/img/@item.Product.HomeImageUrl" width="80" alt="">
+                            </td>
+                            <td>@item.Product.Name</td>
+                            <td>@item.Product.Price</td>
+                            <td>@item.Quantity</td>
+                            <td>@(item.Quantity * @item.Product.Price)</td>
+                            <td>
+                                <form asp-controller="Cart" asp-action="DeleteToCart" method="post" style="display:inline;" class="form-inline">
+                                    <input type="hidden" name="productId" value="@item.ProductId">
+                                    <button class="btn btn-danger p-1" type="submit">Sil</button>
+                                </form>
+                            </td>
 
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+        }
+        
+        @if (Model.CartItems.Count == 0)
+        {
+            <div class="alert alert-secondary m-2" role="alert">
+                No Product
+            </div>
+        }
     </div>
     <div class="col-md-4">
         <div class="text-left">

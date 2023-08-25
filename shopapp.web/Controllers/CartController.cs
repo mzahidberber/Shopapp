@@ -29,7 +29,7 @@ namespace shopapp.web.Controllers
             return View(cart ?? new CartModel());
         }
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int productId, int quantity)
+        public async Task<IActionResult> AddToCart(int productId, int quantity,string? returnUrl)
         {
             var cart = HttpContext.Session.Get<CartModel>("Cart");
             var product = await _productService.GetByIdAsync(productId);
@@ -66,9 +66,12 @@ namespace shopapp.web.Controllers
                 }
                 HttpContext.Session.Set<CartModel>("Cart", cart);
             }
+			if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+			{
+				return Redirect(returnUrl);
+			}
 
-
-            return RedirectToAction("Index");
+			return RedirectToAction("Index");
         }
 
         [HttpPost]

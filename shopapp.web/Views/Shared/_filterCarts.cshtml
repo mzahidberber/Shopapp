@@ -1,6 +1,6 @@
 ﻿@model PageInfo
 <div class="d-flex">
-    @foreach (var filter in @Model.Selected.SubCategories)
+    @foreach (var filter in @Model.Selected.SelectedSubCategories)
     {
         <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
             <h6 class="m-0">@filter</h6>
@@ -18,9 +18,9 @@
                     }
                     
                 }
-                @if (Model.Selected.SubCategories.Count != 0)
+                @if (Model.Selected.SelectedSubCategories.Count != 0)
                 {
-                    @foreach (var c in Model.Selected.SubCategories)
+                    @foreach (var c in Model.Selected.SelectedSubCategories)
                     {
                         if (c != filter)
                         {
@@ -49,9 +49,9 @@
         <div class="border border-dark d-flex rounded align-middle me-2 p-1 align-middle">
             <h6 class="m-0">@Model.Selected.Search</h6>
             <form action=@Model.Url method="get" class="d-flex" style="align-items:center;">
-                @if (Model.Selected.SubCategories.Count != 0)
+                @if (Model.Selected.SelectedSubCategories.Count != 0)
                 {
-                    @foreach (var c in Model.Selected.SubCategories)
+                    @foreach (var c in Model.Selected.SelectedSubCategories)
                     {
                         <input type="hidden" value=@c name="c">
 
@@ -91,9 +91,9 @@
                 {
                     <input type="hidden" value=@Model.Selected.Search name="q">
                 }
-                @if (Model.Selected.SubCategories.Count != 0)
+                @if (Model.Selected.SelectedSubCategories.Count != 0)
                 {
-                    @foreach (var c in @Model.Selected.SubCategories)
+                    @foreach (var c in @Model.Selected.SelectedSubCategories)
                     {
                         <input type="hidden" value=@c name="c">
 
@@ -140,9 +140,9 @@
 
                     }
                 }
-                @if (Model.Selected.SubCategories.Count != 0)
+                @if (Model.Selected.SelectedSubCategories.Count != 0)
                 {
-                    @foreach (var c in Model.Selected.SubCategories)
+                    @foreach (var c in Model.Selected.SelectedSubCategories)
                     {
                       <input type="hidden" value=@c name="c">
 
