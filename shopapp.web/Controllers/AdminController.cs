@@ -20,6 +20,8 @@ using shopapp.web.Models.Entity;
 using shopapp.web.ViewModels;
 using System.Data;
 using System.Drawing.Printing;
+using shopapp.business.Concrete;
+using System.Text.Json;
 
 namespace shopapp.web.Controllers;
 
@@ -31,11 +33,14 @@ public class AdminController : Controller
     private UserManager<User> _userManager { get; set; }
     public IProductService _productService { get; set; }
     public ICategoryService _categoryService { get; set; }
+    public IMainCategoryService _mainCategoryService { get; set; }
     public IConfiguration _configuration { get; set; }
+
+    public ICacheManager _cacheManager { get; set; }
 
     private IWebHostEnvironment _webHostEnvironment { get; set; }
 
-    public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+    public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ICacheManager cacheManager, IMainCategoryService mainCategoryService)
     {
         _roleManager = roleManager;
         _userManager = userManager;
@@ -43,6 +48,18 @@ public class AdminController : Controller
         _categoryService = categoryService;
         _configuration = configuration;
         _webHostEnvironment = webHostEnvironment;
+        _cacheManager = cacheManager;
+        _mainCategoryService = mainCategoryService;
+    }
+
+    public async Task<IEnumerable<MainCategoryModel>> GetCategoriesAsync()
+    {
+        var key = Reflection.CreateCacheKey(typeof(AdminController), "GetCategoriesAsync");
+        if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IEnumerable<MainCategoryModel>>(key);
+        var categories = await _mainCategoryService.GetAllWithCategoriAndSubCategoriesAndBrands();
+        var categoriModel = ObjectMapper.Mapper.Map<IEnumerable<MainCategoryModel>>(categories.data);
+        _cacheManager.Add(key, categoriModel, 60);
+        return categoriModel;
     }
 
     public IActionResult Index() => View();
@@ -315,28 +332,65 @@ public class AdminController : Controller
     public async Task<IActionResult> ProductCreate()
     {
         var categories = await this._categoryService.GetAllAsync();
-        ViewBag.Categories = new SelectList(categories.data, "Id", "Name");
+        ViewBag.Categories =await GetCategoriesAsync();
         return PartialView(new ProductModel());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> FilterCategoryAndBrands(int mainCategoryId,int? categoryId=null,int? subCategoryId=null)
+    {
+        var categories= await GetCategoriesAsync();
+        if(categoryId!=null && subCategoryId!=null){
+            return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId).Categories.FirstOrDefault(x=>x.Id==categoryId).SubCategories.FirstOrDefault(x=>x.Id==subCategoryId));
+        }
+        if(categoryId!=null){
+            return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId).Categories.FirstOrDefault(x=>x.Id==categoryId));
+        }
+        return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId));
     }
 
 
     [HttpPost]
-    public async Task<IActionResult> ProductCreate(ProductModel product, IFormFile file)
+    public async Task<IActionResult> ProductCreate(ProductModel product, List<IFormFile> files,List<string>? features=null,List<string>? values=null)
     {
+        ViewBag.Categories =await GetCategoriesAsync();
         if (ModelState.IsValid)
         {
-            if (file != null)
+            if (files != null)
             {
-                //isime bak
-                var extension = Path.GetExtension(file.FileName);
-                var randomName = string.Format($"{Guid.NewGuid()}{extension}");
-                product.HomeImageUrl = randomName;
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", randomName);
-                using (var stream = new FileStream(path, FileMode.Create))
+                foreach (var file in files)
                 {
-                    await file.CopyToAsync(stream);
+                    //isime bak
+                    var extension = Path.GetExtension(file.FileName);
+                    var randomName = string.Format($"{Guid.NewGuid()}{extension}");
+                    if (product.HomeImageUrl.Contains(file.FileName))
+                    {
+                        product.HomeImageUrl = randomName;
+                    }
+                    
+                    product.Images.Add(new ImageModel
+                    {
+                        Url = randomName,
+                    });
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", randomName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
                 }
+                
             }
+            var ct = await GetCategoriesAsync();
+            var sub = ct.FirstOrDefault(x => x.Id == product.MainCategoryId).Categories.FirstOrDefault(x => x.Id == product.CategoryId).SubCategories.FirstOrDefault(x => x.Id == product.SubCategoryId);
+            for (int i = 0; i < features.Count; i++)
+            {
+                product.SubCategoryFeatureValues.Add(new SubCategoryFeatureValueModel
+                {
+                    Value = values[i],
+                    SubCategoryFeatureId= sub.SubCategoryFeatures.FirstOrDefault(x => features[i]==x.Name).Id
+                });
+            }
+            
             await this._productService.AddAsync(ObjectMapper.Mapper.Map<ProductDTO>(product));
             return RedirectToAction("Index");
         }

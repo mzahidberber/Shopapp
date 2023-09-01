@@ -1,4 +1,5 @@
 ﻿using shopapp.core.Entity.Concrete;
+using System.Text.Json.Serialization;
 
 namespace shopapp.web.Models.Entity
 {
@@ -13,6 +14,7 @@ namespace shopapp.web.Models.Entity
         public string Name { get; set; }
         public string Url { get; set; }
 
+        [JsonIgnore]
         public List<ProductModel> Products { get; set; }
 
         public List<CategoryModel> Categories { get; set; }

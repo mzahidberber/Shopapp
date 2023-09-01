@@ -1,5 +1,6 @@
 ﻿using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
+using System.Text.Json.Serialization;
 
 namespace shopapp.web.Models.Entity
 {
@@ -15,8 +16,9 @@ namespace shopapp.web.Models.Entity
         public string Url { get; set; }
 
         public int MainCategoryId { get; set; }
+        [JsonIgnore]
         public MainCategoryModel MainCategory { get; set; }
-
+        [JsonIgnore]
         public List<ProductModel> Products { get; set; }
         public List<SubCategoryModel> SubCategories { get; set; }
     }

@@ -1,76 +1,264 @@
 ﻿@{
     Layout = "_adminLayout";
+    var categoriesAndBrands = ViewBag.Categories as IEnumerable<MainCategoryModel>;
 }
+
+<style>
+    .custom-file-button input[type=file] {
+  margin-left: -2px !important;
+}
+
+.custom-file-button input[type=file]::-webkit-file-upload-button {
+  display: none;
+}
+
+.custom-file-button input[type=file]::file-selector-button {
+  display: none;
+}
+
+.custom-file-button:hover label {
+  background-color: #dde0e3;
+  cursor: pointer;
+}
+
+</style>
+
 @model ProductModel
-<form asp-controller="Product" asp-action="Create" method="post" enctype="multipart/form-data">
+<form asp-controller="admin" asp-action="productcreate" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="All" class="text-danger"></div>
-    @*<div class="form-group">
-        <label for="CategoryId">Category</label>
-        <select   asp-items="@ViewBag.Categories" class="form-control">
-            <option selected disabled>Select</option>
+    @{
+        var selectedMainCategoryId = categoriesAndBrands?.ToList()[0].Id;
+    }
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Main Category</label>
+        </div>
+        <select asp-for="MainCategoryId" id="mainCategorySelected" asp-items=@(new SelectList(categoriesAndBrands,"Id","Name")) class="form-control">
+            <option selected disabled>Choose</option>
+            
         </select>
-    </div>*@
-    @*@foreach (var category in ViewBag.Categories)
-    {
-        <div class="form-check form-check-inline">
-            <input asp-for="@Model.ProductCategories[0].CategoryId" class="form-check-input" type="checkbox" value="@category.CategoryId">
-            <label class="form-check-label" for="@category.CategoryId">
-                Category
-            </label>
+        
+    </div>
+    <span asp-validation-for="MainCategoryId" class="text-danger"></span>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Category</label>
         </div>
-    }*@
-    @*@foreach (var category in Model.ProductCategories)
-    {
-        <div class="form-check form-check-inline">
-            <input asp-for="@category.CategoryId" class="form-check-input" type="checkbox" value="@category.CategoryId">
-            <label class="form-check-label" for="@category.CategoryId">
-                Category
-            </label>
+        <select asp-for="CategoryId" disabled="disabled" id="categorySelected"  class="form-control">
+            <option selected disabled>Choose</option>
+        </select>
+        
+    </div>
+    <span asp-validation-for="CategoryId" class="text-danger"></span>
+    
+    <div class="input-group mb-3 " >
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Sub Category</label>
         </div>
-    }*@
+        <select asp-for="SubCategoryId" disabled="disabled" id="subCategorySelected"  class="form-control">
+            <option selected disabled>Choose</option>
+        </select>
+        
+    </div>
+    <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+    
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Brand</label>
+        </div>
+        <select asp-for="BrandId" disabled="disabled" id="brandSelected"  class="form-control">
+            <option selected disabled>Choose</option>
+        </select>
+        
+    </div>
+    <span asp-validation-for="BrandId" class="text-danger"></span>
+    
+    <hr>
+    
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="Name">Name</label>
+        </div>
+        <input asp-for="Name" id="nameInput" class="form-control">
+        <input asp-for="Url" type="hidden" id="urlInput" class="form-control">
+        
+    </div>
+    <span asp-validation-for="Name" class="text-danger"></span>
+    
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="Price">Price</label>
+        </div>
+        <input asp-for="Price" class="form-control">
+        
+    </div>
+    <span asp-validation-for="Price" class="text-danger"></span>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="Stock">Stock</label>
+        </div>
+        <input asp-for="Stock" min="0"  class="form-control">
+        
+    </div>
+    <span asp-validation-for="Stock" class="text-danger"></span>
+    
+    <div id="features" class="mt-3">
+        
+    </div>
+    
     
     <div class="form-group">
-        <label for="Name">Name</label>
-        <input asp-for="Name" value="@Model.Name" class="form-control">
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="Url">Url</label>
-        <input asp-for="Url" value="@Model.Url" class="form-control">
-        <span asp-validation-for="Url" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="Price">Price</label>
-        <input asp-for="Price" value="@Model.Price" class="form-control">
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label for="Description">Description</label>
-        <textarea id="editor" asp-for="Description" value="@Model.Description" class="form-control"></textarea>
+        <textarea id="editor" asp-for="Description" value="@Model.Description" class="form-control" ></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label for="ImageUrl">ImageUrl</label>
-        <input asp-for="HomeImageUrl" type="hidden">
-        <img src="~/img/@Model.HomeImageUrl" width="80">
-        <input type="file" name="file" >
-        @*<span asp-validation-for="ImageUrl" class="text-danger"></span>*@
+
+    <div class="input-group custom-file-button mt-3">
+    <label class="input-group-text" for="imageSelect">Images</label>
+            <input type="file" class="form-control" id="imageSelect" name="files" multiple  accept=".jpg,.jpeg,.png">
+
+  </div>
+    <input type="hidden" id="homeImageUrl" asp-for="HomeImageUrl">
+    
+    <p id="imageSelectText"></p>
+    
+    <p id="imageSelectTextWarning" style="color:red;"></p>
+    <div id="imagesBox" style="display: none;" >
+        <div id="images"  class="mt-3 m-0 row border border-3" >
+            <img src=""  alt="">
+        </div>
     </div>
-    @*<div class="form-group">
-        <label for="exampleFormControlFile1">Example file input</label>
-        <input type="file" class="form-control-file" id="exampleFormControlFile1">
-    </div>*@
+    
+    
     <button class="btn btn-primary mt-3" type="submit">Submit</button>
 
 </form>
+
+
+<script>
+    $('#nameInput').on("change",function(){
+        let text=$(this).val().replace(" ","-")
+        $('#urlInput').val(text.toLowerCase())
+    })
+    function imageClick (img,name){
+        $('.imageUrl').removeClass("border-warning")
+        $(img).toggleClass("border-warning") 
+        $('#homeImageUrl').val(name)
+        $('#imageSelectTextWarning').empty()
+    }
+    $('#imageSelect').on("change", function (ev) {
+        
+        $('#imagesBox').css("display","block")
+        $('#images').empty()
+        $('#imageSelectText').empty()
+        $('#imageSelectTextWarning').append("Please select home image!")
+        for(let i=0;i<ev.target.files.length;i++){
+            $('#imageSelectText').append(`{${ev.target.files[i].name}}`)
+            $('#images').append(`
+                <div class="col-2 m-1  border border-3 p-1 rounded imageUrl text-center" style="position: relative;" onclick="imageClick(this,'${ev.target.files[i].name}')">
+                    <img src=${URL.createObjectURL(ev.target.files[i])} class="p-0" height=120  alt="" style="object-fit: contain;width:100%;">
+                </div>
+            
+            `)
+        }
+        
+    })
+
+    
+
+
+    let mainCategoryId=0
+    let categoryId = 0
+    let subCategoryId = 0
+    let categorySelected=$('#categorySelected')
+    let subCategorySelected=$('#subCategorySelected')
+    let brandSelected=$('#brandSelected')
+    $('#mainCategorySelected').on("change", function () {
+        categorySelected.empty()
+        categorySelected.append('<option selected disabled>Choose</option>')
+        categorySelected.prop("disabled", false)
+
+        subCategorySelected.empty()
+        subCategorySelected.append('<option selected disabled>Choose</option>')
+        subCategorySelected.prop("disabled", true)
+
+        brandSelected.empty()
+        brandSelected.append('<option selected disabled>Choose</option>')
+        brandSelected.prop("disabled", true)
+        
+        mainCategoryId = parseInt($(this).val())
+        $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId }, function (data) {
+            if (data.id === mainCategoryId) {
+                for (var j = 0; j < data.categories.length; j++) {
+                    var option = document.createElement("option");
+                    option.value = data.categories[j].id;
+                    option.text = data.categories[j].name;
+                    categorySelected.append(option);
+                }
+            }
+            
+         });
+    })
+    categorySelected.on("change", function () {
+        subCategorySelected.empty()
+        subCategorySelected.append('<option selected disabled>Choose</option>')
+
+        brandSelected.empty()
+        brandSelected.append('<option selected disabled>Choose</option>')
+        brandSelected.prop("disabled", true)
+
+        subCategorySelected.prop("disabled", false)
+        categoryId = parseInt($(this).val())
+        $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId:mainCategoryId, categoryId: categoryId }, function (data) {
+            if (data.id === categoryId) {
+                for (var j = 0; j < data.subCategories.length; j++) {
+                    var option = document.createElement("option");
+                    option.value = data.subCategories[j].id;
+                    option.text = data.subCategories[j].name;
+                    subCategorySelected.append(option);
+                }
+            }
+        });
+    })
+    subCategorySelected.on("change", function () {
+        brandSelected.empty()
+        brandSelected.append('<option selected disabled>Choose</option>')
+        brandSelected.prop("disabled", false)
+        subCategoryId = parseInt($(this).val())
+        $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId, categoryId: categoryId, subCategoryId: subCategoryId }, function (data) {
+            console.log(data)
+            if (data.id === subCategoryId) {
+                for (var j = 0; j < data.brands.length; j++) {
+                    var option = document.createElement("option");
+                    option.value = data.brands[j].id;
+                    option.text = data.brands[j].name;
+                    brandSelected.append(option);
+                }
+            }
+            $('#features').empty()
+            for (var i = 0; i < data.subCategoryFeatures.length; i++) {
+                    $('#features').append(`
+                        <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">${data.subCategoryFeatures[i].name}</span>
+        </div>
+        <input type="hidden" class="form-control" name="features" value='${data.subCategoryFeatures[i].name}'>
+        <input type="text" class="form-control" name="values" value="">
+    </div>`);
+            }
+            
+        });
+    })
+
+</script>
 
 <script src="/modules/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="/modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
 <script src="/modules/ckeditor/ckeditor.js"></script>
 <script>
-    CKEDITOR.replace('editor',{
+    let editor=CKEDITOR.replace('editor',{
         filebrowserUploadUrl:"/admin/UploadImage",
             filebrowserBrowseUrl: "/admin/BrowseImages"
     });
+    editor.setData("Description")
 </script>

@@ -1,4 +1,5 @@
 ﻿using shopapp.core.Entity.Concrete;
+using System.Text.Json.Serialization;
 
 namespace shopapp.web.Models.Entity
 {
@@ -8,9 +9,11 @@ namespace shopapp.web.Models.Entity
         public string Value { get; set; }
 
         public int SubCategoryFeatureId { get; set; }
+        [JsonIgnore]
         public SubCategoryFeatureModel SubCategoryFeature { get; set; }
 
         public int ProductId { get; set; }
+        [JsonIgnore]
         public ProductModel Product { get; set; }
     }
 }

@@ -26,6 +26,10 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             return _dbSet
                 .Include(x => x.Categories)
                 .ThenInclude(x => x.SubCategories)
+                .ThenInclude(x => x.SubCategoryFeatures)
+                .ThenInclude(x=>x.SubCategoryFeatureValues)
+                .Include(x=>x.Categories)
+                .ThenInclude(x => x.SubCategories)
                 .ThenInclude(x => x.Brands)
                 .AsQueryable();
         }

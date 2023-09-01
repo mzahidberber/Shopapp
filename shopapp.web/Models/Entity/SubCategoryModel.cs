@@ -1,4 +1,6 @@
-﻿namespace shopapp.web.Models.Entity;
+﻿using System.Text.Json.Serialization;
+
+namespace shopapp.web.Models.Entity;
 
 	public class SubCategoryModel
 {
@@ -13,8 +15,9 @@
     public string Url { get; set; }
 
     public int CategoryId { get; set; }
+    [JsonIgnore]
     public CategoryModel Category { get; set; }
-
+    [JsonIgnore]
     public List<ProductModel> Products { get; set; }
     public List<BrandModel> Brands { get; set; }
     public List<SubCategoryFeatureModel> SubCategoryFeatures { get; set; }

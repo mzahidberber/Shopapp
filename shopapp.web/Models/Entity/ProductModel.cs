@@ -8,7 +8,6 @@ namespace shopapp.web.Models.Entity
         public ProductModel()
         {
             this.Images = new List<ImageModel>();
-            this.Stocks = new List<StockModel>();
             this.SubCategoryFeatureValues = new List<SubCategoryFeatureValueModel>();
 
         }
@@ -35,21 +34,21 @@ namespace shopapp.web.Models.Entity
 
         public bool IsApprove { get; set; }
         public bool IsHome { get; set; }
+        public int Stock { get; set; }
         public List<ImageModel> Images { get; set; }
 
         public int BrandId { get; set; }
-        public BrandModel Brand { get; set; }
+        public BrandModel? Brand { get; set; }
 
         public int CategoryId { get; set; }
-        public CategoryModel Category { get; set; }
+        public CategoryModel? Category { get; set; }
 
         public int SubCategoryId { get; set; }
-        public SubCategoryModel SubCategory { get; set; }
+        public SubCategoryModel? SubCategory { get; set; }
 
         public int MainCategoryId { get; set; }
-        public MainCategoryModel MainCategory { get; set; }
+        public MainCategoryModel? MainCategory { get; set; }
 
         public List<SubCategoryFeatureValueModel> SubCategoryFeatureValues { get; set; }
-        public List<StockModel> Stocks { get; set; }
     }
 }

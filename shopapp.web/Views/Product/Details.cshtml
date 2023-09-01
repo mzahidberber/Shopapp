@@ -129,7 +129,7 @@
 		<h1 class="h2 mt-4">@Model.Name</h1>
 		<h1 class="h1 price mt-4">@(string.Format("{0:N0}", @Model.Price)) <span class="h6">TL</span></h1>
 
-		@foreach (var stock in Model.Stocks)
+		@*@foreach (var stock in Model.Stocks)
 		{
 			<div class="row mt-3">
 				<div class="col-md-10">
@@ -145,7 +145,7 @@
 					</div>
 				</div>
 			</div>
-		}
+		}*@
 		
 
 		@*@if (User.Identity.IsAuthenticated)

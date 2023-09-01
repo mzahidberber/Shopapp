@@ -1,4 +1,5 @@
 ﻿using shopapp.core.DTOs.Concrete;
+using System.Text.Json.Serialization;
 
 namespace shopapp.web.Models.Entity
 {
@@ -12,7 +13,8 @@ namespace shopapp.web.Models.Entity
         public string Name { get; set; }
 
         public int CategoryId { get; set; }
-        public SubCategoryDTO Category { get; set; }
+        [JsonIgnore]
+        public SubCategoryModel Category { get; set; }
 
         public List<SubCategoryFeatureValueModel> SubCategoryFeatureValues { get; set; }
     }
