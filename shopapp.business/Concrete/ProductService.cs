@@ -26,6 +26,32 @@ public class ProductService : GenericService<Product, ProductDTO>, IProductServi
         return Response<IEnumerable<ProductDTO>>.Success(ObjectMapper.Mapper.Map<IEnumerable<ProductDTO>>(list), 200);
     }
 
+    public Response<IsUrlDTO> IsUrl(string url)
+    {
+        return Response<IsUrlDTO>.Success(new IsUrlDTO
+        {
+            IsUrl= _genericRepository.GetAll().Any(x => x.Url == url)
+        },200);
+    }
+
+    public async Task<Response<NoDataDTO>> ChangeHome(int id,bool isHome)
+    {
+       var product=await _genericRepository.GetByIdAsync(id);
+        product.IsHome=isHome;
+        _genericRepository.Update(product);
+        await _genericRepository.CommitAsync();
+        return Response<NoDataDTO>.Success(204);
+    }
+
+    public async Task<Response<NoDataDTO>> ChangeApprove(int id, bool isApprove)
+    {
+        var product = await _genericRepository.GetByIdAsync(id);
+        product.IsApprove = isApprove;
+        _genericRepository.Update(product);
+        await _genericRepository.CommitAsync();
+        return Response<NoDataDTO>.Success(204);
+    }
+
     public async Task<Response<ProductDTO>> GetByIdWithCategoriesAsync(int id)
     {
         var product = await _genericRepository.GetByIdWithCategoriesAsync(id);

@@ -1,6 +1,8 @@
-﻿namespace shopapp.core.Entity.Concrete;
+﻿using shopapp.core.Entity.Abstract;
 
-public class SubCategoryFeatureValue
+namespace shopapp.core.Entity.Concrete;
+
+public class SubCategoryFeatureValue:IEntity
 {
     public int Id { get; set; }
     public string Value { get; set; }

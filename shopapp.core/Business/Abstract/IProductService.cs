@@ -16,6 +16,10 @@ namespace shopapp.core.Business.Abstract
 
         Task<Response<ProductDTOAndTotalCount>> WherePage(string? category, int page, int pageSize, int sort, Expression<Func<Product, bool>>? predicate = null);
         Task<Response<Dictionary<string, int>>> GetCountByCategory(string categoryUrl);
+        Response<IsUrlDTO> IsUrl(string url);
+        Task<Response<NoDataDTO>> ChangeApprove(int id, bool isApprove);
+        Task<Response<NoDataDTO>> ChangeHome(int id, bool isHome);
 
-	}
+
+    }
 }

@@ -28,12 +28,18 @@ builder.Services.AddProxyScoped<ICategoryRepository, EfCategoryRepository>();
 builder.Services.AddProxyScoped<ICartRepository, EfCartRepository>();
 builder.Services.AddProxyScoped<ICartItemRepository, EfCartItemRepository>();
 builder.Services.AddProxyScoped<IMainCategoryRepository, EfMainCategoryRepository>();
+builder.Services.AddProxyScoped<IImageRepository, EfImageRepository>();
+builder.Services.AddProxyScoped<ISubCategoryFeatureValueRepository, EfSubCategoryFeatureValueRepository>();
+builder.Services.AddProxyScoped<ISubCategoryFeatureRepository, EfSubCategoryFeatureRepository>();
 
 builder.Services.AddProxyScoped<IProductService, ProductService>();
 builder.Services.AddProxyScoped<ICategoryService, CategoryService>();
 builder.Services.AddProxyScoped<ICartService, CartService>();
 builder.Services.AddProxyScoped<ICartItemService, CartItemService>();
 builder.Services.AddProxyScoped<IMainCategoryService, MainCategoryService>();
+builder.Services.AddProxyScoped<IImageService, ImageService>();
+builder.Services.AddProxyScoped<ISubCategoryFeatureValueService, SubCategoryFeatureValueService>();
+builder.Services.AddProxyScoped<ISubCategoryFeatureService, SubCategoryFeatureService>();
 
 builder.Services.AddProxyScoped<ICacheManager, MemoryCacheManager>();
 

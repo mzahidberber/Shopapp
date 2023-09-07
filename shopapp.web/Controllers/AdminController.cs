@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using shopapp.core.Aspects.Caching;
 using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
-using shopapp.core.CrossCuttingConcers.Caching.Microsoft;
 using shopapp.core.CrossCuttingConcers.Caching;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
@@ -17,11 +13,7 @@ using shopapp.web.Mapper;
 using shopapp.web.Models.Account;
 using shopapp.web.Models.Admin;
 using shopapp.web.Models.Entity;
-using shopapp.web.ViewModels;
 using System.Data;
-using System.Drawing.Printing;
-using shopapp.business.Concrete;
-using System.Text.Json;
 
 namespace shopapp.web.Controllers;
 
@@ -34,13 +26,15 @@ public class AdminController : Controller
     public IProductService _productService { get; set; }
     public ICategoryService _categoryService { get; set; }
     public IMainCategoryService _mainCategoryService { get; set; }
+    public IImageService _imageService { get; set; }
+    public ISubCategoryFeatureValueService _subCategoryFeatureValueService { get; set; }
     public IConfiguration _configuration { get; set; }
 
     public ICacheManager _cacheManager { get; set; }
 
     private IWebHostEnvironment _webHostEnvironment { get; set; }
 
-    public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ICacheManager cacheManager, IMainCategoryService mainCategoryService)
+    public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ICacheManager cacheManager, IMainCategoryService mainCategoryService, IImageService imageService, ISubCategoryFeatureValueService subCategoryFeatureValueService)
     {
         _roleManager = roleManager;
         _userManager = userManager;
@@ -50,6 +44,8 @@ public class AdminController : Controller
         _webHostEnvironment = webHostEnvironment;
         _cacheManager = cacheManager;
         _mainCategoryService = mainCategoryService;
+        _imageService = imageService;
+        _subCategoryFeatureValueService = subCategoryFeatureValueService;
     }
 
     public async Task<IEnumerable<MainCategoryModel>> GetCategoriesAsync()
@@ -199,7 +195,7 @@ public class AdminController : Controller
         if (result.Succeeded)
         {
             TempDataMessage.CreateMessage(TempData, key: "message", message: "User created.");
-            return RedirectToAction("Login", "Account");
+            return Redirect("UserList");
         }
         else
         {
@@ -331,7 +327,6 @@ public class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> ProductCreate()
     {
-        var categories = await this._categoryService.GetAllAsync();
         ViewBag.Categories =await GetCategoriesAsync();
         return PartialView(new ProductModel());
     }
@@ -351,35 +346,24 @@ public class AdminController : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> ProductCreate(ProductModel product, List<IFormFile> files,List<string>? features=null,List<string>? values=null)
+    public async Task<IActionResult> ProductCreate(ProductModel product, List<string> imageUrls, List<string>? features=null,List<string>? values=null)
     {
         ViewBag.Categories =await GetCategoriesAsync();
         if (ModelState.IsValid)
         {
-            if (files != null)
+            foreach (var imageUrl in imageUrls)
             {
-                foreach (var file in files)
+                product.Images.Add(new ImageModel
                 {
-                    //isime bak
-                    var extension = Path.GetExtension(file.FileName);
-                    var randomName = string.Format($"{Guid.NewGuid()}{extension}");
-                    if (product.HomeImageUrl.Contains(file.FileName))
-                    {
-                        product.HomeImageUrl = randomName;
-                    }
-                    
-                    product.Images.Add(new ImageModel
-                    {
-                        Url = randomName,
-                    });
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", randomName);
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-                }
+                    Url= imageUrl,
+                    ProductId=product.Id
+                });
                 
             }
+            if (_productService.IsUrl(product.Url).data.IsUrl)
+                return View(product);
+
+
             var ct = await GetCategoriesAsync();
             var sub = ct.FirstOrDefault(x => x.Id == product.MainCategoryId).Categories.FirstOrDefault(x => x.Id == product.CategoryId).SubCategories.FirstOrDefault(x => x.Id == product.SubCategoryId);
             for (int i = 0; i < features.Count; i++)
@@ -392,7 +376,7 @@ public class AdminController : Controller
             }
             
             await this._productService.AddAsync(ObjectMapper.Mapper.Map<ProductDTO>(product));
-            return RedirectToAction("Index");
+            return RedirectToAction("ProductList");
         }
         return PartialView(product);
     }
@@ -402,70 +386,136 @@ public class AdminController : Controller
         ViewBag.fileInfo = dir.GetFiles();
         return PartialView("FileExplorer");
     }
-    public async Task<JsonResult> UploadImage(IFormFile upload)
-    {
-		if (upload.Length <= 0) return null;
-
-		//your custom code logic here
-
-		//1)check if the file is image
-
-		//2)check if the file is too large
-
-		//etc
-
-		var fileName = Guid.NewGuid() + Path.GetExtension(upload.FileName).ToLower();
-
-		//save file under wwwroot/CKEditorImages folder
-
-		var filePath = Path.Combine(
-			Directory.GetCurrentDirectory(), "wwwroot/img",
-			fileName);
-
-		using (var stream = System.IO.File.Create(filePath))
-		{
-			await upload.CopyToAsync(stream);
-		}
-
-		var url = $"{"/img/"}{fileName}";
-
-		var success = new uploadsuccess
-		{
-			Uploaded = 1,
-			FileName = fileName,
-			Url = url
-		};
-
-		return new JsonResult(success);
-    }
-
-
+    
     [HttpGet]
     public async Task<IActionResult> ProductEdit(int id)
     {
-        var categories = await this._categoryService.GetAllAsync();
-        ViewBag.Categories = new SelectList(categories.data.ToList(), "Id", "Name");
-        var product = this._productService.GetByIdWithCategoriesAsync(id).Result.data;
+        ViewBag.Categories =await GetCategoriesAsync();
+        var product = this._productService.GetByIdWithAttsAsync(id).Result.data;
         return View(ObjectMapper.Mapper.Map<ProductModel>(product));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> LoadImages(int productId){
+        var images =await _imageService.Where(x => x.ProductId == productId);
+        return Json(images.data);
     }
 
 
     [HttpPost]
-    public async Task<IActionResult> ProductEdit(ProductDTO product)
+    public async Task<IActionResult> ProductEdit(ProductModel product, List<string> imageUrls, List<string>? features = null, List<string>? values = null)
     {
-        //Console.WriteLine(product.ProductCategories.Count());
-        //foreach (var item in product.ProductCategories)
-        //{
-        //    Console.WriteLine(item.ProductId);
-        //    Console.WriteLine(item.CategoryId);
-        //}
-        await this._productService.Update(product, product.Id);
-        return RedirectToAction("Index");
+        ViewBag.Categories = await GetCategoriesAsync();
+        if (ModelState.IsValid)
+        {
+            //var oldProduct=await _productService.GetByIdAsync(product.Id);
+            //if (_productService.IsUrl(product.Url).data.IsUrl && oldProduct.data.Url!=product.Url)
+            //    return View(product);
+
+
+            await _subCategoryFeatureValueService.SyncProductFeatures(product.Id, product.SubCategoryId, features, values);
+
+            await _imageService.SyncProductImages(imageUrls, product.Id);
+
+            await this._productService.Update(ObjectMapper.Mapper.Map<ProductDTO>(product), product.Id);
+
+
+        }
+            
+        return RedirectToAction("ProductList");
     }
-}
-public class uploadsuccess
-{
-	public int Uploaded { get; set; }
-	public string FileName { get; set; }
-	public string Url { get; set; }
+    [HttpPost]
+    public async Task<IActionResult> ProductDelete(int productId)
+    {
+        await _productService.Remove(productId);
+
+        return Redirect("ProductList");
+    }
+    [HttpPost]
+    public IActionResult IsUrl(string url) => Json(_productService.IsUrl(url).data.IsUrl);
+    
+    public IActionResult ImageList()
+    {
+        var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","img"));
+        return View(images.Select(x => x.Split("\\").Last()).ToList());
+    }
+
+    public IActionResult ImagesUrls()
+    {
+        var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","img"));
+        return Json(images.Select(x => x.Split("\\").Last()).ToList());
+    }
+    public async Task<IActionResult> IsHomeChange(bool isHome, int productId)
+    {
+        var result=await _productService.ChangeHome(productId, isHome);
+        return Json(result.statusCode);
+    }
+    public async Task<IActionResult> IsApproveChange(bool isApprove, int productId)
+    {
+        var result=await _productService.ChangeApprove(productId, isApprove);
+        return Json(result.statusCode);
+    }
+    //public async Task<IActionResult> IsHomeChange(bool  isHome,int productId)
+    //{
+    //    await _productService.ChangeHome(productId, isHome);
+    //    return Redirect("ProductList");
+    //}
+
+    //public async Task<IActionResult> IsApproveChange(bool isApprove, int productId)
+    //{
+    //    await _productService.ChangeApprove(productId, isApprove);
+    //    return Redirect("ProductList");
+    //}
+
+
+    [HttpPost]
+    public async Task<IActionResult> AddImage(List<IFormFile> files,string name)
+    {
+        if (files != null)
+        {
+            name= name.Replace(" ", "-");
+            var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","img"));
+            var imageNames = images.Select(x => x.Split("\\").Last()).ToList();
+            if (imageNames.Any(x=>x.Contains(name)))
+                name = string.Format($"{name}-{Guid.NewGuid()}");
+            foreach (var file in files)
+            {
+                var extension = Path.GetExtension(file.FileName);
+                var randomName = string.Format($"{name}-{files.IndexOf(file)}{extension}");
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", randomName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+            }
+
+        }
+        return Redirect("ImageList");
+    }
+
+    public async Task<IActionResult> DeleteImage(string name)
+    {
+        var products=await _productService.Where(x=>x.Images.Any(x=>x.Url== name) || x.HomeImageUrl==name);
+        if(products.data.Count()>0)
+            return Redirect("ImageList");
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", name);
+        System.IO.File.Delete(path);
+        return Redirect("ImageList");
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> CheckImageProduct(string name)
+    {
+        var products=await _productService.Where(x=>x.Images.Any(x=>x.Url== name) || x.HomeImageUrl==name);
+        return Json(products.data);
+    }
+
+    public async Task<IActionResult> CategoriesList()
+    {
+        var categories=await _mainCategoryService.GetAllWithCategoriAndSubCategoriesAndBrands();
+        return View(ObjectMapper.Mapper.Map<List<MainCategoryModel>>(categories.data));
+    }
+
+
 }

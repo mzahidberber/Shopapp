@@ -34,15 +34,15 @@
             <thead>
                 <tr>
                     <td>Id</td>
+                    <td>HomeImage</td>
                     <td>Name</td>
                     <td>Url</td>
                     <td>Price</td>
+                    <td>Stock</td>
                     @*<td>Description</td>*@
-                    <td>HomeImage</td>
                     <td>IsApprove</td>
                     <td>IsHome</td>
-                    <td>ImageCount</td>
-                    <td>CategoryCount</td>
+                    <td>Edit</td>
                 </tr>
             </thead>
             <tbody>
@@ -52,14 +52,24 @@
                     {
                         <tr class="@(item.IsHome?"table-success":"") @(item.IsApprove?"":"table-warning")">
                             <td>@item.Id</td>
+                            <td><img src="~/img/@item.HomeImageUrl" height="50"></td>
+
                             <td>@item.Name</td>
                             <td>@item.Url</td>
                             <td>@item.Price &#8378</td>
+                            <td>@item.Stock</td>
                             @*<td>@Html.Raw(@item.Description)</td>*@
-                            <td><img src="~/img/@item.HomeImageUrl" height="50"></td>
-                            <td>@item.IsApprove</td>
-                            <td>@item.IsHome</td>
-                            <td>@item.Images.Count()</td>
+                            <td>
+                                    <input type="checkbox" name="isApprove" value=@item.Id class="isApproveInput" @(item.IsApprove ? "checked" : "")>
+                           
+
+                               
+                            </td>
+                            <td>
+                                    <input type="checkbox" name="isHome" class="isHomeInput" value=@item.Id @(item.IsHome ? "checked" : "")>
+                            
+                            </td>
+                                
                             <td>
                                 <a href="/admin/productedit/@item.Id" class="btn btn-primary btn-sm mr-2">Edit</a>
                                 <button type="button" class="btn btn-danger btn-sm" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
@@ -81,7 +91,57 @@
     </div>
 </div>
 
-@await Html.PartialAsync("_areYouSureModel",new AreYouSureModel{
-    ActionName="UserDelete",ControllerName="Admin",ParametreName="UserId"
-})
+<div class="modal fade" id="deleteModel" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModelLabel">Delete Product</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3>Are you sure?</h3>
+            </div>
+            <div class="modal-footer">
+                <form asp-controller="admin" asp-action="ProductDelete" style="display: inline;">
+                    <input id="deleteInput" type="hidden" name=productId value="">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.isHomeInput').on("click", function (ev) {
+        //console.log($(this)[0].checked)
+        //console.log($(this).parent())
+        //$(this).val($(this).is(':checked') ? true : false)
+        //$(this).parent().submit()
+        $.post("@Url.Action("IsHomeChange","admin")", { isHome: $(this)[0].checked, productId: parseInt($(this).val()) }, function (data) {
+            //console.log(data)
+
+        });
+
+    })
+    $('.isApproveInput').on("click", function (ev) {
+        //console.log($(this)[0].checked)
+        //console.log($(this).val())
+        //console.log($(this).parent())
+        //$(this).val($(this).is(':checked') ? true : false)
+        //$(this).parent().submit()
+        $.post("@Url.Action("IsApproveChange","admin")", { isApprove: $(this)[0].checked, productId: parseInt($(this).val()) }, function (data) {
+            //console.log(data)
+
+        });
+
+    })
+    
+
+
+
+
+</script>
 

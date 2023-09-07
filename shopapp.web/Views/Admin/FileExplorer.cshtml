@@ -1,21 +1,31 @@
-﻿<div id="browseFile">
-
-	@foreach (var item in ViewBag.fileInfo)
-	{
-		<div class="img-thumbnail">
-			<img src="~/img/@item.Name" title="@item.Name" width="120" height="100">
-			<br />
-			@item.Name
-		</div>
-	}
-</div>
-<script src="/modules/ckeditor/ckeditor.js"></script>
+﻿<link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.min.css" />
 <script src="/modules/jquery/dist/jquery.min.js"></script>
+<script src="/modules/ckeditor/ckeditor.js"></script>
+<script src="/modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<div id="browseFile">
+
+	<div id="imagesBox1">
+		<div id="images1" class="row mt-3 m-0 p-1 rounded  border border-3">
+			@foreach (var image in ViewBag.fileInfo)
+			{
+				<div class="col-2  p-1  ">
+					<div class="imageUrl1 border border-3 m-0  rounded text-center" style="position: relative;">
+
+						<img src="~/img/@image.Name" title="@image.Name" class="p-1" height=120 alt="" style="object-fit: contain;width:100%;">
+						<h6>@image.Name</h6>
+					</div>
+				</div>
+
+			}
+		</div>
+	</div>
+</div>
+
 <script>
 
 	var funcName=@(Context.Request.Query["CKEditorFuncNum"]+";")
 	$('#browseFile').on('click','img',function(){
-		console.log("asdasd")
 		var fileUrl='/img/'+$(this).attr('title');
 		window.opener.CKEDITOR.tools.callFunction(funcName,fileUrl);
 		window.close();

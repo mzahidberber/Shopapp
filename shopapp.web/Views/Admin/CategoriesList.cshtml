@@ -1,0 +1,279 @@
+﻿@{
+    Layout = "_adminLayout";
+    var categoriesAndBrands = ViewBag.Categories as IEnumerable<MainCategoryModel>;
+}
+@model List<MainCategoryModel>
+@section Css{
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+}
+@section Scripts{
+    <script src="//cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        $('#myTable').DataTable({
+            responsive: true
+        });
+
+        $('#myTable1').DataTable({
+            responsive: true
+        });
+        $('#myTable2').DataTable({
+            responsive: true
+        });
+        $('#myTable3').DataTable({
+            responsive: true
+        });
+
+    </script>
+
+    <script>
+        $('#deleteModel').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('bsUserid')
+            var modal = $(this)
+            modal.find('#deleteInput').val(recipient)
+        })
+    </script>
+}
+<style>
+    .link{
+
+        color:black;
+    }
+</style>
+<ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active link" id="maincategory-tab" data-bs-toggle="tab" data-bs-target="#maincategory" type="button" role="tab" aria-controls="maincategory" aria-selected="true">Main Category</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link link" id="category-tab" data-bs-toggle="tab" data-bs-target="#category" type="button" role="tab" aria-controls="category" aria-selected="false">Category</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link link" id="subcategory-tab" data-bs-toggle="tab" data-bs-target="#subcategory" type="button" role="tab" aria-controls="subcategory" aria-selected="false">Sub Category</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link link" id="brand-tab" data-bs-toggle="tab" data-bs-target="#brand" type="button" role="tab" aria-controls="brand" aria-selected="false">Brand</button>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="maincategory" role="tabpanel" aria-labelledby="maincategory-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">Main Category List</h1>
+                <hr>
+                <a class="btn btn-primary btn-sm  mb-3" href="/admin/categorycreate">Create Main Category</a>
+                <table id="myTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>Name</td>
+                            <td>Url</td>
+                            <td>Product Count</td>
+                            <td>Category Count</td>
+                            <td>Edit</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Url</td>
+                                    <td>@item.Products.Count</td>
+                                    <td>@item.Categories.Count</td>
+                                    <td>
+                                        <a href="/admin/maincategoryedit/@item.Id" class="btn btn-primary btn-sm mr-2">Edit</a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">
+                                <h3>No Users</h3>
+                            </div>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="category" role="tabpanel" aria-labelledby="category-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">Category List</h1>
+                <hr>
+                <a class="btn btn-primary btn-sm  mb-3" href="/admin/categorycreate">Create Category</a>
+                <table id="myTable1" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>Name</td>
+                            <td>Url</td>
+                            <td>Main Category</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var item in Model.SelectMany(x=>x.Categories))
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Url</td>
+                                    <td>@item.MainCategory.Name</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">
+                                <h3>No Users</h3>
+                            </div>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="subcategory" role="tabpanel" aria-labelledby="subcategory-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">Category List</h1>
+                <hr>
+                <a class="btn btn-primary btn-sm  mb-3" href="/admin/categorycreate">Create Category</a>
+                <table id="myTable2" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>Name</td>
+                            <td>Url</td>
+                            <td>Category</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var item in Model.SelectMany(x => x.Categories).SelectMany(x => x.SubCategories))
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Url</td>
+                                    <td>@item.Category.Name</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">
+                                <h3>No Users</h3>
+                            </div>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="brand" role="tabpanel" aria-labelledby="brand-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">Category List</h1>
+                <hr>
+                <a class="btn btn-primary btn-sm  mb-3" href="/admin/categorycreate">Create Category</a>
+                <table id="myTable3" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>Name</td>
+                            <td>Url</td>
+                            <td>Sub Category</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var item in Model.SelectMany(x => x.Categories).SelectMany(x => x.SubCategories).SelectMany(x => x.Brands))
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Url</td>
+                                    <td>@item.SubCategory</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">
+                                <h3>No Users</h3>
+                            </div>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="deleteModel" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModelLabel">Delete Product</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3>Are you sure?</h3>
+            </div>
+            <div class="modal-footer">
+                <form asp-controller="admin" asp-action="ProductDelete" style="display: inline;">
+                    <input id="deleteInput" type="hidden" name=productId value="">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    
+
+
+
+
+
+</script>
+

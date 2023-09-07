@@ -1,0 +1,155 @@
+﻿@{
+    Layout = "_adminLayout";
+}
+<style>
+    .custom-file-button input[type=file] {
+  margin-left: -2px !important;
+}
+
+.custom-file-button input[type=file]::-webkit-file-upload-button {
+  display: none;
+}
+
+.custom-file-button input[type=file]::file-selector-button {
+  display: none;
+}
+
+.custom-file-button:hover label {
+  background-color: #dde0e3;
+  cursor: pointer;
+}
+
+</style>
+@model List<string>
+<form asp-controller="admin" asp-action="addimage" method="post" enctype="multipart/form-data">
+    
+    <div class="input-group custom-file-button mt-3">
+        <label class="input-group-text" for="imageSelect">Add Images</label>
+        <input type="file" class="form-control" id="imageSelect" name="files" multiple required  accept=".jpg,.jpeg,.png">
+
+    </div>
+    <p id="imageSelectText"></p>
+
+    <div id="imagesBox" style="display: none;" >
+        <div class="input-group mb-3 mt-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="name">Name</label>
+        </div>
+        <input name="name" for="name" class="form-control" placeholder="Image Name" required>
+        
+    </div>
+        <div id="images"  class="mt-3 m-0 row border border-3" >
+        </div>
+        <button class="btn btn-primary mt-3" type="submit">Add Images</button>
+    </div>
+
+</form>
+
+
+
+
+
+<div id="imagesBox1" >
+    <div id="images1"  class="row mt-3 m-0 p-1 rounded  border border-3" >
+        @foreach (var image in Model)
+        {
+            <div class="col-2  p-1  ">
+                <div class="imageUrl1 border border-3 m-0  rounded text-center" style="position: relative;">
+                    <button type="button" class="btn-close closeBtn"  aria-label="Close" data-bs-imageName="@image" data-bs-toggle="modal" data-bs-target="#deleteModel" style="position:absolute;right:0;top:0;"></button>
+
+                    <img src="~/img/@image" title="@image" class="p-1" height=120  alt="" style="object-fit: contain;width:100%;">
+                </div>
+            </div>
+            
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModel" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModelLabel">Delete Image</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body">
+                <h3>Are you sure?</h3>
+                <div id="deleteProducts" class="row mt-3 m-0 p-1 ">
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <form asp-controller="admin" asp-action="deleteimage" method="post" style="display: inline;">
+                        <input type="hidden" id="deleteImage" name="name">
+                        <button type="submit" id="deleteBtn" disabled class="btn btn-danger btn-sm" >Delete</button>
+
+                    </form>
+                        <button type="button"  class="btn btn-primary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+
+                </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+        $('#deleteModel').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('bsImagename')
+            var modal = $(this)
+            modal.find('#deleteImage').val(recipient)
+            var deleteProduct=$('#deleteProducts')
+            deleteProduct.empty()
+            $.post("@Url.Action("CheckImageProduct","admin")", { name: recipient }, function (data) {
+                if(data.length>0){
+                    $('#deleteBtn').prop("disabled", true)
+                     deleteProduct.empty()
+                    for(let i=0;i<data.length;i++){
+                        deleteProduct.append(`
+                            <div class="col-4   ">
+                            <div class="p-1 border ">
+                                <img src='/img/${data[i].homeImageUrl}' title=${data[i].homeImageUrl} class="p-1" height=120  alt="" style="object-fit: contain;width:100%;">
+
+                                <h5>${data[i].id}</h5>
+                                <h6>${data[i].name}</h6>
+                            </div>
+                        </div>
+                        `)
+                    }
+                    deleteProduct.append(`
+                            <h5 class="mt-2">${data.length} products use image.Cant delete it</h5>
+                        `)
+                }else{
+                    $('#deleteBtn').prop("disabled", false)
+                }
+            
+         });
+
+            
+
+        })
+    $('#imageSelect').on("change", function (ev) {
+        if(ev.target.files.length<1){
+            $('#submit').prop("disabled", true)
+        }
+        $('#imagesBox').css("display","block")
+        $('#images').empty()
+        $('#imageSelectText').empty()
+        $('#imageSelectTextWarning').empty()
+        $('#imageSelectTextWarning').append("Please select home image!")
+        for(let i=0;i<ev.target.files.length;i++){
+            $('#imageSelectText').append(`{${ev.target.files[i].name}}`)
+            $('#images').append(`
+                <div class="col-2  p-1  ">
+                        <div class=" m-1  border border-3 rounded imageUrl text-center" style="position: relative;" >
+                        <img src=${URL.createObjectURL(ev.target.files[i])} class="p-1" height=120  alt="" style="object-fit: contain;width:100%;">
+                    </div>
+                </div>
+                
+            
+            `)
+        }
+        
+    })
+</script>
+
+
