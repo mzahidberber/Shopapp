@@ -50,7 +50,7 @@
                 {
                     @foreach (var item in Model)
                     {
-                        <tr class="@(item.IsHome?"table-success":"") @(item.IsApprove?"":"table-warning")">
+                        <tr class="@(item.IsHome?"table-success":"") @(item.IsApprove?"":"table-warning") @(item.Stock!=0?"":"table-danger")">
                             <td>@item.Id</td>
                             <td><img src="~/img/@item.HomeImageUrl" height="50"></td>
 
@@ -58,7 +58,6 @@
                             <td>@item.Url</td>
                             <td>@item.Price &#8378</td>
                             <td>@item.Stock</td>
-                            @*<td>@Html.Raw(@item.Description)</td>*@
                             <td>
                                     <input type="checkbox" name="isApprove" value=@item.Id class="isApproveInput" @(item.IsApprove ? "checked" : "")>
                            

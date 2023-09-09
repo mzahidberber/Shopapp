@@ -19,6 +19,7 @@ namespace shopapp.core.Business.Abstract
         Response<IsUrlDTO> IsUrl(string url);
         Task<Response<NoDataDTO>> ChangeApprove(int id, bool isApprove);
         Task<Response<NoDataDTO>> ChangeHome(int id, bool isHome);
+        Task<Response<ProductDTO>> AddCheckUrlAsync(ProductDTO entity);
 
 
     }

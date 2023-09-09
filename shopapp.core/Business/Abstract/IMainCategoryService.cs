@@ -7,4 +7,6 @@ public interface IMainCategoryService : IGenericService<MainCategory, MainCatego
 {
     Task<Response<IEnumerable<MainCategoryDTO>>> GetAllWithCategoriAndSubCategories();
     Task<Response<IEnumerable<MainCategoryDTO>>> GetAllWithCategoriAndSubCategoriesAndBrands();
+    Task<Response<MainCategoryDTO>> AddCheckUrlAndNameAsync(MainCategoryDTO entity);
+    Task<Response<NoDataDTO>> UpdateCheckUrlAndNameAsync(MainCategoryDTO entity, int id);
 }

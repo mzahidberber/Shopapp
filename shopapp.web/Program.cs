@@ -31,6 +31,8 @@ builder.Services.AddProxyScoped<IMainCategoryRepository, EfMainCategoryRepositor
 builder.Services.AddProxyScoped<IImageRepository, EfImageRepository>();
 builder.Services.AddProxyScoped<ISubCategoryFeatureValueRepository, EfSubCategoryFeatureValueRepository>();
 builder.Services.AddProxyScoped<ISubCategoryFeatureRepository, EfSubCategoryFeatureRepository>();
+builder.Services.AddProxyScoped<ISubCategoryRepository, EfSubCategoryRepository>();
+builder.Services.AddProxyScoped<IBrandRepository, EfBrandRepository>();
 
 builder.Services.AddProxyScoped<IProductService, ProductService>();
 builder.Services.AddProxyScoped<ICategoryService, CategoryService>();
@@ -40,6 +42,8 @@ builder.Services.AddProxyScoped<IMainCategoryService, MainCategoryService>();
 builder.Services.AddProxyScoped<IImageService, ImageService>();
 builder.Services.AddProxyScoped<ISubCategoryFeatureValueService, SubCategoryFeatureValueService>();
 builder.Services.AddProxyScoped<ISubCategoryFeatureService, SubCategoryFeatureService>();
+builder.Services.AddProxyScoped<ISubCategoryService, SubCategoryService>();
+builder.Services.AddProxyScoped<IBrandService, BrandService>();
 
 builder.Services.AddProxyScoped<ICacheManager, MemoryCacheManager>();
 
@@ -59,12 +63,12 @@ builder.Services.AddScoped<IEmailSender, SmtpEmailSender>(
         builder.Configuration["EmailSender:Password"]
         ));
 
-using (ShopContext context = new ShopContext(builder.Configuration))
-{
-    var pendingMigrations = context.Database.GetPendingMigrations();
-    if (pendingMigrations.Any())
-        context.Database.Migrate();
-}
+//using (ShopContext context = new ShopContext(builder.Configuration))
+//{
+//    var pendingMigrations = context.Database.GetPendingMigrations();
+//    if (pendingMigrations.Any())
+//        context.Database.Migrate();
+//}
 
 builder.Services.AddSession();
 

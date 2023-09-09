@@ -47,6 +47,7 @@
 
 
 
+<input class="form-control mr-sm-2" id="imageSearch" type="text" placeholder="Image Search">
 
 
 <div id="imagesBox1" >
@@ -58,6 +59,7 @@
                     <button type="button" class="btn-close closeBtn"  aria-label="Close" data-bs-imageName="@image" data-bs-toggle="modal" data-bs-target="#deleteModel" style="position:absolute;right:0;top:0;"></button>
 
                     <img src="~/img/@image" title="@image" class="p-1" height=120  alt="" style="object-fit: contain;width:100%;">
+                    <h6>@image</h6>
                 </div>
             </div>
             
@@ -92,6 +94,19 @@
 </div>
 
 <script>
+    $('#imageSearch').on('input',function(ev){
+        for (var i = 0; i < $('.imageUrl1').length;i++){
+            if (!$('.imageUrl1')[i].children[1].title.includes($(this).val())){
+                $('.imageUrl1')[i].parentElement.style.display = "none"
+                
+            }
+            else{
+                $('.imageUrl1')[i].parentElement.style.display = "block"
+            }
+        }
+    })
+
+
         $('#deleteModel').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
             var recipient = button.data('bsImagename')

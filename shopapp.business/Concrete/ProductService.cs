@@ -7,6 +7,7 @@ using shopapp.core.DTOs.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
 using System.Linq.Expressions;
+using System.Security.Policy;
 
 namespace shopapp.business.Concrete;
 
@@ -26,11 +27,25 @@ public class ProductService : GenericService<Product, ProductDTO>, IProductServi
         return Response<IEnumerable<ProductDTO>>.Success(ObjectMapper.Mapper.Map<IEnumerable<ProductDTO>>(list), 200);
     }
 
+    public async Task<Response<ProductDTO>> AddCheckUrlAsync(ProductDTO entity)
+    {
+        var url = _genericRepository.GetAll().Any(x => x.Url == entity.Url);
+        if(url==true)
+            return Response<ProductDTO>.Fail("Url already exists", 400,true);
+        var newEntity = ObjectMapper.Mapper.Map<Product>(entity);
+        await _genericRepository.AddAsync(newEntity);
+        await _genericRepository.CommitAsync();
+        var newDto = ObjectMapper.Mapper.Map<ProductDTO>(newEntity);
+        return Response<ProductDTO>.Success(newDto, 200);
+    }
+
     public Response<IsUrlDTO> IsUrl(string url)
     {
+        var urll = _genericRepository.GetAll().Any(x => x.Url == url);
+        _genericRepository.CommitAsync();
         return Response<IsUrlDTO>.Success(new IsUrlDTO
         {
-            IsUrl= _genericRepository.GetAll().Any(x => x.Url == url)
+            IsUrl= urll
         },200);
     }
 

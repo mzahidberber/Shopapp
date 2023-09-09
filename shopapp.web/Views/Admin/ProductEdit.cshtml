@@ -169,7 +169,7 @@
                 <div class="modal-body">
 					<input class="form-control mr-sm-2" id="imageSearch" type="text" placeholder="Images">
 					
-                    <div id="imageList" class="row mt-3" style="overflow: scroll;height:30rem;"></div>
+                    <div id="imageList" class="row mt-3" style="overflow: scroll;max-height:30rem;"></div>
                 </div>
                 <div class="modal-footer">
                         <button type="button"  class="btn btn-primary btn-sm" onclick="refreshImages()" data-bs-dismiss="modal" aria-label="Close">Select</button>
@@ -181,7 +181,19 @@
     </div>
 </div>
 <script>
-    
+    $(document).ready(function () {
+        $('#imageSearch').on('input', function (ev) {
+            for (var i = 0; i < $('.imageItem').length; i++) {
+                if (!$('.imageItem')[i].children[0].children[0].title.includes($(this).val())) {
+                    $('.imageItem')[i].style.display = "none"
+
+                }
+                else {
+                    $('.imageItem')[i].style.display = "block"
+                }
+            }
+        })
+    })
     var imageUrlList=[]
 
     var imageInputs=$('[name="imageUrls"]')
@@ -287,7 +299,8 @@
                 <div class="col-2   imageItem p-0">
                     <div class="p-1  ">
                         <img src='/img/${data[i]}' title=${data[i]} onclick="imageClick1(this)" data-img=${data[i]} data-click=0  class="p-1 border" height=120  alt="" style="object-fit: contain;width:100%;">
-                    </div>
+                            <h6>${data[i]}</h6>
+                        </div>
                 </div>
 
            

@@ -79,7 +79,8 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
                 // Diğer ortamlarda yapılacak varsayılan işlemler
             }
 
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            //optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            optionsBuilder.UseSqlite("Data Source=shopdb.db;Pooling=false;");
         }
 
 

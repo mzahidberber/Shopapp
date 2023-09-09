@@ -15,15 +15,15 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         {
             _context = context;
             _dbSet = _context.Set<T>();
-            _transaction = _context.Database.BeginTransaction();
+            //_transaction = _context.Database.BeginTransaction();
         }
         public bool Commit(bool state = true)
         {
             _context.SaveChanges();
-            if (state)
-                _transaction.Commit();
-            else
-                _transaction.Rollback();
+            //if (state)
+            //    _transaction.Commit();
+            //else
+            //    _transaction.Rollback();
 
             Dispose();
             return true;
@@ -32,10 +32,10 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         public async Task<bool> CommitAsync(bool state = true)
         {
             await _context.SaveChangesAsync();
-            if (state)
-                await _transaction.CommitAsync();
-            else
-                await _transaction.RollbackAsync();
+            //if (state)
+            //    await _transaction.CommitAsync();
+            //else
+            //    await _transaction.RollbackAsync();
 
             Dispose();
             return true;

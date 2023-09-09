@@ -5,5 +5,6 @@ namespace shopapp.core.Business.Abstract
 {
     public interface ICategoryService : IGenericService<Category, CategoryDTO>
     {
+        Task<Response<CategoryDTO>> AddCheckUrlAndNameAsync(CategoryDTO entity);
     }
 }

@@ -3,27 +3,43 @@
 <script src="/modules/ckeditor/ckeditor.js"></script>
 <script src="/modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<div id="browseFile">
 
-	<div id="imagesBox1">
-		<div id="images1" class="row mt-3 m-0 p-1 rounded  border border-3">
-			@foreach (var image in ViewBag.fileInfo)
-			{
-				<div class="col-2  p-1  ">
-					<div class="imageUrl1 border border-3 m-0  rounded text-center" style="position: relative;">
+<div class="p-3">
+	<input class="form-control mr-sm-2" id="imageSearch" type="text" placeholder="Image Search">
 
-						<img src="~/img/@image.Name" title="@image.Name" class="p-1" height=120 alt="" style="object-fit: contain;width:100%;">
-						<h6>@image.Name</h6>
+	<div id="browseFile">
+
+		<div id="imagesBox1">
+			<div id="images1" class="row mt-3 m-0 p-1 rounded  border border-3">
+				@foreach (var image in ViewBag.fileInfo)
+				{
+					<div class="col-2  p-1  ">
+						<div class="imageUrl1 border border-3 m-0  rounded text-center" style="position: relative;">
+
+							<img src="~/img/@image.Name" title="@image.Name" class="p-1" height=120 alt="" style="object-fit: contain;width:100%;">
+							<h6>@image.Name</h6>
+						</div>
 					</div>
-				</div>
 
-			}
+				}
+			</div>
 		</div>
 	</div>
 </div>
 
-<script>
 
+<script>
+	$('#imageSearch').on('input', function (ev) {
+		for (var i = 0; i < $('.imageUrl1').length; i++) {
+			if (!$('.imageUrl1')[i].children[0].title.includes($(this).val())) {
+				$('.imageUrl1')[i].parentElement.style.display = "none"
+
+			}
+			else {
+				$('.imageUrl1')[i].parentElement.style.display = "block"
+			}
+		}
+	})
 	var funcName=@(Context.Request.Query["CKEditorFuncNum"]+";")
 	$('#browseFile').on('click','img',function(){
 		var fileUrl='/img/'+$(this).attr('title');

@@ -10,4 +10,5 @@ namespace shopapp.core.Business.Abstract;
 
 public interface ISubCategoryFeatureService : IGenericService<SubCategoryFeature, SubCategoryFeatureDTO>
 {
+    Task<Response<List<SubCategoryFeatureDTO>>> AddManyAsync(List<SubCategoryFeatureDTO> entities);
 }

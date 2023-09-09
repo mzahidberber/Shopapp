@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper.Features;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,16 +26,19 @@ public class AdminController : Controller
     private UserManager<User> _userManager { get; set; }
     public IProductService _productService { get; set; }
     public ICategoryService _categoryService { get; set; }
+    public ISubCategoryService _subCategoryService { get; set; }
+    public IBrandService _brandService { get; set; }
     public IMainCategoryService _mainCategoryService { get; set; }
     public IImageService _imageService { get; set; }
     public ISubCategoryFeatureValueService _subCategoryFeatureValueService { get; set; }
+    public ISubCategoryFeatureService _subCategoryFeatureService { get; set; }
     public IConfiguration _configuration { get; set; }
 
     public ICacheManager _cacheManager { get; set; }
 
     private IWebHostEnvironment _webHostEnvironment { get; set; }
 
-    public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ICacheManager cacheManager, IMainCategoryService mainCategoryService, IImageService imageService, ISubCategoryFeatureValueService subCategoryFeatureValueService)
+    public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ICacheManager cacheManager, IMainCategoryService mainCategoryService, IImageService imageService, ISubCategoryFeatureValueService subCategoryFeatureValueService, ISubCategoryService subCategoryService, IBrandService brandService, ISubCategoryFeatureService subCategoryFeatureService)
     {
         _roleManager = roleManager;
         _userManager = userManager;
@@ -46,6 +50,9 @@ public class AdminController : Controller
         _mainCategoryService = mainCategoryService;
         _imageService = imageService;
         _subCategoryFeatureValueService = subCategoryFeatureValueService;
+        _subCategoryService = subCategoryService;
+        _brandService = brandService;
+        _subCategoryFeatureService = subCategoryFeatureService;
     }
 
     public async Task<IEnumerable<MainCategoryModel>> GetCategoriesAsync()
@@ -56,6 +63,11 @@ public class AdminController : Controller
         var categoriModel = ObjectMapper.Mapper.Map<IEnumerable<MainCategoryModel>>(categories.data);
         _cacheManager.Add(key, categoriModel, 60);
         return categoriModel;
+    }
+    public void RemoveCacheCategories()
+    {
+        var key = Reflection.CreateCacheKey(typeof(AdminController), "GetCategoriesAsync");
+        _cacheManager.Remove(key);
     }
 
     public IActionResult Index() => View();
@@ -296,24 +308,6 @@ public class AdminController : Controller
 
     public async Task<IActionResult> ProductList(string? category = null, int page = 1)
     {
-        //return View();
-        //if (RouteData.Values["action"].ToString() == "ProductList")
-        //{
-        //    ViewBag.SelectedCategory = RouteData?.Values["id"];
-        //}
-        //var product = new ProductDTOAndTotalCount();
-        //var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
-        //if (category == null) product = this._productService.WherePage(page, pageSize).Result.data;
-        //else product = this._productService.WherePage(page, pageSize, x => x.ProductCategories.Any(x => x.Category.Url == category)).Result.data;
-        //ViewBag.PageInfo = new PageInfo
-        //{
-        //    Url = "/admin/product",
-        //    TotalItems = product.TotalCount,
-        //    CurrentPage = page,
-        //    ItemsPerPage = pageSize,
-        //    CurrentCategory = category
-        //};
-        //ViewBag.Categories= ObjectMapper.Mapper.Map<List<CategoryModel>>(this._categoryService.GetAllAsync().Result.data);
         var product = await _productService.GetAllAsync();
         return View(ObjectMapper.Mapper.Map<List<ProductModel>>(product.data));
     }
@@ -360,9 +354,6 @@ public class AdminController : Controller
                 });
                 
             }
-            if (_productService.IsUrl(product.Url).data.IsUrl)
-                return View(product);
-
 
             var ct = await GetCategoriesAsync();
             var sub = ct.FirstOrDefault(x => x.Id == product.MainCategoryId).Categories.FirstOrDefault(x => x.Id == product.CategoryId).SubCategories.FirstOrDefault(x => x.Id == product.SubCategoryId);
@@ -375,7 +366,7 @@ public class AdminController : Controller
                 });
             }
             
-            await this._productService.AddAsync(ObjectMapper.Mapper.Map<ProductDTO>(product));
+            await this._productService.AddCheckUrlAsync(ObjectMapper.Mapper.Map<ProductDTO>(product));
             return RedirectToAction("ProductList");
         }
         return PartialView(product);
@@ -517,5 +508,211 @@ public class AdminController : Controller
         return View(ObjectMapper.Mapper.Map<List<MainCategoryModel>>(categories.data));
     }
 
+    public async Task<IActionResult> CreateMainCategory(string name,string url)
+    {
+        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url)) {
 
+            var result= await _mainCategoryService.AddCheckUrlAndNameAsync(new MainCategoryDTO
+            {
+                Name = name,
+                Url = url
+            });
+
+            if (result.statusCode == 400)
+            {
+                TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Url or name already exists",
+                    alertType: "warning");
+            }
+            else
+            {
+                RemoveCacheCategories();
+            }
+
+        }
+        else
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Name or url must not empty!",
+                    alertType: "warning");
+        }
+        
+        return Redirect("CategoriesList");
+    }
+
+    public async Task<IActionResult> EditMainCategory(string name, string url,int mainCategoryId)
+    {
+        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+        {
+
+            var result = await _mainCategoryService.UpdateCheckUrlAndNameAsync(new MainCategoryDTO
+            {
+                Id=mainCategoryId,
+                Name = name,
+                Url = url
+            },mainCategoryId);
+
+            if (result.statusCode != 204)
+            {
+                TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Url or name already exists",
+                    alertType: "warning");
+            }
+
+        }
+        else
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Name or url must not empty!",
+                    alertType: "warning");
+        }
+
+        return Redirect("CategoriesList");
+    }
+    public async Task<IActionResult> DeleteMainCategory(int mainCategoryId)
+    {
+        var result = await _mainCategoryService.Remove(mainCategoryId);
+        return Redirect("CategoriesList");
+    }
+
+    public async Task<IActionResult> CreateCategory(string name, string url,int mainCategoryId)
+    {
+        if (mainCategoryId == 0)
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Main category must!",
+                    alertType: "warning");
+            return Redirect("CategoriesList");
+        }
+
+        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+        {
+
+            var result = await _categoryService.AddCheckUrlAndNameAsync(new CategoryDTO
+            {
+                MainCategoryId=mainCategoryId,
+                Name = name,
+                Url = url
+            });
+
+            if (result.statusCode == 400)
+            {
+                TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Url or name already exists",
+                    alertType: "warning");
+            }
+            else
+            {
+                RemoveCacheCategories();
+            }
+
+        }
+        else
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Name or url must not empty!",
+                    alertType: "warning");
+        }
+
+        return Redirect("CategoriesList");
+    }
+
+    public async Task<IActionResult> CreateSubCategory(string name, string url,int categoryId,List<string>? features=null)
+    {
+        
+        if (categoryId==0)
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Main category must!",
+                    alertType: "warning");
+            return Redirect("CategoriesList");
+        }
+       
+
+        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+        {
+
+            var result = await _subCategoryService.AddCheckUrlAndNameAsync(new SubCategoryDTO
+            {
+                CategoryId=categoryId,
+                Name = name,
+                Url = url
+            });
+
+            if (features != null) {
+                List<SubCategoryFeatureDTO> list=new List<SubCategoryFeatureDTO>();
+                foreach (var feature in features)
+                {
+                    list.Add(new SubCategoryFeatureDTO
+                    {
+                        Name = feature,
+                        SubCategoryId = result.data.Id,
+                    });
+                }
+                await _subCategoryFeatureService.AddManyAsync(list);
+            }
+
+            if (result.statusCode == 400)
+            {
+                TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Url or name already exists",
+                    alertType: "warning");
+            }
+            else
+            {
+                RemoveCacheCategories();
+            }
+
+        }
+        else
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Name or url must not empty!",
+                    alertType: "warning");
+        }
+
+        return Redirect("CategoriesList");
+    }
+
+    public async Task<IActionResult> CreateBrand(string name, string url,int subCategoryId)
+    {
+        if (subCategoryId == 0)
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Main category must!",
+                    alertType: "warning");
+            return Redirect("CategoriesList");
+        }
+
+        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+        {
+
+            var result = await _brandService.AddCheckUrlAndNameAsync(new BrandDTO
+            {
+                SubCategoryId = subCategoryId,
+                Name = name,
+                Url = url
+            });
+
+            if (result.statusCode == 400)
+            {
+                TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Url or name already exists",
+                    alertType: "warning");
+            }
+            else
+            {
+                RemoveCacheCategories();
+            }
+
+        }
+        else
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Name or url must not empty!",
+                    alertType: "warning");
+        }
+
+        return Redirect("CategoriesList");
+    }
 }

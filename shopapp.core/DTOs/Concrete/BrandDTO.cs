@@ -12,8 +12,8 @@ public class BrandDTO:IDTO
     public string Name { get; set; }
     public string Url { get; set; }
 
-    public int CategoryId { get; set; }
-    public CategoryDTO Category { get; set; }
+    public int SubCategoryId { get; set; }
+    public SubCategoryDTO SubCategory { get; set; }
 
     public List<ProductDTO> Products { get; set; }
 }

@@ -11,8 +11,8 @@ public class SubCategoryFeatureDTO:IDTO
     public int Id { get; set; }
     public string Name { get; set; }
 
-    public int CategoryId { get; set; }
-    public SubCategoryDTO Category { get; set; }
+    public int SubCategoryId { get; set; }
+    public SubCategoryDTO SubCategory { get; set; }
 
     public List<SubCategoryFeatureValueDTO> SubCategoryFeatureValues { get; set; }
 }
