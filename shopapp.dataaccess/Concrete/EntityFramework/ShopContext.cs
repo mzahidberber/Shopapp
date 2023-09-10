@@ -72,15 +72,19 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             }
             else if (environment == "Production")
             {
-                // Production ortamında yapılacak işlemler
+                var host=Environment.GetEnvironmentVariable("dbHost");
+                var name=Environment.GetEnvironmentVariable("dbName");
+                var password=Environment.GetEnvironmentVariable("dbPassword");
+                var port=Environment.GetEnvironmentVariable("dbPort");
+                connectionString = $"server={host};port={port};database={name};User Id=root;password={password};";
+               
             }
             else
             {
-                // Diğer ortamlarda yapılacak varsayılan işlemler
+                // Diğer ortamlarda yapılacak işlemler
             }
-
-            //optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            optionsBuilder.UseSqlite("Data Source=shopdb.db;Pooling=false;");
+            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            //optionsBuilder.UseSqlite("Data Source=shopdb.db;");
         }
 
 

@@ -6,4 +6,5 @@ namespace shopapp.core.Business.Abstract;
 public interface IBrandService : IGenericService<Brand, BrandDTO>
 {
     Task<Response<BrandDTO>> AddCheckUrlAndNameAsync(BrandDTO entity);
+    Task<Response<NoDataDTO>> UpdateCheckUrlAndNameAsync(BrandDTO entity, int id);
 }

@@ -12,9 +12,9 @@ namespace shopapp.web.Models.Entity
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int CategoryId { get; set; }
+        public int SubCategoryId { get; set; }
         [JsonIgnore]
-        public SubCategoryModel Category { get; set; }
+        public SubCategoryModel SubCategory { get; set; }
 
         public List<SubCategoryFeatureValueModel> SubCategoryFeatureValues { get; set; }
     }

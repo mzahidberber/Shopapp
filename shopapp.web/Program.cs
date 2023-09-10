@@ -2,6 +2,7 @@ using Castle.DynamicProxy;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using NLog.Web;
@@ -61,17 +62,23 @@ builder.Services.AddScoped<IEmailSender, SmtpEmailSender>(
         builder.Configuration.GetValue<bool>("EmailSender:EnableSSL"),
         builder.Configuration["EmailSender:UserName"],
         builder.Configuration["EmailSender:Password"]
-        ));
+    ));
 
-//using (ShopContext context = new ShopContext(builder.Configuration))
+//using(var connection = new SqliteConnection("Data Source=shopdb.db;"))
 //{
-//    var pendingMigrations = context.Database.GetPendingMigrations();
-//    if (pendingMigrations.Any())
-//        context.Database.Migrate();
+//    connection.Open();
+//    connection.Close();
 //}
 
-builder.Services.AddSession();
 
+using (ShopContext context = new ShopContext(builder.Configuration))
+{
+    var pendingMigrations = context.Database.GetPendingMigrations();
+    if (pendingMigrations.Any())
+        context.Database.Migrate();
+}
+
+builder.Services.AddSession();
 builder.Services.AddIdentity<User, UserRole>().AddEntityFrameworkStores<ShopContext>().AddDefaultTokenProviders();
 builder.Services.Configure<IdentityOptions>(options =>
 {

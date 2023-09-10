@@ -14,12 +14,24 @@ COPY ["shopapp.dataaccess/shopapp.dataaccess.csproj", "shopapp.dataaccess/"]
 RUN dotnet restore "shopapp.web/shopapp.web.csproj"
 COPY . .
 WORKDIR "/src/shopapp.web"
+
+
+
 RUN dotnet build "shopapp.web.csproj" -c Release -o /app/build
+
+FROM node:14 AS node
+WORKDIR /src
+COPY ["shopapp.web/package.json", "shopapp.web/package-lock.json", "./"]
+RUN npm install
+
 
 FROM build AS publish
 RUN dotnet publish "shopapp.web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=node /src/node_modules ./node_modules
 ENTRYPOINT ["dotnet", "shopapp.web.dll"]

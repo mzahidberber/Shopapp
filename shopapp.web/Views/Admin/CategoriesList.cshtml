@@ -29,116 +29,93 @@
     <script>
         $('#deleteModel').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
-            var recipient = button.data('bsUserid')
-            var modal = $(this)
-            modal.find('#deleteInput').val(recipient)
+            var id = button.data('bsUserid')
+            var title = button.data('bsTitle')
+            var action = button.data('bsAction')
+            var typeCategory = button.data('bsTypecategory')
+            @*
+            if (typeCategory == "maincategory"){
+                $.get("@Url.Action("CheckMainCategory","admin")", { id: id }, function (data) {
+                    console.log(data)
+
+                });
+            }
+            if (typeCategory == "category") {
+
+            }
+            if (typeCategory == "subcategory") {
+
+            }
+            if (typeCategory == "brand") {
+
+            }
+            *@
+            $('#deleteEntityId').val(id)
+            $('.modal-header h1').text(title)
+            $('.modal-content form').prop("action", action)
         })
     </script>
 
-    <script>
-        $('#editModel').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var name = button.data('bsName')
-            var url = button.data('bsUrl')
-            var id = button.data('bsId')
-            var modal = $(this)
-            modal.find('#editNameInput').val(name)
-            modal.find('#editUrlInput').val(url)
-            modal.find('#mainCategoryId').val(id)
-        })
-    </script>
-    <script>
-        let mainCategoryId = 0
-        let categoryId = 0
-        let subCategoryId = 0
-        let categorySelected = $('#categorySelected')
-        let subCategorySelected = $('#subCategorySelected')
-        let brandSelected = $('#brandSelected')
-        $('#mainCategorySelected').on("change", function () {
-            categorySelected.empty()
-            categorySelected.append('<option selected disabled>Choose</option>')
-            categorySelected.prop("disabled", false)
+    
+    @*CreateModelScript*@
+    <script type="text/javascript">
+        var mainCategoryId = 0
+        var categoryId = 0
+        var subCategoryId = 0
 
-            subCategorySelected.empty()
-            subCategorySelected.append('<option selected disabled>Choose</option>')
-            subCategorySelected.prop("disabled", true)
 
-            brandSelected.empty()
-            brandSelected.append('<option selected disabled>Choose</option>')
-            brandSelected.prop("disabled", true)
+        var selected = `
+                       <div class="input-group mb-3 mainCategorySelectedBox" style="display:none;">
+                           <div class="input-group-prepend">
+                               <label class="input-group-text" for="inputGroupSelect01">Main Category</label>
+                           </div>
+                           <select  class="form-control mainCategorySelected" onchange="mainCategoryChange(this)">
+                               <option selected disabled>Choose</option>
+        @foreach (var item in Model)
+        {
+                                       <option value=@item.Id>@item.Name</option>
+        }
+                           </select>
 
-            $('#features').empty()
+                       </div>
+                       <div class="input-group mb-3 categorySelectedBox"  style="display:none;">
+                           <div class="input-group-prepend">
+                               <label class="input-group-text" for="inputGroupSelect01">Category</label>
+                           </div>
+                           <select  disabled="disabled"  class="form-control categorySelected" onchange="categoryChange(this)">
+                               <option selected disabled>Choose</option>
 
-            mainCategoryId = parseInt($(this).val())
-            $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId }, function (data) {
-                if (data.id === mainCategoryId) {
-                    for (var j = 0; j < data.categories.length; j++) {
-                        var option = document.createElement("option");
-                        option.value = data.categories[j].id;
-                        option.text = data.categories[j].name;
-                        categorySelected.append(option);
-                    }
-                }
+                           </select>
 
-            });
-        })
-        categorySelected.on("change", function () {
-            subCategorySelected.empty()
-            subCategorySelected.append('<option selected disabled>Choose</option>')
+                       </div>
 
-            brandSelected.empty()
-            brandSelected.append('<option selected disabled>Choose</option>')
-            brandSelected.prop("disabled", true)
+                       <div class="input-group mb-3 subCategorySelectedBox" style="display:none;">
+                           <div class="input-group-prepend">
+                               <label class="input-group-text" for="inputGroupSelect01">Sub Category</label>
+                           </div>
+                           <select disabled="disabled" class="form-control subCategorySelected" onchange="subCategoryChange(this)">
+                               <option selected disabled>Choose</option>
+                           </select>
 
-            $('#features').empty()
+                       </div>`
 
-            subCategorySelected.prop("disabled", false)
-            categoryId = parseInt($(this).val())
-            $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId, categoryId: categoryId }, function (data) {
-                if (data.id === categoryId) {
-                    for (var j = 0; j < data.subCategories.length; j++) {
-                        var option = document.createElement("option");
-                        option.value = data.subCategories[j].id;
-                        option.text = data.subCategories[j].name;
-                        subCategorySelected.append(option);
-                    }
-                }
-            });
-        })
-        subCategorySelected.on("change", function () {
-            brandSelected.empty()
-            brandSelected.append('<option selected disabled>Choose</option>')
-            brandSelected.prop("disabled", false)
-            subCategoryId = parseInt($(this).val())
-            $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId, categoryId: categoryId, subCategoryId: subCategoryId }, function (data) {
+        var inputs = `
+                       <div class="input-group input-group-sm mb-3">
+                           <div class="input-group-prepend">
+                               <span class="input-group-text" id="inputGroup-sizing-sm">Name</span>
+                           </div>
+                                   <input class="form-control" id="editNameInput" placeHolder="Name" name="name" aria-label="Name" aria-describedby="inputGroup-sizing-sm">
+                       </div>
+                       <div class="input-group input-group-sm mb-3">
+                           <div class="input-group-prepend">
+                               <span class="input-group-text" id="inputGroup-sizing-sm">Url</span>
+                           </div>
+                                           <input class="form-control " id="editUrlInput" placeHolder="Url" name="url" aria-label="Url" aria-describedby="inputGroup-sizing-sm">
+                       </div>
+                            `
 
-                if (data.id === subCategoryId) {
-                    for (var j = 0; j < data.brands.length; j++) {
-                        var option = document.createElement("option");
-                        option.value = data.brands[j].id;
-                        option.text = data.brands[j].name;
-                        brandSelected.append(option);
-                    }
-                }
-                $('#features').empty()
-                for (var i = 0; i < data.subCategoryFeatures.length; i++) {
-                    $('#features').append(`
-                                <div class="input-group input-group-sm mb-3">
-                    <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">${data.subCategoryFeatures[i].name}</span>
-                </div>
-                    <input type="hidden" class="form-control" required name="features" value='${data.subCategoryFeatures[i].name}'>
-                <input type="text" class="form-control values" oninput="inputValue(this)" required name="values" value="">
-            </div>`);
-                }
-
-            });
-        })
-    </script>
-
-    <script>
         function addFeature(){
-            $('#featureBox').append(`
+            $('.featureBox').append(`
                <div class="input-group input-group-sm mb-3">
                        <div class="input-group-prepend">
                            <span class="input-group-text" id="inputGroup-sizing-sm">Feature Name</span>
@@ -157,93 +134,258 @@
             tag.parentElement.parentElement.parentElement.remove()
         }
 
-
-        $('#createModel').on('show.bs.modal', function (event) {
-            $('#createModel .modal-content form #mainCategorySelectedBox').hide()
-            $('#createModel .modal-content form #categorySelectedBox').hide()
-            $('#createModel .modal-content form #subCategorySelectedBox').hide()
+        
+        function onShow(event,typee) {
             var button = $(event.relatedTarget)
+            var name = button.data('bsName')
+            var url = button.data('bsUrl')
+            var id = button.data('bsId')
+            mainCategoryId = button.data('bsMaincategoryid')
+            categoryId = button.data('bsCategoryid')
+            subCategoryId = button.data('bsSubcategoryid')
             var title = button.data('bsTitle')
             var action = button.data('bsAction')
             var type = button.data('bsType')
-            $('#createModel .modal-header h1').text(title)
-            $('#createModel .modal-content form').prop("action", action)
-            $('#createModel .modal-content form .form-col').empty()
-            
-            var inputs=`
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Name</span>
-                        </div>
-                        <input class="form-control" placeHolder="Name" name="name" aria-label="Name" aria-describedby="inputGroup-sizing-sm">
-                    </div>
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Url</span>
-                        </div>
-                        <input class="form-control " placeHolder="Url" name="url" aria-label="Url" aria-describedby="inputGroup-sizing-sm">
-                    </div>
-            `
 
-            $('#createModel .modal-content form .form-col').append(inputs)
+            
+
+            
+            $(document).ready(function () {
+                if(typee=="edit"){
+                    
+                $('.categorySelected').prop("disabled", false)
+                $('.subCategorySelected').prop("disabled", false)
+                $('#editModel .form-col #editNameInput').val(name)
+                $('#editModel .form-col #editUrlInput').val(url)
+                $('#editModel  #entityId').val(id)
+
+                var options = $('.mainCategorySelected option')
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].value == mainCategoryId) {
+                        options[i].setAttribute('selected', true)
+                    }
+                }
+                
+                $('#mainCategoryIdValue').val(mainCategoryId)
+
+                if(mainCategoryId!=undefined){
+                    $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId }, function (data) {
+                    $('.categorySelected').empty()
+                    if (data.id == mainCategoryId) {
+                        for (var j = 0; j < data.categories.length; j++) {
+                            var option = document.createElement("option");
+                            option.value = data.categories[j].id;
+                            option.text = data.categories[j].name;
+                            $('.categorySelected').append(option);
+                        }
+                        var options1 = $('.categorySelected option')
+                        for (let i = 0; i < options1.length; i++) {
+                            if (options1[i].value == categoryId) {
+                                options1[i].setAttribute('selected', true)
+                            }
+                        }
+                    }
+
+                });
+                }
+                if(mainCategoryId!=undefined && categoryId!=undefined){
+                    $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId, categoryId: categoryId }, function (data) {
+
+                        $('.subCategorySelected').empty()
+                        if (data.id == categoryId) {
+                            for (var j = 0; j < data.subCategories.length; j++) {
+                                var option = document.createElement("option");
+                                option.value = data.subCategories[j].id;
+                                option.text = data.subCategories[j].name;
+                                $('.subCategorySelected').append(option);
+                            }
+                        }
+
+                        var options1 = $('.categorySelected option')
+                        for (let i = 0; i < options1.length; i++) {
+                            if (options1[i].value == categoryId) {
+                                options1[i].setAttribute('selected', true)
+                            }
+                        }
+                        var options2 = $('.subCategorySelected option')
+                        for (let i = 0; i < options2.length; i++) {
+                            if (options2[i].value == subCategoryId) {
+                                options2[i].setAttribute('selected', true)
+                            }
+                        }
+                    });
+
+
+                        $.get("@Url.Action("GetFeatures","admin")", { subCategoryId: parseInt(id) }, function (data) {
+
+                       $('.featureBox').empty()
+                       for(let i=0;i<data.length;i++){
+                                $('.featureBox').append(`
+                                <div class="input-group input-group-sm mb-3">
+                               <div class="input-group-prepend">
+                                           <span class="input-group-text" id="inputGroup-sizing-sm">Feature Name</span>
+                               </div>
+                                                                             <input class="form-control " placeHolder="Name" name="features" value='${data[i].featureName}' aria-label="features" aria-describedby="inputGroup-sizing-sm">
+                                <div class="input-group-prepend">
+                                   <span class="input-group-text" id="inputGroup-sizing-sm">
+                                    <button type="button" class="btn-close" aria-label="Close" onclick="closeFeature(this)"></button>
+                                   </span>
+                                </div>
+                                   </div>`)
+
+                        
+                       }
+
+                       
+                   });
+
+                }
+                
+
+                
+                
+                
+            }
+
+            })
+
+
+
+            $('.modal-content form .mainCategorySelectedBox').hide()
+            $('.modal-content form .categorySelectedBox').hide()
+            $('.modal-content form .subCategorySelectedBox').hide()
+
+
+            $('.modal-header h1').text(title)
+            $('.modal-content form').prop("action", action)
+            
+            $('.modal-content form .form-col').empty()
+            $('.modal-content form .form-selected').empty()
+            $('.modal-content form .form-selected').append(selected)
+            $('.modal-content form .form-col').append(inputs)
+
             if (type == "1") {
-                $('#createModel .modal-content form #mainCategorySelectedBox').show()
-                
-                $('#createModel .modal-content form .form-col').append(`
-                     <input type="hidden" name="mainCategoryId" id="mainCategoryIdValue" required>
-                                
-                            `)
-                
+                $('.modal-content form .mainCategorySelectedBox').show()
+
+                $('.modal-content form .form-col').append(`
+                                     <input type="hidden" name="mainCategoryId" class="mainCategoryIdValue" required value=${mainCategoryId != undefined?mainCategoryId:""} >
+
+                                            `)
+
             }
             if (type == "2") {
-                $('#createModel .modal-content form #mainCategorySelectedBox').show()
-                $('#createModel .modal-content form #categorySelectedBox').show()
+                $('.modal-content form .mainCategorySelectedBox').show()
+                $('.modal-content form .categorySelectedBox').show()
 
-                $('#createModel .modal-content form .form-col').append(`
-                    <input type="hidden" name="categoryId" id="categoryIdValue" required>
-                            <div id="featureBox" class="mt-3"></div>
-                    <div class="d-flex justify-content-end">
-                           <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addFeature()">Add Feature</button>
-                    </div>
-                    
-                    
-                    `)
+                $('.modal-content form .form-col').append(`
+                                            <input type="hidden" name="categoryId" class="categoryIdValue" required value=${categoryId != undefined?categoryId:""}>
+                                            <div  class="mt-3 featureBox"></div>
+                                    <div class="d-flex justify-content-end">
+                                           <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addFeature()">Add Feature</button>
+                                    </div>
+
+
+                                    `)
             }
             if (type == "3") {
-                $('#createModel .modal-content form #mainCategorySelectedBox').show()
-                $('#createModel .modal-content form #categorySelectedBox').show()
-                $('#createModel .modal-content form #subCategorySelectedBox').show()
+                $('.modal-content form .mainCategorySelectedBox').show()
+                $('.modal-content form .categorySelectedBox').show()
+                $('.modal-content form .subCategorySelectedBox').show()
 
-                $('#createModel .modal-content form .form-col').append(`
-                   <input type="hidden" name="subCategoryId" id="subCategoryIdValue" required>
-                   
-                   `)
+                $('.modal-content form .form-col').append(`
+                                                   <input type="hidden" name="subCategoryId" class="subCategoryIdValue" required value=${subCategoryId != undefined?subCategoryId:""}>
 
-                  
+                                   `)
+
+
             }
+        }
 
 
-            
-         
+        $('#editModel').on('show.bs.modal', function (event) {
+            onShow(event,"edit")
+        })
+
+        $('#createModel').on('show.bs.modal', function (event) {
+            onShow(event,"create")
+        })
+    </script>
+
+    <script>
         
-        
-        
-        })
 
-        $('#mainCategorySelected').on("change",function(ev){
-            $('#mainCategoryIdValue').val($(this).val())
-        })
+        function mainCategoryChange(ev) {
+            let categorySelected = $('.categorySelected')
+            let subCategorySelected = $('.subCategorySelected')
+            categorySelected.empty()
+            categorySelected.append('<option selected disabled>Choose</option>')
+            categorySelected.prop("disabled", false)
 
-        $('#categorySelected').on("change", function (ev) {
-            $('#categoryIdValue').val($(this).val())
-        })
+            subCategorySelected.empty()
+            subCategorySelected.append('<option selected disabled>Choose</option>')
+            subCategorySelected.prop("disabled", true)
 
-        $('#subCategorySelected').on("change", function (ev) {
-            $('#subCategoryIdValue').val($(this).val())
-        })
+            $('.features').empty()
 
+            mainCategoryId = parseInt(ev.value)
+            $('.mainCategoryIdValue').val(mainCategoryId)
+            $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId }, function (data) {
+                if (data.id === mainCategoryId) {
+                    for (var j = 0; j < data.categories.length; j++) {
+                        var option = document.createElement("option");
+                        option.value = data.categories[j].id;
+                        option.text = data.categories[j].name;
+                        categorySelected.append(option);
+                    }
+                }
+
+            });
+        }
+
+        function categoryChange(ev) {
+            let subCategorySelected = $('.subCategorySelected')
+            subCategorySelected.empty()
+            subCategorySelected.append('<option selected disabled>Choose</option>')
+
+            $('.features').empty()
+
+            subCategorySelected.prop("disabled", false)
+            categoryId = parseInt(ev.value)
+            $('.categoryIdValue').val(categoryId)
+            $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId, categoryId: categoryId }, function (data) {
+                if (data.id === categoryId) {
+                    for (var j = 0; j < data.subCategories.length; j++) {
+                        var option = document.createElement("option");
+                        option.value = data.subCategories[j].id;
+                        option.text = data.subCategories[j].name;
+                        subCategorySelected.append(option);
+                    }
+                }
+            });
+        }
+
+        function subCategoryChange(ev) {
+            subCategoryId = parseInt(ev.value)
+            $('.subCategoryIdValue').val(subCategoryId)
+            $.post("@Url.Action("FilterCategoryAndBrands","admin")", { mainCategoryId: mainCategoryId, categoryId: categoryId, subCategoryId: subCategoryId }, function (data) {
+
+                $('.features').empty()
+                for (var i = 0; i < data.subCategoryFeatures.length; i++) {
+                    $('#features').append(`
+                                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">${data.subCategoryFeatures[i].name}</span>
+                        </div>
+                            <input type="hidden" class="form-control" required name="features" value='${data.subCategoryFeatures[i].name}'>
+                        <input type="text" class="form-control values" oninput="inputValue(this)" required name="values" value="">
+                    </div>`);
+                }
+
+            });
+        }
 
     </script>
+
 }
 <style>
     .link{
@@ -263,35 +405,8 @@
                 <div class="modal-body">
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <div class="input-group mb-3" id="mainCategorySelectedBox" style="display:none;">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Main Category</label>
-                                </div>
-                                <select id="mainCategorySelected" asp-items=@(new SelectList(Model, "Id", "Name")) class="form-control">
-                                    <option selected disabled>Choose</option>
-
-                                </select>
-
-                            </div>
-                            <div class="input-group mb-3" id="categorySelectedBox" style="display:none;">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Category</label>
-                                </div>
-                                <select  disabled="disabled" id="categorySelected" class="form-control">
-                                    <option selected disabled>Choose</option>
-                                </select>
-
-                            </div>
-
-                            <div class="input-group mb-3 " id="subCategorySelectedBox" style="display:none;">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Sub Category</label>
-                                </div>
-                                <select disabled="disabled" id="subCategorySelected" class="form-control">
-                                    <option selected disabled>Choose</option>
-                                </select>
-
-                            </div>
+                            
+                            <div class=" form-selected"></div>
                             <div class=" form-col"></div>
                         </div>
                     </div>
@@ -314,25 +429,19 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createModelLabel">Edit Main Category</h1>
+                <h1 class="modal-title fs-5" id="editModelLabel"></h1>                
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form asp-controller="Admin" asp-action="EditMainCategory" method="GET">
+            <form method="GET">
                 <div class="modal-body">
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input type="hidden" id="mainCategoryId" name="mainCategoryId">
-                            <div class="input-group input-group-sm mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Name</span>
-                                </div>
-                                <input class="form-control" placeHolder="Main Category Name" name="name" id="editNameInput" aria-label="Name" aria-describedby="inputGroup-sizing-sm">
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Url</span>
-                                </div>
-                                <input class="form-control " placeHolder="Main Category Url" name="url" id="editUrlInput" aria-label="Url" aria-describedby="inputGroup-sizing-sm">
+                            <div class=" form-selected"></div>
+                            <input type="hidden" id="entityId" name="entityId">
+                            <div class=" form-col">
+
+
+
                             </div>
                         </div>
                     </div>
@@ -340,7 +449,7 @@
                 <div class="modal-footer">
                     <div class="form-group row">
                         <div class="col-sm-12 ">
-                            <button type="submit" class="btn btn-primary mt-3 w-100">Set Main Category</button>
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Save</button>
                         </div>
                     </div>
 
@@ -355,16 +464,17 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteModelLabel">Delete Main Category</h1>
+                <h1 class="modal-title fs-5" id="deleteModelLabel"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <h3>Are you sure?</h3>
             </div>
             <div class="modal-footer">
-                <form asp-controller="admin" asp-action="DeleteMainCategory" style="display: inline;">
-                    <input id="deleteInput" type="hidden" name=mainCategoryId value="">
+                <form method="GET">
+                    <input type="hidden" id="deleteEntityId" name="entityId">
                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+
                 </form>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
 
@@ -418,9 +528,9 @@
                                     <td>@item.Url</td>
                                     <td>@item.Categories.Count</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-name=@item.Name data-bs-url=@item.Url data-bs-id=@item.Id data-bs-target="#editModel">Edit</button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-bs-type="0" data-bs-action="editmaincategory" data-bs-title="Edit Main Category" data-bs-toggle="modal" data-bs-name=@item.Name data-bs-url=@item.Url data-bs-id=@item.Id data-bs-target="#editModel">Edit</button>
 
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
+                                        <button type="button" @(item.Categories.Count == 0 ? "" : "disabled") class="btn btn-danger btn-sm" data-bs-action="deletemaincategory" data-bs-typecategory="maincategory" data-bs-title="Delete Main Category" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
 
                                     </td>
                                 </tr>
@@ -445,7 +555,7 @@
             <div class="col-md-12">
                 <h1 class="h4 mt-3">Category List</h1>
                 <hr>
-                <button type="button" class="btn btn-primary btn-sm mb-3" data-bs-type="1" data-bs-action="CreateCategory" data-bs-title="Create Category" data-bs-toggle="modal" data-bs-target="#createModel">Create Category</button>
+                <button type="button" class="btn btn-primary btn-sm mb-3" data-bs-type="1"  data-bs-action="CreateCategory" data-bs-title="Create Category" data-bs-toggle="modal" data-bs-target="#createModel">Create Category</button>
                 <table id="myTable1" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
@@ -467,9 +577,9 @@
                                     <td>@item.Url</td>
                                     <td>@item.MainCategory.Name</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-name=@item.Name data-bs-url=@item.Url data-bs-id=@item.Id data-bs-target="#editModel">Edit</button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-bs-type="1" data-bs-mainCategoryId=@item.MainCategoryId data-bs-categoryId=@item data-bs-action="editcategory" data-bs-title="Edit Category" data-bs-toggle="modal" data-bs-name=@item.Name data-bs-url=@item.Url data-bs-id=@item.Id data-bs-target="#editModel">Edit</button>
 
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
+                                        <button type="button" @(item.SubCategories.Count == 0 ? "" : "disabled") class="btn btn-danger btn-sm" data-bs-action="deletecategory" data-bs-typecategory="category" data-bs-title="Delete Category" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
 
                                     </td>
                                 </tr>
@@ -503,6 +613,7 @@
                             <td>Name</td>
                             <td>Url</td>
                             <td>Category</td>
+                            <td>Edit</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -515,6 +626,12 @@
                                     <td>@item.Name</td>
                                     <td>@item.Url</td>
                                     <td>@item.Category.Name</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm" data-bs-type="2" data-bs-mainCategoryId=@item.Category.MainCategoryId data-bs-categoryId=@item.CategoryId data-bs-categoryId=@item data-bs-action="editsubcategory" data-bs-title="Edit Sub Category" data-bs-toggle="modal" data-bs-name=@item.Name data-bs-url=@item.Url data-bs-id=@item.Id data-bs-target="#editModel">Edit</button>
+
+                                        <button type="button" @(item.Brands.Count == 0 ? "" : "disabled") class="btn btn-danger btn-sm" data-bs-action="deletesubcategory" data-bs-typecategory="subcategory" data-bs-title="Delete Sub Category" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
+
+                                    </td>
                                 </tr>
                             }
                         }
@@ -546,6 +663,7 @@
                             <td>Name</td>
                             <td>Url</td>
                             <td>Sub Category</td>
+                            <td>Edit</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -558,6 +676,12 @@
                                     <td>@item.Name</td>
                                     <td>@item.Url</td>
                                     <td>@item.SubCategory.Name</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm" data-bs-type="3" data-bs-mainCategoryId=@item.SubCategory.Category.MainCategoryId data-bs-categoryId=@item.SubCategory.CategoryId data-bs-subcategoryId=@item.SubCategoryId data-bs-categoryId=@item data-bs-action="editbrand" data-bs-title="Edit Brand" data-bs-toggle="modal" data-bs-name=@item.Name data-bs-url=@item.Url data-bs-id=@item.Id data-bs-target="#editModel">Edit</button>
+
+                                        <button type="button" @(item.Products.Count == 0 ? "" : "disabled") class="btn btn-danger btn-sm" data-bs-action="deletebrand" data-bs-typecategory="brand" data-bs-title="Delete Brand" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
+
+                                    </td>
                                 </tr>
                             }
                         }

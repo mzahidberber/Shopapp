@@ -12,6 +12,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         {
         }
 
+        
 
         public IQueryable<MainCategory> GetAllWithCategoriesAndSubCategories()
         {

@@ -15,6 +15,7 @@ using shopapp.web.Models.Account;
 using shopapp.web.Models.Admin;
 using shopapp.web.Models.Entity;
 using System.Data;
+using System.Text.Json.Serialization;
 
 namespace shopapp.web.Controllers;
 
@@ -332,7 +333,8 @@ public class AdminController : Controller
         if(categoryId!=null && subCategoryId!=null){
             return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId).Categories.FirstOrDefault(x=>x.Id==categoryId).SubCategories.FirstOrDefault(x=>x.Id==subCategoryId));
         }
-        if(categoryId!=null){
+        if(categoryId!=null && mainCategoryId!=0 && mainCategoryId != null)
+        {
             return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId).Categories.FirstOrDefault(x=>x.Id==categoryId));
         }
         return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId));
@@ -540,17 +542,24 @@ public class AdminController : Controller
         return Redirect("CategoriesList");
     }
 
-    public async Task<IActionResult> EditMainCategory(string name, string url,int mainCategoryId)
+    public async Task<IActionResult> EditMainCategory(string name, string url,int entityId)
     {
+        if (entityId == 0)
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Main category must!",
+                    alertType: "warning");
+            return Redirect("CategoriesList");
+        }
         if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
         {
 
             var result = await _mainCategoryService.UpdateCheckUrlAndNameAsync(new MainCategoryDTO
             {
-                Id=mainCategoryId,
+                Id= entityId,
                 Name = name,
                 Url = url
-            },mainCategoryId);
+            }, entityId);
 
             if (result.statusCode != 204)
             {
@@ -569,9 +578,9 @@ public class AdminController : Controller
 
         return Redirect("CategoriesList");
     }
-    public async Task<IActionResult> DeleteMainCategory(int mainCategoryId)
+    public async Task<IActionResult> DeleteMainCategory(int entityId)
     {
-        var result = await _mainCategoryService.Remove(mainCategoryId);
+        var result = await _mainCategoryService.Remove(entityId);
         return Redirect("CategoriesList");
     }
 
@@ -616,7 +625,43 @@ public class AdminController : Controller
 
         return Redirect("CategoriesList");
     }
+    public async Task<IActionResult> EditCategory(string name, string url, int entityId, int mainCategoryId)
+    {
+        if (entityId == 0 || mainCategoryId==0)
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Main category must!",
+                    alertType: "warning");
+            return Redirect("CategoriesList");
+        }
+        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+        {
 
+            var result = await _categoryService.UpdateCheckUrlAndNameAsync(new CategoryDTO
+            {
+                Id = entityId,
+                Name = name,
+                Url = url,
+                MainCategoryId=mainCategoryId
+            }, entityId);
+
+            if (result.statusCode != 204)
+            {
+                TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Url or name already exists",
+                    alertType: "warning");
+            }
+
+        }
+        else
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Name or url must not empty!",
+                    alertType: "warning");
+        }
+
+        return Redirect("CategoriesList");
+    }
     public async Task<IActionResult> CreateSubCategory(string name, string url,int categoryId,List<string>? features=null)
     {
         
@@ -673,8 +718,49 @@ public class AdminController : Controller
 
         return Redirect("CategoriesList");
     }
+    public async Task<IActionResult> EditSubCategory(string name, string url, int entityId, int categoryId,List<string>? features=null)
+    {
+        if (entityId == 0 || categoryId == 0)
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Main category must!",
+                    alertType: "warning");
+            return Redirect("CategoriesList");
+        }
+        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+        {
 
-    public async Task<IActionResult> CreateBrand(string name, string url,int subCategoryId)
+            var result = await _subCategoryService.UpdateCheckUrlAndNameAsync(new SubCategoryDTO
+            {
+                Id = entityId,
+                Name = name,
+                Url = url,
+                CategoryId = categoryId
+            }, entityId);
+
+            if (features != null)
+            {
+                await _subCategoryFeatureService.SyncFeatures(entityId,features);
+            }
+
+            if (result.statusCode != 204)
+            {
+                TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Url or name already exists",
+                    alertType: "warning");
+            }
+
+        }
+        else
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Name or url must not empty!",
+                    alertType: "warning");
+        }
+
+        return Redirect("CategoriesList");
+    }
+   public async Task<IActionResult> CreateBrand(string name, string url,int subCategoryId)
     {
         if (subCategoryId == 0)
         {
@@ -687,7 +773,7 @@ public class AdminController : Controller
         if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
         {
 
-            var result = await _brandService.AddCheckUrlAndNameAsync(new BrandDTO
+            var result = await _brandService.AddAsync(new BrandDTO
             {
                 SubCategoryId = subCategoryId,
                 Name = name,
@@ -714,5 +800,69 @@ public class AdminController : Controller
         }
 
         return Redirect("CategoriesList");
+    }
+    public async Task<IActionResult> EditBrand(string name, string url, int entityId, int subCategoryId)
+    {
+        if (entityId == 0 || subCategoryId == 0)
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Main category must!",
+                    alertType: "warning");
+            return Redirect("CategoriesList");
+        }
+        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+        {
+
+            var result = await _brandService.Update(new BrandDTO
+            {
+                Id = entityId,
+                Name = name,
+                Url = url,
+                SubCategoryId = subCategoryId
+            }, entityId);
+
+            if (result.statusCode != 204)
+            {
+                TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Url or name already exists",
+                    alertType: "warning");
+            }
+
+        }
+        else
+        {
+            TempDataMessage.CreateMessage(TempData,
+                    key: "message", message: "Name or url must not empty!",
+                    alertType: "warning");
+        }
+
+        return Redirect("CategoriesList");
+    }
+
+    public async Task<IActionResult> GetFeatures(int subCategoryId)
+    {
+        var featureValues = await _subCategoryFeatureService.Where(x => x.SubCategoryId==subCategoryId);
+        
+        return Json(featureValues.data.Select(x=>new
+        {
+            Id=x.Id,
+            FeatureName=x.Name,
+        }));
+    }
+
+    public async Task<IActionResult> CheckMainCategory(int id)
+    {
+        var category = await _mainCategoryService.GetByIdWithProductCountAndCategories(id);
+
+        return Json(new
+        {
+            Categories=category.data.Categories.Select(x=>new
+            {
+                Name=x.Name,
+                Url=x.Url
+            }),
+            ProductCount=category.data.ProductCount,
+            
+        });
     }
 }

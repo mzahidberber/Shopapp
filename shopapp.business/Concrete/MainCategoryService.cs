@@ -20,6 +20,18 @@ namespace shopapp.business.Concrete
             this._genericRepository = genericRepository;
         }
 
+        public async Task<Response<MainCategoryAndProductCountDTO>> GetByIdWithProductCountAndCategories(int id)
+        {
+            var maincategory = _genericRepository.GetWhere(x => x.Id == id);
+            var count = maincategory.SelectMany(x => x.Products).Count();
+            var categories =await _genericRepository.GetAllWithCategoriesAndSubCategories().Where(x=>x.Id==id).ToListAsync();
+            await _genericRepository.CommitAsync();
+            return Response<MainCategoryAndProductCountDTO>.Success(new MainCategoryAndProductCountDTO
+            {
+                ProductCount=count,
+                Categories=ObjectMapper.Mapper.Map<List<CategoryDTO>>(categories.SelectMany(x => x.Categories))
+            }, 200);
+        }
 
         public async Task<Response<IEnumerable<MainCategoryDTO>>> GetAllWithCategoriAndSubCategories()
         {

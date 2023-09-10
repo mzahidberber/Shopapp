@@ -33,4 +33,31 @@ public class SubCategoryFeatureService : GenericService<SubCategoryFeature, SubC
         var newDtos = ObjectMapper.Mapper.Map<List<SubCategoryFeatureDTO>>(newEntities);
         return Response< List < SubCategoryFeatureDTO >>.Success(newDtos, 200);
     }
+
+    public async Task<Response<NoDataDTO>> SyncFeatures(int subCategoryId, List<string> features)
+    {
+        var featureModels = _genericRepository.GetWhere(x => x.SubCategoryId==subCategoryId).ToList();
+        foreach (var f  in featureModels)
+        {
+            if (!features.Any(x => x == f.Name))
+            {
+                _genericRepository.Delete(f);
+            }
+        }
+        foreach (var f in features)
+        {
+            if (!featureModels.Any(x => x.Name == f))
+            {
+                await _genericRepository.AddAsync(new SubCategoryFeature
+                {
+                    Name=f,
+                    SubCategoryId=subCategoryId
+                });
+            }
+        }
+
+        await _genericRepository.CommitAsync();
+        return Response<NoDataDTO>.Success(204);
+
+    }
 }

@@ -15,7 +15,7 @@ namespace shopapp.core.Aspects.Logging
                 invocation.Method.Name,
                 GetParams(invocation)
             );
-            _logger.Info(message);
+            //_logger.Info(message);
         }
 
         public override void OnException(IInvocation invocation, Exception ex)
@@ -27,7 +27,7 @@ namespace shopapp.core.Aspects.Logging
             ex.Message
             );
 
-            _logger.Info(message);
+            //_logger.Info(message);
         }
 
         private string GetParams(IInvocation IInvocation)

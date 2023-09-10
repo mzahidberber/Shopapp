@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using shopapp.business.Concrete.Mapper;
 using shopapp.core.Business.Abstract;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
+using System.Linq.Expressions;
 
 namespace shopapp.business.Concrete;
 
@@ -15,6 +17,13 @@ public class SubCategoryFeatureValueService : GenericService<SubCategoryFeatureV
     {
         _repository = genericRepository;
         _repositoryFeature = repositoryFeature;
+    }
+
+    public async Task<Response<IEnumerable<SubCategoryFeatureValueDTO>>> WhereWithFeaturesAsync(Expression<Func<SubCategoryFeatureValue, bool>> filter)
+    {
+        var features = ObjectMapper.Mapper.Map<IEnumerable<SubCategoryFeatureValueDTO>>(_repository.GetWhereWithFeature(filter).AsEnumerable());
+        await _repository.CommitAsync();
+        return Response<IEnumerable<SubCategoryFeatureValueDTO>>.Success(features,200);
     }
 
     public async  Task<Response<NoDataDTO>> SyncProductFeatures(int productId,int subCategoryId,List<string> features, List<string> values)

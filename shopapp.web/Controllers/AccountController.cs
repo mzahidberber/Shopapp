@@ -41,7 +41,6 @@ namespace shopapp.web.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user == null)
             {

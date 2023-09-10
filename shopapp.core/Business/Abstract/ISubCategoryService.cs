@@ -6,4 +6,5 @@ namespace shopapp.core.Business.Abstract;
 public interface ISubCategoryService : IGenericService<SubCategory, SubCategoryDTO>
 {
     Task<Response<SubCategoryDTO>> AddCheckUrlAndNameAsync(SubCategoryDTO entity);
+    Task<Response<NoDataDTO>> UpdateCheckUrlAndNameAsync(SubCategoryDTO entity, int id);
 }

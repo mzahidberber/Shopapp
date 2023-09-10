@@ -51,7 +51,8 @@ public class ProductController : Controller
         //var key = Reflection.CreateCacheKey(typeof(ProductController), "Details", id);
         //if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
 
-
+        var categoriesss = await GetCategoriesAsync();
+        ViewBag.categories = categoriesss;
 
         var product = await this._productService.GetByUrlWithAttsAsync(url);
         if (product.statusCode == 200)
@@ -128,7 +129,8 @@ public class ProductController : Controller
 
         var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
 
-        
+        var categoriesss = await GetCategoriesAsync();
+        ViewBag.categories = categoriesss;
 
         var product =await this._productService.WherePage(selectedInfo.MainCategory.Url,p, pageSize, s, filter);
 
@@ -185,6 +187,7 @@ public class ProductController : Controller
 
 
         var categoriesss =await GetCategoriesAsync();
+        ViewBag.categories = categoriesss;
         var brands=categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories.SelectMany(x => x.Brands)));
         return View(new ProductInfo
         {
@@ -237,6 +240,7 @@ public class ProductController : Controller
 
 
             var categoriesss = await GetCategoriesAsync();
+            ViewBag.categories = categoriesss;
             var brands = categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories.SelectMany(x => x.Brands)));
             return View(new ProductInfo
             {

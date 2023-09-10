@@ -8,7 +8,7 @@
 </style>
 
 <div class="container">
-    @await Component.InvokeAsync("NavMainCategory")
+    @await Component.InvokeAsync("NavMainCategory",new { categories = ViewBag.categories})
 
     <div class="row">
         <div class="col-2">

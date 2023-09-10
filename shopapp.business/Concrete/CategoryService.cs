@@ -31,4 +31,32 @@ public class CategoryService : GenericService<Category, CategoryDTO>, ICategoryS
         return Response<CategoryDTO>.Success(newDto, 200);
     }
 
+    public async Task<Response<NoDataDTO>> UpdateCheckUrlAndNameAsync(CategoryDTO entity, int id)
+    {
+        var isExistEntity = await _genericRepository.GetByIdAsync(id);
+        if (isExistEntity == null)
+        {
+            return Response<NoDataDTO>.Fail("Id Not Found", 404, true);
+
+        }
+        var categories = _genericRepository.GetAll();
+        if (isExistEntity.Url != entity.Url)
+        {
+            var result = await categories.FirstOrDefaultAsync(x => x.Url == entity.Url);
+            if (result != null)
+                return Response<NoDataDTO>.Fail("Url or name already exists ", 400, true);
+        }
+        if (isExistEntity.Name != entity.Name)
+        {
+            var result = await categories.FirstOrDefaultAsync(x => x.Name == entity.Name);
+            if (result != null)
+                return Response<NoDataDTO>.Fail("Url or name already exists ", 400, true);
+        }
+
+        var updateEntity = ObjectMapper.Mapper.Map<Category>(entity);
+        _genericRepository.Update(updateEntity);
+        await _genericRepository.CommitAsync();
+        return Response<NoDataDTO>.Success(204);
+    }
+
 }

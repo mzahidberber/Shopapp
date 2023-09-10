@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.Entity.Abstract;
+using shopapp.core.Reflection;
 using System.Linq.Expressions;
 
 namespace shopapp.dataaccess.Concrete.EntityFramework
@@ -10,41 +11,33 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
     {
         protected readonly ShopContext _context;
         protected readonly DbSet<T> _dbSet;
-        protected readonly IDbContextTransaction _transaction;
         public EfGenericRepository(ShopContext context)
         {
+            //Console.WriteLine($"create {this.ToString()}");
             _context = context;
             _dbSet = _context.Set<T>();
-            //_transaction = _context.Database.BeginTransaction();
         }
         public bool Commit(bool state = true)
         {
             _context.SaveChanges();
-            //if (state)
-            //    _transaction.Commit();
-            //else
-            //    _transaction.Rollback();
-
-            Dispose();
             return true;
         }
 
         public async Task<bool> CommitAsync(bool state = true)
         {
             await _context.SaveChangesAsync();
-            //if (state)
-            //    await _transaction.CommitAsync();
-            //else
-            //    await _transaction.RollbackAsync();
-
-            Dispose();
             return true;
         }
 
         public void Dispose()
         {
+            //Console.WriteLine($"dispose {this.ToString()}");
             _context.Dispose();
         }
+        //public override string ToString()
+        //{
+        //    return this.GetType().Name;
+        //}
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
