@@ -13,8 +13,13 @@ internal class SubCategoryFeatureValueMapping : IEntityTypeConfiguration<SubCate
         builder.HasData(
             new SubCategoryFeatureValue { Id = 1,ProductId = 1, Value = "GTX 3060",SubCategoryFeatureId=1 },
             new SubCategoryFeatureValue { Id = 2,ProductId = 1, Value = "Intel i7",SubCategoryFeatureId=2 },
-            new SubCategoryFeatureValue { Id = 3,ProductId = 2, Value = "Intel i7",SubCategoryFeatureId=9 },
-            new SubCategoryFeatureValue { Id = 4,ProductId = 2, Value = "GT 360",SubCategoryFeatureId=10 }
+            new SubCategoryFeatureValue { Id = 3,ProductId = 1, Value = "1 TB HDD",SubCategoryFeatureId=3 },
+            new SubCategoryFeatureValue { Id = 4,ProductId = 1, Value = "32 GB",SubCategoryFeatureId=4 },
+            new SubCategoryFeatureValue { Id = 5,ProductId = 1, Value = "18 Inc",SubCategoryFeatureId=5 },
+            new SubCategoryFeatureValue { Id = 6,ProductId = 2, Value = "Intel i7",SubCategoryFeatureId=26 },
+            new SubCategoryFeatureValue { Id = 7,ProductId = 2, Value = "16 GB",SubCategoryFeatureId=27 },
+            new SubCategoryFeatureValue { Id = 8,ProductId = 2, Value = "3046 mAh", SubCategoryFeatureId=28 },
+            new SubCategoryFeatureValue { Id = 9,ProductId = 2, Value = "12 MP",SubCategoryFeatureId=29 }
 
             );
     }

@@ -14,6 +14,7 @@ namespace shopapp.core.DataAccess.Abstract
         Task<int> GetCountByCategory(Expression<Func<Product, bool>>? filter = null);
         Task<Product> GetByIdWithAttAsync(int id);
         IQueryable<Product> GetWhereWithAtt(Expression<Func<Product, bool>> filter);
+        IQueryable<Product> GetAllWithCategoriesAndBrands(Expression<Func<Product, bool>>? filter = null);
 
 
     }

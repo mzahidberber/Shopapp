@@ -67,6 +67,13 @@ public class ProductService : GenericService<Product, ProductDTO>, IProductServi
         return Response<NoDataDTO>.Success(204);
     }
 
+    public async Task<Response<IEnumerable<ProductDTO>>> GetAllWithCategoriesAndBrandAsync()
+    {
+        var products = ObjectMapper.Mapper.Map<List<ProductDTO>>(await _genericRepository.GetAllWithCategoriesAndBrands().ToListAsync());
+        await _genericRepository.CommitAsync();
+        return Response<IEnumerable<ProductDTO>>.Success(products, 200);
+    }
+
     public async Task<Response<ProductDTO>> GetByIdWithCategoriesAsync(int id)
     {
         var product = await _genericRepository.GetByIdWithCategoriesAsync(id);

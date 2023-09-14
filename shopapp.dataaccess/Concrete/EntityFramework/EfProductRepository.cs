@@ -17,6 +17,20 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         {
             return _dbSet.Where(filter).Include(x=>x.Brand).Include(x=>x.SubCategoryFeatureValues).ThenInclude(x=>x.SubCategoryFeature);
         }
+
+        public IQueryable<Product> GetAllWithCategoriesAndBrands(Expression<Func<Product, bool>>? filter = null)
+        {
+            if (filter != null) return _dbSet.Where(filter)
+                    .Include(x=>x.MainCategory)
+                    .Include(x=>x.Category)
+                    .Include(x=>x.SubCategory)
+                    .Include(x=>x.Brand)
+                    .AsQueryable();
+            return _dbSet.Include(x => x.MainCategory)
+                    .Include(x => x.Category)
+                    .Include(x => x.SubCategory)
+                    .Include(x => x.Brand).AsQueryable();
+        }
         public IQueryable<Product> WherePage(int page, int pageSize,int sort, Expression<Func<Product, bool>>? filter)
         {
 

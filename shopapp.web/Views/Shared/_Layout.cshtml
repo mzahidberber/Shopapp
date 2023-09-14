@@ -8,21 +8,25 @@
     <link href="/modules/@("@fortawesome")/fontawesome-free/css/fontawesome.css" rel="stylesheet">
     <link href="/modules/@("@fortawesome")/fontawesome-free/css/brands.css" rel="stylesheet">
     <link href="/modules/@("@fortawesome")/fontawesome-free/css/solid.css" rel="stylesheet">
+	<link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	@await RenderSectionAsync("Css", required: false)
+	<link rel="stylesheet" href="~/shopapp.web.styles.css" asp-append-version="true" />
+
+
 
     <script src="/modules/jquery/dist/jquery.min.js"></script>
     <script src="/modules/@("@popperjs")/core/dist/umd/popper.min.js"></script>
     <script src="/modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="/modules/@("@fortawesome")/fontawesome-free/js/fontawesome.js"></script>
     <script src="/modules/@("@fortawesome")/fontawesome-free/js/brands.js"></script>
     <script src="/modules/@("@fortawesome")/fontawesome-free/js/solid.js"></script>
     
     
-    <link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.min.css" />
+    
 
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    @await RenderSectionAsync("Css", required: false)
-    <link rel="stylesheet" href="~/shopapp.web.styles.css" asp-append-version="true" />
+    
 
 	<style>
 		.basket {

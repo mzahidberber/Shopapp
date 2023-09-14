@@ -2,6 +2,8 @@
 @{
     Layout = "_adminLayout";
     var categoriesAndBrands = ViewBag.Categories as IEnumerable<MainCategoryModel>;
+    Console.WriteLine(categoriesAndBrands.Count());
+    Console.WriteLine(categoriesAndBrands.ToList()[0].Categories[0].SubCategories.Count());
 }
 <style>
     .custom-file-button input[type=file] {
@@ -56,7 +58,8 @@
         <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelect01">Sub Category</label>
         </div>
-        <select asp-for="SubCategoryId" asp-items=@(new SelectList(categoriesAndBrands.FirstOrDefault(x=>x.Id==Model.MainCategoryId).Categories.FirstOrDefault(x=>x.Id==Model.CategoryId).SubCategories,"Id","Name")) id="subCategorySelected" class="form-control">
+        
+        <select asp-for="SubCategoryId" asp-items=@(new SelectList(categoriesAndBrands?.FirstOrDefault(x=>x.Id==Model.MainCategoryId)?.Categories?.FirstOrDefault(x=>x.Id==Model.CategoryId)?.SubCategories,"Id","Name")) id="subCategorySelected" class="form-control">
             <option selected disabled>Choose</option>
         </select>
         

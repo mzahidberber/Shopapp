@@ -309,7 +309,7 @@ public class AdminController : Controller
 
     public async Task<IActionResult> ProductList(string? category = null, int page = 1)
     {
-        var product = await _productService.GetAllAsync();
+        var product = await _productService.GetAllWithCategoriesAndBrandAsync();
         return View(ObjectMapper.Mapper.Map<List<ProductModel>>(product.data));
     }
 
@@ -380,7 +380,6 @@ public class AdminController : Controller
         return PartialView("FileExplorer");
     }
     
-    [HttpGet]
     public async Task<IActionResult> ProductEdit(int id)
     {
         ViewBag.Categories =await GetCategoriesAsync();
@@ -430,13 +429,13 @@ public class AdminController : Controller
     public IActionResult ImageList()
     {
         var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","img"));
-        return View(images.Select(x => x.Split("\\").Last()).ToList());
+        return View(images.Select(x => Path.GetFileName(x)).ToList());
     }
 
     public IActionResult ImagesUrls()
     {
         var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","img"));
-        return Json(images.Select(x => x.Split("\\").Last()).ToList());
+        return Json(images.Select(x => Path.GetFileName(x)).ToList());
     }
     public async Task<IActionResult> IsHomeChange(bool isHome, int productId)
     {
@@ -468,7 +467,7 @@ public class AdminController : Controller
         {
             name= name.Replace(" ", "-");
             var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","img"));
-            var imageNames = images.Select(x => x.Split("\\").Last()).ToList();
+            var imageNames = images.Select(x => Path.GetFileName(x)).ToList();
             if (imageNames.Any(x=>x.Contains(name)))
                 name = string.Format($"{name}-{Guid.NewGuid()}");
             foreach (var file in files)
@@ -567,6 +566,10 @@ public class AdminController : Controller
                     key: "message", message: "Url or name already exists",
                     alertType: "warning");
             }
+            else
+            {
+                RemoveCacheCategories();
+            }
 
         }
         else
@@ -581,6 +584,7 @@ public class AdminController : Controller
     public async Task<IActionResult> DeleteMainCategory(int entityId)
     {
         var result = await _mainCategoryService.Remove(entityId);
+        RemoveCacheCategories();
         return Redirect("CategoriesList");
     }
 
@@ -641,8 +645,7 @@ public class AdminController : Controller
             {
                 Id = entityId,
                 Name = name,
-                Url = url,
-                MainCategoryId=mainCategoryId
+                Url = url
             }, entityId);
 
             if (result.statusCode != 204)
@@ -650,6 +653,10 @@ public class AdminController : Controller
                 TempDataMessage.CreateMessage(TempData,
                     key: "message", message: "Url or name already exists",
                     alertType: "warning");
+            }
+            else
+            {
+                RemoveCacheCategories();
             }
 
         }
@@ -660,6 +667,12 @@ public class AdminController : Controller
                     alertType: "warning");
         }
 
+        return Redirect("CategoriesList");
+    }
+    public async Task<IActionResult> DeleteCategory(int entityId)
+    {
+        var result = await _categoryService.Remove(entityId);
+        RemoveCacheCategories();
         return Redirect("CategoriesList");
     }
     public async Task<IActionResult> CreateSubCategory(string name, string url,int categoryId,List<string>? features=null)
@@ -734,8 +747,7 @@ public class AdminController : Controller
             {
                 Id = entityId,
                 Name = name,
-                Url = url,
-                CategoryId = categoryId
+                Url = url
             }, entityId);
 
             if (features != null)
@@ -749,6 +761,10 @@ public class AdminController : Controller
                     key: "message", message: "Url or name already exists",
                     alertType: "warning");
             }
+            else
+            {
+                RemoveCacheCategories();
+            }
 
         }
         else
@@ -760,7 +776,13 @@ public class AdminController : Controller
 
         return Redirect("CategoriesList");
     }
-   public async Task<IActionResult> CreateBrand(string name, string url,int subCategoryId)
+    public async Task<IActionResult> DeleteSubCategory(int entityId)
+    {
+        var result = await _subCategoryService.Remove(entityId);
+        RemoveCacheCategories();
+        return Redirect("CategoriesList");
+    }
+    public async Task<IActionResult> CreateBrand(string name, string url,int subCategoryId)
     {
         if (subCategoryId == 0)
         {
@@ -812,13 +834,11 @@ public class AdminController : Controller
         }
         if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
         {
-
-            var result = await _brandService.Update(new BrandDTO
+            var result = await _brandService.UpdateLastSubCategory(new BrandDTO
             {
                 Id = entityId,
                 Name = name,
                 Url = url,
-                SubCategoryId = subCategoryId
             }, entityId);
 
             if (result.statusCode != 204)
@@ -826,6 +846,10 @@ public class AdminController : Controller
                 TempDataMessage.CreateMessage(TempData,
                     key: "message", message: "Url or name already exists",
                     alertType: "warning");
+            }
+            else
+            {
+                RemoveCacheCategories();
             }
 
         }
@@ -838,7 +862,12 @@ public class AdminController : Controller
 
         return Redirect("CategoriesList");
     }
-
+    public async Task<IActionResult> DeleteBrand(int entityId)
+    {
+        var result = await _brandService.Remove(entityId);
+        RemoveCacheCategories();
+        return Redirect("CategoriesList");
+    }
     public async Task<IActionResult> GetFeatures(int subCategoryId)
     {
         var featureValues = await _subCategoryFeatureService.Where(x => x.SubCategoryId==subCategoryId);
@@ -850,18 +879,13 @@ public class AdminController : Controller
         }));
     }
 
-    public async Task<IActionResult> CheckMainCategory(int id)
+    public async Task<IActionResult> CheckBrandProducts(int id)
     {
-        var category = await _mainCategoryService.GetByIdWithProductCountAndCategories(id);
+        var count = await _brandService.GetProductCountAsync(id);
 
         return Json(new
         {
-            Categories=category.data.Categories.Select(x=>new
-            {
-                Name=x.Name,
-                Url=x.Url
-            }),
-            ProductCount=category.data.ProductCount,
+            ProductCount= count.data.ProductCount,
             
         });
     }

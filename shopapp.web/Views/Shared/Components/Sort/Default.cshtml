@@ -2,11 +2,11 @@
 
 <div class="dropdown show border ">
 
-    <a class="btn btn-light dropdown-toggle sortName" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <a class="btn btn-light dropdown-toggle sortName" role="button" id="dropdownMenuuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @(Model.Sort.Find(x => x.Value == Model.PageInfo.Selected.Sort)?.Name)
     </a>
 
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuuLink">
         @foreach (var s in Model.Sort)
         {
             <form action=@Model.PageInfo.Url method="get">

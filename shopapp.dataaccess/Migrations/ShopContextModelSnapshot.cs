@@ -169,9 +169,9 @@ namespace shopapp.dataaccess.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "Dell",
+                            Name = "Lenova",
                             SubCategoryId = 2,
-                            Url = "dell"
+                            Url = "lenova"
                         },
                         new
                         {
@@ -183,72 +183,212 @@ namespace shopapp.dataaccess.Migrations
                         new
                         {
                             Id = 5,
-                            Name = "Dell",
+                            Name = "Casper",
                             SubCategoryId = 3,
-                            Url = "dell"
+                            Url = "casper"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Asus",
-                            SubCategoryId = 3,
-                            Url = "asus"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Dell",
-                            SubCategoryId = 4,
-                            Url = "dell"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Asus",
-                            SubCategoryId = 4,
-                            Url = "asus"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Samsung",
-                            SubCategoryId = 5,
-                            Url = "samsung"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Apple",
-                            SubCategoryId = 5,
-                            Url = "apple"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Apple",
-                            SubCategoryId = 6,
-                            Url = "apple"
-                        },
-                        new
-                        {
-                            Id = 12,
                             Name = "Lenova",
-                            SubCategoryId = 6,
+                            SubCategoryId = 3,
                             Url = "lenova"
                         },
                         new
                         {
+                            Id = 7,
+                            Name = "Lenova",
+                            SubCategoryId = 4,
+                            Url = "lenova"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "MSI",
+                            SubCategoryId = 4,
+                            Url = "msi"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Dell",
+                            SubCategoryId = 5,
+                            Url = "dell"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Samsung",
+                            SubCategoryId = 5,
+                            Url = "samsung"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Samsung",
+                            SubCategoryId = 6,
+                            Url = "samsung"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Apple",
+                            SubCategoryId = 6,
+                            Url = "apple"
+                        },
+                        new
+                        {
                             Id = 13,
-                            Name = "Vestel",
+                            Name = "Samsung",
                             SubCategoryId = 7,
-                            Url = "vestel"
+                            Url = "samsung"
                         },
                         new
                         {
                             Id = 14,
-                            Name = "Samsung",
+                            Name = "Apple",
                             SubCategoryId = 7,
+                            Url = "apple"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Samsung",
+                            SubCategoryId = 8,
                             Url = "samsung"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "Apple",
+                            SubCategoryId = 8,
+                            Url = "apple"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "Apple",
+                            SubCategoryId = 9,
+                            Url = "apple"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Lenova",
+                            SubCategoryId = 9,
+                            Url = "lenova"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "Vestel",
+                            SubCategoryId = 10,
+                            Url = "vestel"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Samsung",
+                            SubCategoryId = 10,
+                            Url = "samsung"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Name = "Vestel",
+                            SubCategoryId = 11,
+                            Url = "vestel"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "Samsung",
+                            SubCategoryId = 11,
+                            Url = "samsung"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Name = "Vestel",
+                            SubCategoryId = 12,
+                            Url = "vestel"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Name = "Samsung",
+                            SubCategoryId = 12,
+                            Url = "samsung"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Name = "Canon",
+                            SubCategoryId = 13,
+                            Url = "canon"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Name = "Nikon",
+                            SubCategoryId = 13,
+                            Url = "nikon"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Name = "Canon",
+                            SubCategoryId = 14,
+                            Url = "canon"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Name = "Nikon",
+                            SubCategoryId = 14,
+                            Url = "nikon"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Name = "Canon",
+                            SubCategoryId = 15,
+                            Url = "canon"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Name = "Nikon",
+                            SubCategoryId = 15,
+                            Url = "nikon"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Name = "Autel",
+                            SubCategoryId = 16,
+                            Url = "autel"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Name = "Samsung",
+                            SubCategoryId = 17,
+                            Url = "samsung"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Name = "Samsung",
+                            SubCategoryId = 18,
+                            Url = "samsung"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Name = "Apple",
+                            SubCategoryId = 19,
+                            Url = "apple"
                         });
                 });
 
@@ -326,29 +466,92 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = 2,
                             MainCategoryId = 1,
-                            Name = "Masaüstü Bilgisayar",
-                            Url = "masaustupc"
+                            Name = "Desktop Computer",
+                            Url = "desktoppc"
                         },
                         new
                         {
                             Id = 3,
-                            MainCategoryId = 2,
-                            Name = "Cep Telefonu",
-                            Url = "ceptelefonu"
+                            MainCategoryId = 1,
+                            Name = "Game Computer",
+                            Url = "desktop-game-pc"
                         },
                         new
                         {
                             Id = 4,
+                            MainCategoryId = 2,
+                            Name = "Mobile Phone",
+                            Url = "mobilephone"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            MainCategoryId = 2,
+                            Name = "Push Button Phone",
+                            Url = "pushbuttonphone"
+                        },
+                        new
+                        {
+                            Id = 6,
                             MainCategoryId = 2,
                             Name = "Tablet",
                             Url = "tablet"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 7,
                             MainCategoryId = 3,
-                            Name = "Televizyon",
-                            Url = "televizyon"
+                            Name = "Television",
+                            Url = "television"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            MainCategoryId = 3,
+                            Name = "Projection",
+                            Url = "projection"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            MainCategoryId = 3,
+                            Name = "SoundBar",
+                            Url = "soundbar"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            MainCategoryId = 4,
+                            Name = "Camera",
+                            Url = "ccamera"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            MainCategoryId = 4,
+                            Name = "Video Camera",
+                            Url = "videocamera"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            MainCategoryId = 4,
+                            Name = "Drone",
+                            Url = "drone"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            MainCategoryId = 5,
+                            Name = "Earphones",
+                            Url = "earphones"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            MainCategoryId = 5,
+                            Name = "Phone case",
+                            Url = "phonecase"
                         });
                 });
 
@@ -370,6 +573,32 @@ namespace shopapp.dataaccess.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Images");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ProductId = 1,
+                            Url = "lenovaimg1.jpg"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ProductId = 1,
+                            Url = "2.jpg"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ProductId = 2,
+                            Url = "lenovaimg1.jpg"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ProductId = 2,
+                            Url = "2.jpg"
+                        });
                 });
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.MainCategory", b =>
@@ -394,20 +623,32 @@ namespace shopapp.dataaccess.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Bilgisayar",
-                            Url = "bilgisayar"
+                            Name = "Computer",
+                            Url = "computer"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Telefon",
-                            Url = "telefon"
+                            Name = "Phone",
+                            Url = "phone"
                         },
                         new
                         {
                             Id = 3,
                             Name = "TV",
                             Url = "tv"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Camera",
+                            Url = "camera"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Accessory",
+                            Url = "accessory"
                         });
                 });
 
@@ -498,30 +739,30 @@ namespace shopapp.dataaccess.Migrations
                             BrandId = 1,
                             CategoryId = 1,
                             Description = "Güzel laptop",
-                            HomeImageUrl = "1.jpg",
-                            IsApprove = false,
-                            IsHome = false,
+                            HomeImageUrl = "lenovaimg1.jpg",
+                            IsApprove = true,
+                            IsHome = true,
                             MainCategoryId = 1,
                             Name = "Dell Laptop",
                             Price = 10.0,
-                            Stock = 0,
+                            Stock = 10,
                             SubCategoryId = 1,
                             Url = "dell-laptop"
                         },
                         new
                         {
                             Id = 2,
-                            BrandId = 8,
-                            CategoryId = 4,
+                            BrandId = 17,
+                            CategoryId = 6,
                             Description = "Güzel tablet",
                             HomeImageUrl = "2.jpg",
-                            IsApprove = false,
-                            IsHome = false,
+                            IsApprove = true,
+                            IsHome = true,
                             MainCategoryId = 2,
                             Name = "Lenova Tablet",
                             Price = 101.0,
-                            Stock = 0,
-                            SubCategoryId = 5,
+                            Stock = 11,
+                            SubCategoryId = 9,
                             Url = "lenova-tablet"
                         });
                 });
@@ -561,43 +802,127 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            Name = "Oyun Bilgisayarı",
-                            Url = "oyunpc"
+                            Name = "Game Notebook",
+                            Url = "gamenotebook"
                         },
                         new
                         {
                             Id = 3,
                             CategoryId = 2,
-                            Name = "Masaüstü",
-                            Url = "masaustu"
+                            Name = "Desktop",
+                            Url = "desktop"
                         },
                         new
                         {
                             Id = 4,
                             CategoryId = 2,
-                            Name = "Oyun Bilgisayarı",
-                            Url = "oyun-pc"
+                            Name = "Game Computer",
+                            Url = "game-pc"
                         },
                         new
                         {
                             Id = 5,
                             CategoryId = 3,
-                            Name = "Akıllı Telefon",
-                            Url = "akillitelefon"
+                            Name = "Computer",
+                            Url = "c-game-pc"
                         },
                         new
                         {
                             Id = 6,
                             CategoryId = 4,
+                            Name = "Smarth Phone",
+                            Url = "smarthphone"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 4,
+                            Name = "Phone",
+                            Url = "m-phone"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryId = 5,
+                            Name = "Phone",
+                            Url = "p-phone"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryId = 6,
                             Name = "Tablet",
                             Url = "tablet"
                         },
                         new
                         {
-                            Id = 7,
-                            CategoryId = 5,
+                            Id = 10,
+                            CategoryId = 7,
                             Name = "Full HD",
                             Url = "fullhd"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CategoryId = 8,
+                            Name = "Projection",
+                            Url = "p-projection"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CategoryId = 9,
+                            Name = "SoundBar",
+                            Url = "s-soundbar"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CategoryId = 10,
+                            Name = "Camera",
+                            Url = "c-camera"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CategoryId = 10,
+                            Name = "Vlog Camera",
+                            Url = "vlogcamera"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CategoryId = 11,
+                            Name = "Camera",
+                            Url = "v-camera"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CategoryId = 12,
+                            Name = "Drone",
+                            Url = "drone"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CategoryId = 13,
+                            Name = "Bluetooth Earphones",
+                            Url = "bluetoothearphones"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CategoryId = 13,
+                            Name = "Microphone",
+                            Url = "Microphone"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CategoryId = 14,
+                            Name = "Case",
+                            Url = "case"
                         });
                 });
 
@@ -624,86 +949,272 @@ namespace shopapp.dataaccess.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Ekran Kartı",
+                            Name = "Display Card",
                             SubCategoryId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Name = "İşlemci",
+                            Name = "Processor",
                             SubCategoryId = 1
                         },
                         new
                         {
                             Id = 3,
-                            Name = "İşlemci",
-                            SubCategoryId = 2
+                            Name = "Memory",
+                            SubCategoryId = 1
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Ekran Kartı",
-                            SubCategoryId = 2
+                            Name = "Ram",
+                            SubCategoryId = 1
                         },
                         new
                         {
                             Id = 5,
-                            Name = "İşlemci",
-                            SubCategoryId = 3
+                            Name = "Screen Size",
+                            SubCategoryId = 1
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Ekran Kartı",
-                            SubCategoryId = 3
+                            Name = "Display Card",
+                            SubCategoryId = 2
                         },
                         new
                         {
                             Id = 7,
-                            Name = "İşlemci",
-                            SubCategoryId = 4
+                            Name = "Processor",
+                            SubCategoryId = 2
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Ekran Kartı",
-                            SubCategoryId = 4
+                            Name = "Memory",
+                            SubCategoryId = 2
                         },
                         new
                         {
                             Id = 9,
-                            Name = "Kamera",
-                            SubCategoryId = 5
+                            Name = "Ram",
+                            SubCategoryId = 2
                         },
                         new
                         {
                             Id = 10,
-                            Name = "Hafıza",
-                            SubCategoryId = 5
+                            Name = "Screen Size",
+                            SubCategoryId = 2
                         },
                         new
                         {
                             Id = 11,
-                            Name = "İşlemci",
-                            SubCategoryId = 6
+                            Name = "Display Card",
+                            SubCategoryId = 3
                         },
                         new
                         {
                             Id = 12,
-                            Name = "Ekran Kartı",
-                            SubCategoryId = 6
+                            Name = "Processor",
+                            SubCategoryId = 3
                         },
                         new
                         {
                             Id = 13,
-                            Name = "Ekran Boyutu",
-                            SubCategoryId = 7
+                            Name = "Memory",
+                            SubCategoryId = 3
                         },
                         new
                         {
                             Id = 14,
-                            Name = "Çözünürlük",
+                            Name = "Ram",
+                            SubCategoryId = 3
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Screen Size",
+                            SubCategoryId = 3
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "Display Card",
+                            SubCategoryId = 4
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "Processor",
+                            SubCategoryId = 4
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Memory",
+                            SubCategoryId = 4
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "Ram",
+                            SubCategoryId = 4
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Screen Size",
+                            SubCategoryId = 4
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Name = "Display Card",
+                            SubCategoryId = 5
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "Processor",
+                            SubCategoryId = 5
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Name = "Memory",
+                            SubCategoryId = 5
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Name = "Ram",
+                            SubCategoryId = 5
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Name = "Screen Size",
+                            SubCategoryId = 5
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Name = "Processor",
+                            SubCategoryId = 6
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Name = "Ram",
+                            SubCategoryId = 6
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Name = "Battery",
+                            SubCategoryId = 6
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Name = "Camera",
+                            SubCategoryId = 6
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Name = "Processor",
                             SubCategoryId = 7
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Name = "Ram",
+                            SubCategoryId = 7
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Name = "Battery",
+                            SubCategoryId = 7
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Name = "Camera",
+                            SubCategoryId = 7
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Name = "Processor",
+                            SubCategoryId = 8
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Name = "Ram",
+                            SubCategoryId = 8
+                        },
+                        new
+                        {
+                            Id = 36,
+                            Name = "Battery",
+                            SubCategoryId = 8
+                        },
+                        new
+                        {
+                            Id = 37,
+                            Name = "Camera",
+                            SubCategoryId = 8
+                        },
+                        new
+                        {
+                            Id = 38,
+                            Name = "Processor",
+                            SubCategoryId = 9
+                        },
+                        new
+                        {
+                            Id = 39,
+                            Name = "Ram",
+                            SubCategoryId = 9
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Name = "Battery",
+                            SubCategoryId = 9
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Name = "Camera",
+                            SubCategoryId = 9
+                        },
+                        new
+                        {
+                            Id = 42,
+                            Name = "Screen Size",
+                            SubCategoryId = 10
+                        },
+                        new
+                        {
+                            Id = 43,
+                            Name = "Resolution",
+                            SubCategoryId = 10
+                        },
+                        new
+                        {
+                            Id = 44,
+                            Name = "Screen Size",
+                            SubCategoryId = 11
+                        },
+                        new
+                        {
+                            Id = 45,
+                            Name = "Resolution",
+                            SubCategoryId = 11
                         });
                 });
 
@@ -749,16 +1260,51 @@ namespace shopapp.dataaccess.Migrations
                         new
                         {
                             Id = 3,
-                            ProductId = 2,
-                            SubCategoryFeatureId = 9,
-                            Value = "Intel i7"
+                            ProductId = 1,
+                            SubCategoryFeatureId = 3,
+                            Value = "1 TB HDD"
                         },
                         new
                         {
                             Id = 4,
+                            ProductId = 1,
+                            SubCategoryFeatureId = 4,
+                            Value = "32 GB"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ProductId = 1,
+                            SubCategoryFeatureId = 5,
+                            Value = "18 Inc"
+                        },
+                        new
+                        {
+                            Id = 6,
                             ProductId = 2,
-                            SubCategoryFeatureId = 10,
-                            Value = "GT 360"
+                            SubCategoryFeatureId = 26,
+                            Value = "Intel i7"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ProductId = 2,
+                            SubCategoryFeatureId = 27,
+                            Value = "16 GB"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ProductId = 2,
+                            SubCategoryFeatureId = 28,
+                            Value = "3046 mAh"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ProductId = 2,
+                            SubCategoryFeatureId = 29,
+                            Value = "12 MP"
                         });
                 });
 
@@ -838,7 +1384,7 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "df11b0a8-f0c9-47d4-9cea-4af417d5504e",
+                            ConcurrencyStamp = "38c142a2-4b03-4eca-a964-7f8f7bb024d7",
                             Email = "adminuser@shopapp.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -846,9 +1392,9 @@ namespace shopapp.dataaccess.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMİNUSER@SHOPAPP.COM",
                             NormalizedUserName = "ADMİN",
-                            PasswordHash = "AQAAAAIAAYagAAAAECH0Z29Wf8xSTyMDgXVmjL9vPHqt11gLM5V7o0jXtAPTLDxxCOzqYRUtTc2PQzLpew==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBjromk1G5pbwbysNbD8NLGGhD620QGt5q/l3zqqZPDlbRl78Ljooh+EDBi7YDtHYA==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "9bc893ab-3217-4e82-88b3-d18c69c4eb97",
+                            SecurityStamp = "053cd56b-62d5-4d3e-8620-f171fef95355",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });

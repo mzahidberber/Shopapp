@@ -52,7 +52,7 @@ public class CategoryService : GenericService<Category, CategoryDTO>, ICategoryS
             if (result != null)
                 return Response<NoDataDTO>.Fail("Url or name already exists ", 400, true);
         }
-
+        entity.MainCategoryId = isExistEntity.MainCategoryId;
         var updateEntity = ObjectMapper.Mapper.Map<Category>(entity);
         _genericRepository.Update(updateEntity);
         await _genericRepository.CommitAsync();

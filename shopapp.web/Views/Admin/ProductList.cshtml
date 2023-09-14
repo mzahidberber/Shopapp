@@ -39,6 +39,10 @@
                     <td>Url</td>
                     <td>Price</td>
                     <td>Stock</td>
+                    <td>Main Category</td>
+                    <td>Category</td>
+                    <td>Sub Category</td>
+                    <td>Brand</td>
                     @*<td>Description</td>*@
                     <td>IsApprove</td>
                     <td>IsHome</td>
@@ -58,7 +62,11 @@
                             <td>@item.Url</td>
                             <td>@item.Price &#8378</td>
                             <td>@item.Stock</td>
-                            <td>
+                            <td>@item.MainCategory.Name</td>
+                            <td>@item.Category.Name</td>
+                            <td>@item.SubCategory.Name</td>
+                            <td>@item.Brand.Name</td>
+                            <td >
                                     <input type="checkbox" name="isApprove" value=@item.Id class="isApproveInput" @(item.IsApprove ? "checked" : "")>
                            
 
@@ -68,8 +76,8 @@
                                     <input type="checkbox" name="isHome" class="isHomeInput" value=@item.Id @(item.IsHome ? "checked" : "")>
                             
                             </td>
-                                
-                            <td>
+
+                            <td style="width:120px">
                                 <a href="/admin/productedit/@item.Id" class="btn btn-primary btn-sm mr-2">Edit</a>
                                 <button type="button" class="btn btn-danger btn-sm" data-bs-userid="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModel">Delete</button>
 

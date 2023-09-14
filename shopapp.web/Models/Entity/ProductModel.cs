@@ -23,7 +23,7 @@ namespace shopapp.web.Models.Entity
         public string Url { get; set; }
 
         [Required(ErrorMessage = "Price Required")]
-        [Range(0, 10000, ErrorMessage = "Price 1-10000")]
+        [Range(0, 100000, ErrorMessage = "Price 1-100000")]
         public double? Price { get; set; }
 
         [Required(ErrorMessage = "Description Required")]

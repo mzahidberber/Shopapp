@@ -14,7 +14,7 @@ namespace shopapp.core.Aspects.Logging
                 filterContext.ActionDescriptor.DisplayName,
                 GetParams(filterContext)
             );
-            //_logger.Info(message);
+            _logger.Info(message);
         }
 
         private string GetParams(ActionExecutingContext IInvocation)

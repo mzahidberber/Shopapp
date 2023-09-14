@@ -49,7 +49,7 @@ public class SubCategoryService : GenericService<SubCategory, SubCategoryDTO>, I
             if (result != null)
                 return Response<NoDataDTO>.Fail("Url or name already exists ", 400, true);
         }
-
+        entity.CategoryId = isExistEntity.CategoryId;
         var updateEntity = ObjectMapper.Mapper.Map<SubCategory>(entity);
         _genericRepository.Update(updateEntity);
         await _genericRepository.CommitAsync();
