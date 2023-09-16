@@ -100,13 +100,6 @@ namespace shopapp.dataaccess.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
-                            RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -755,7 +748,7 @@ namespace shopapp.dataaccess.Migrations
                             BrandId = 17,
                             CategoryId = 6,
                             Description = "Güzel tablet",
-                            HomeImageUrl = "2.jpg",
+                            HomeImageUrl = "lenovatablet1.jpg",
                             IsApprove = true,
                             IsHome = true,
                             MainCategoryId = 2,
@@ -1378,26 +1371,6 @@ namespace shopapp.dataaccess.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "38c142a2-4b03-4eca-a964-7f8f7bb024d7",
-                            Email = "adminuser@shopapp.com",
-                            EmailConfirmed = true,
-                            FirstName = "Admin",
-                            LastName = "Admin",
-                            LockoutEnabled = true,
-                            NormalizedEmail = "ADMİNUSER@SHOPAPP.COM",
-                            NormalizedUserName = "ADMİN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBjromk1G5pbwbysNbD8NLGGhD620QGt5q/l3zqqZPDlbRl78Ljooh+EDBi7YDtHYA==",
-                            PhoneNumberConfirmed = true,
-                            SecurityStamp = "053cd56b-62d5-4d3e-8620-f171fef95355",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.UserRole", b =>

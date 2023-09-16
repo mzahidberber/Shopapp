@@ -46,13 +46,7 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "publishAllPorts": true,
-      "useSSL": true,
-      "environmentVariables": {
-        "dbHost": "localhost",
-        "dbName": "shopdb",
-        "dbPassword": "123456",
-        "dbPort": "3306"
-      }
+      "useSSL": true
     }
   },
   "iisSettings": {

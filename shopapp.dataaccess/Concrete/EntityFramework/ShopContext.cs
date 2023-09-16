@@ -53,13 +53,13 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             //builder.ApplyConfiguration(new StockMapping());
             //builder.ApplyConfiguration(new StockValueMapping());
 
-            builder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string>()
-                {
-                    RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                    UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
-                }
-                );
+            //builder.Entity<IdentityUserRole<string>>().HasData(
+            //    new IdentityUserRole<string>()
+            //    {
+            //        RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210",
+            //        UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
+            //    }
+            //    );
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -68,7 +68,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             var connectionString = "";
             if (environment == "Development")
             {
-                connectionString = _configuration.GetConnectionString("shopdb3");
+                connectionString = _configuration.GetConnectionString("shopdb");
             }
             else if (environment == "Production")
             {

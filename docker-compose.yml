@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  database:
+    container_name: data
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD : <password>
+    networks:
+      - shopapp
+    volumes:
+      - /data:/var/lib/mysql
+  shopapp:
+    container_name: shopapp
+    image: mzahidberber/shopapp
+    ports:
+      - '80:80'
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - dbHost=database
+      - dbPort=3306
+      - dbName=shopdb
+      - dbPassword=<password>
+      - adminPassword=<adminpassword> 
+    depends_on:
+      - database
+    networks:
+      - shopapp
+
+
+networks:
+  shopapp:
+    driver: bridge
+
+
+

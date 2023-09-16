@@ -77,6 +77,7 @@ namespace shopapp.web.Controllers
                 LastName = model.LastName,
                 UserName = model.UserName,
                 Email = model.Email,
+                EmailConfirmed=true
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
@@ -90,9 +91,9 @@ namespace shopapp.web.Controllers
                 });
                 //email
                 //url degiştir
-                await this._emailSender.SendEmailAsync(user.Email, "ShopApp - Confirm your account.", $"Please confirm your account.<a href='http://localhost:5119{url}'>Link</a>");
+                //await this._emailSender.SendEmailAsync(user.Email, "ShopApp - Confirm your account.", $"Please confirm your account.<a href='http://localhost:5119{url}'>Link</a>");
 
-                TempDataMessage.CreateMessage(TempData, key: "message", message: "User created.Please confirm your account.");
+                //TempDataMessage.CreateMessage(TempData, key: "message", message: "User created.Please confirm your account.");
                 return RedirectToAction("Login", "Account");
             }
             else

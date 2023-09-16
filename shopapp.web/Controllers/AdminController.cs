@@ -474,7 +474,7 @@ public class AdminController : Controller
             {
                 var extension = Path.GetExtension(file.FileName);
                 var randomName = string.Format($"{name}-{files.IndexOf(file)}{extension}");
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", randomName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", randomName);
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);

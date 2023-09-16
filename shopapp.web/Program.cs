@@ -16,6 +16,7 @@ using shopapp.core.Extensions;
 using shopapp.core.Validation;
 using shopapp.dataaccess.Concrete.EntityFramework;
 using shopapp.web.EmailService;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,6 +116,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 
+
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
@@ -154,9 +158,9 @@ app.MapControllerRoute(
     pattern: "product/create",
     defaults: new { controller = "Product", action = "Create" });
 app.MapControllerRoute(
-	name: "admin",
-	pattern: "admin",
-	defaults: new { controller = "Admin", action = "Index" });
+    name: "admin",
+    pattern: "admin",
+    defaults: new { controller = "Admin", action = "Index" });
 app.MapControllerRoute(
     name: "products",
     pattern: "products",
@@ -166,24 +170,24 @@ app.MapControllerRoute(
     pattern: "search",
     defaults: new { controller = "Product", action = "Search" });
 app.MapControllerRoute(
-	name: "detail",
-	pattern: "detail/{url}",
-	defaults: new { controller = "Product", action = "Details" });
+    name: "detail",
+    pattern: "detail/{url}",
+    defaults: new { controller = "Product", action = "Details" });
 
 app.MapControllerRoute(
-	name: "cart",
-	pattern: "cart",
-	defaults: new { controller = "Cart", action = "Index" });
+    name: "cart",
+    pattern: "cart",
+    defaults: new { controller = "Cart", action = "Index" });
 
 app.MapControllerRoute(
-	name: "default",
-	pattern: "",
-	defaults: new { controller = "Product", action = "Products" });
+    name: "default",
+    pattern: "",
+    defaults: new { controller = "Product", action = "Products" });
 
 app.MapControllerRoute(
-	name: "product",
-	pattern: "{category}",
-	defaults: new { controller = "Product", action = "Index" });
+    name: "product",
+    pattern: "{category}",
+    defaults: new { controller = "Product", action = "Index" });
 
 app.MapControllerRoute(
     name: "product",
@@ -249,6 +253,42 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+using (var scope = app.Services.CreateScope())
+{
+	var userManager = (UserManager<User>)scope.ServiceProvider.GetService(typeof(UserManager<User>));
+    var user=await userManager.FindByIdAsync("8e445865-a24d-4543-a6c6-9443d048cdb9");
+    if(user == null)
+    {
+		var hasher = new PasswordHasher<User>();
+		string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+		var password = "";
+		if (environment == "Development")
+			password = builder.Configuration["Data:AdminUser:password"];
 
+		if (environment == "Production")
+			password = Environment.GetEnvironmentVariable("adminPassword");
+
+		var adminUser = new User
+		{
+			Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+			FirstName = "Admin",
+			LastName = "Admin",
+			UserName = builder.Configuration["Data:AdminUser:username"],
+			Email = builder.Configuration["Data:AdminUser:email"],
+			NormalizedUserName = builder.Configuration["Data:AdminUser:username"].ToUpper(),
+			NormalizedEmail = builder.Configuration["Data:AdminUser:email"].ToUpper(),
+			PasswordHash = hasher.HashPassword(null, password),
+			EmailConfirmed = true,
+			LockoutEnabled = true,
+			PhoneNumberConfirmed = true,
+			SecurityStamp = Guid.NewGuid().ToString()
+		};
+
+
+		await userManager.CreateAsync(adminUser);
+		await userManager.AddToRoleAsync(adminUser, "Admin");
+	}
+	
+}
 
 app.Run();
