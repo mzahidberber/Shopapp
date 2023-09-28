@@ -2,7 +2,7 @@
 
 namespace shopapp.core.Entity.Concrete;
 
-public class StockValue:IEntity
+public class StockValue : IEntity
 {
     public int Id { get; set; }
     public string Name { get; set; }

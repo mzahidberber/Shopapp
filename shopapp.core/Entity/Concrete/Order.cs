@@ -7,11 +7,11 @@ namespace shopapp.core.Entity.Concrete
         public Order()
         {
             this.OrderItems = new List<OrderItem>();
-		}
+        }
         public int Id { get; set; }
         public string OrderNumber { get; set; }
-        public EnumOrderState State { get; set; } 
-		public DateTime OrderTime { get; set; }
+        public EnumOrderState State { get; set; }
+        public DateTime OrderTime { get; set; }
         public double TotalPrice { get; set; }
         public User User { get; set; }
         public string UserId { get; set; } = null!;
@@ -33,11 +33,11 @@ namespace shopapp.core.Entity.Concrete
 
     public enum EnumPaymentType
     {
-        CreditCard=0,Eft=1
+        CreditCard = 0, Eft = 1
     }
 
     public enum EnumOrderState
     {
-        HasbeenTaken=0,Waiting=1,Unpaid=2,GettingReady=3,InCargo=4,HasDelivered=5
+        HasbeenTaken = 0, Waiting = 1, Unpaid = 2, GettingReady = 3, InCargo = 4, HasDelivered = 5
     }
 }

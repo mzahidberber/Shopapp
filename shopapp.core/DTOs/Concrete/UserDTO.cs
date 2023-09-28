@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace shopapp.core.DTOs.Concrete
+﻿namespace shopapp.core.DTOs.Concrete
 {
-    public class UserDTO 
+    public class UserDTO
     {
         public UserDTO()
         {

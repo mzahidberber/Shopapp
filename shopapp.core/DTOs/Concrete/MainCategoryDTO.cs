@@ -2,7 +2,7 @@
 
 namespace shopapp.core.DTOs.Concrete;
 
-public class MainCategoryDTO:IDTO
+public class MainCategoryDTO : IDTO
 {
     public MainCategoryDTO()
     {

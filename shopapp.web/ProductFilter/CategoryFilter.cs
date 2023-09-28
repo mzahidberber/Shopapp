@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace shopapp.web.ProductFilter;
 
-public class CategoryFilter:IFilter
+public class CategoryFilter : IFilter
 {
     public string Category { get; set; }
     public CategoryFilter(string category)

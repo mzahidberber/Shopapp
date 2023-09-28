@@ -2,7 +2,6 @@ using Castle.DynamicProxy;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using NLog.Web;
@@ -16,7 +15,6 @@ using shopapp.core.Extensions;
 using shopapp.core.Validation;
 using shopapp.dataaccess.Concrete.EntityFramework;
 using shopapp.web.EmailService;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -183,9 +181,9 @@ app.MapControllerRoute(
     defaults: new { controller = "Product", action = "Details" });
 
 app.MapControllerRoute(
-	name: "order",
-	pattern: "order",
-	defaults: new { controller = "Order", action = "Index" });
+    name: "order",
+    pattern: "order",
+    defaults: new { controller = "Order", action = "Index" });
 
 app.MapControllerRoute(
     name: "cart",
@@ -265,40 +263,40 @@ app.MapControllerRoute(
 
 using (var scope = app.Services.CreateScope())
 {
-	var userManager = (UserManager<User>)scope.ServiceProvider.GetService(typeof(UserManager<User>));
-    var user=await userManager.FindByIdAsync("8e445865-a24d-4543-a6c6-9443d048cdb9");
-    if(user == null)
+    var userManager = (UserManager<User>)scope.ServiceProvider.GetService(typeof(UserManager<User>));
+    var user = await userManager.FindByIdAsync("8e445865-a24d-4543-a6c6-9443d048cdb9");
+    if (user == null)
     {
-		var hasher = new PasswordHasher<User>();
-		string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-		var password = "";
-		if (environment == "Development")
-			password = builder.Configuration["Data:AdminUser:password"];
+        var hasher = new PasswordHasher<User>();
+        string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        var password = "";
+        if (environment == "Development")
+            password = builder.Configuration["Data:AdminUser:password"];
 
-		if (environment == "Production")
-			password = Environment.GetEnvironmentVariable("adminPassword");
+        if (environment == "Production")
+            password = Environment.GetEnvironmentVariable("adminPassword");
 
-		var adminUser = new User
-		{
-			Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
-			FirstName = "Admin",
-			LastName = "Admin",
-			UserName = builder.Configuration["Data:AdminUser:username"],
-			Email = builder.Configuration["Data:AdminUser:email"],
-			NormalizedUserName = builder.Configuration["Data:AdminUser:username"].ToUpper(),
-			NormalizedEmail = builder.Configuration["Data:AdminUser:email"].ToUpper(),
-			PasswordHash = hasher.HashPassword(null, password),
-			EmailConfirmed = true,
-			LockoutEnabled = true,
-			PhoneNumberConfirmed = true,
-			SecurityStamp = Guid.NewGuid().ToString()
-		};
+        var adminUser = new User
+        {
+            Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+            FirstName = "Admin",
+            LastName = "Admin",
+            UserName = builder.Configuration["Data:AdminUser:username"],
+            Email = builder.Configuration["Data:AdminUser:email"],
+            NormalizedUserName = builder.Configuration["Data:AdminUser:username"].ToUpper(),
+            NormalizedEmail = builder.Configuration["Data:AdminUser:email"].ToUpper(),
+            PasswordHash = hasher.HashPassword(null, password),
+            EmailConfirmed = true,
+            LockoutEnabled = true,
+            PhoneNumberConfirmed = true,
+            SecurityStamp = Guid.NewGuid().ToString()
+        };
 
 
-		await userManager.CreateAsync(adminUser);
-		await userManager.AddToRoleAsync(adminUser, "Admin");
-	}
-	
+        await userManager.CreateAsync(adminUser);
+        await userManager.AddToRoleAsync(adminUser, "Admin");
+    }
+
 }
 
 app.Run();

@@ -2,7 +2,7 @@
 
 namespace shopapp.core.DTOs.Concrete;
 
-public class BrandDTO:IDTO
+public class BrandDTO : IDTO
 {
     public BrandDTO()
     {

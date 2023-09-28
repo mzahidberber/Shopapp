@@ -2,7 +2,7 @@
 
 namespace shopapp.core.Entity.Concrete;
 
-public class SubCategoryFeature:IEntity
+public class SubCategoryFeature : IEntity
 {
     public SubCategoryFeature()
     {

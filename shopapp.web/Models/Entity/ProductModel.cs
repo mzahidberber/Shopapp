@@ -1,6 +1,4 @@
-﻿using shopapp.core.DTOs.Concrete;
-using shopapp.core.Entity.Concrete;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace shopapp.web.Models.Entity
 {
@@ -51,8 +49,8 @@ namespace shopapp.web.Models.Entity
         public int MainCategoryId { get; set; }
         public MainCategoryModel? MainCategory { get; set; }
 
-		public List<OrderItemModel> OrderItems { get; set; }
+        public List<OrderItemModel> OrderItems { get; set; }
 
-		public List<SubCategoryFeatureValueModel> SubCategoryFeatureValues { get; set; }
+        public List<SubCategoryFeatureValueModel> SubCategoryFeatureValues { get; set; }
     }
 }

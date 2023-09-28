@@ -1,5 +1,4 @@
 ﻿using shopapp.core.Entity.Concrete;
-using System.Drawing.Printing;
 using System.Linq.Expressions;
 
 namespace shopapp.web.ProductFilter
@@ -13,7 +12,7 @@ namespace shopapp.web.ProductFilter
         }
         public Expression<Func<Product, bool>> Expression()
         {
-            return p => this.Brands.Any(x=> x == p.Brand.Url);
+            return p => this.Brands.Any(x => x == p.Brand.Url);
 
         }
     }

@@ -2,7 +2,7 @@
 
 namespace shopapp.core.DTOs.Concrete;
 
-public class SubCategoryFeatureDTO:IDTO
+public class SubCategoryFeatureDTO : IDTO
 {
     public SubCategoryFeatureDTO()
     {

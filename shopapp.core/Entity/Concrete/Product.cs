@@ -19,7 +19,7 @@ namespace shopapp.core.Entity.Concrete
         public string Description { get; set; }
         public string HomeImageUrl { get; set; }
         public int Stock { get; set; }
-        
+
         public bool IsApprove { get; set; }
         public bool IsHome { get; set; }
 
@@ -29,10 +29,10 @@ namespace shopapp.core.Entity.Concrete
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
-		public int SubCategoryId { get; set; }
-		public SubCategory SubCategory { get; set; }
+        public int SubCategoryId { get; set; }
+        public SubCategory SubCategory { get; set; }
 
-		public int MainCategoryId { get; set; }
+        public int MainCategoryId { get; set; }
         public MainCategory MainCategory { get; set; }
 
         public List<Image> Images { get; set; }

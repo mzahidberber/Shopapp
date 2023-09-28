@@ -26,5 +26,5 @@ namespace shopapp.core.Business.Abstract
 
 
 
-	}
+    }
 }

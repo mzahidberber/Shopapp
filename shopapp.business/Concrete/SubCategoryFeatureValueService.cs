@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using shopapp.business.Concrete.Mapper;
+﻿using shopapp.business.Concrete.Mapper;
 using shopapp.core.Business.Abstract;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.DTOs.Concrete;
@@ -23,13 +21,14 @@ public class SubCategoryFeatureValueService : GenericService<SubCategoryFeatureV
     {
         var features = ObjectMapper.Mapper.Map<IEnumerable<SubCategoryFeatureValueDTO>>(_repository.GetWhereWithFeature(filter).AsEnumerable());
         await _repository.CommitAsync();
-        return Response<IEnumerable<SubCategoryFeatureValueDTO>>.Success(features,200);
+        return Response<IEnumerable<SubCategoryFeatureValueDTO>>.Success(features, 200);
     }
 
-    public async  Task<Response<NoDataDTO>> SyncProductFeatures(int productId,int subCategoryId,List<string> features, List<string> values)
+    public async Task<Response<NoDataDTO>> SyncProductFeatures(int productId, int subCategoryId, List<string> features, List<string> values)
     {
-        var featureModels=_repository.GetWhereWithFeature(x => x.ProductId == productId).ToList();
-        if(featureModels.First().SubCategoryFeature.SubCategoryId == subCategoryId) {
+        var featureModels = _repository.GetWhereWithFeature(x => x.ProductId == productId).ToList();
+        if (featureModels.First().SubCategoryFeature.SubCategoryId == subCategoryId)
+        {
             for (int i = 0; i < featureModels.Count(); i++)
             {
                 featureModels[i].Value = values[features.IndexOf(features.First(x => x == featureModels[i].SubCategoryFeature.Name))];
@@ -46,7 +45,7 @@ public class SubCategoryFeatureValueService : GenericService<SubCategoryFeatureV
                 await _repository.AddAsync(new SubCategoryFeatureValue
                 {
                     Value = values[i],
-                    ProductId= productId,
+                    ProductId = productId,
                     SubCategoryFeatureId = _repositoryFeature.GetWhere(x => x.Name == features[i]).First().Id
                 });
             }

@@ -1,7 +1,6 @@
 ﻿using shopapp.core.Aspects.Logging;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.Entity.Concrete;
-using System.Linq.Expressions;
 
 namespace shopapp.dataaccess.Concrete.EntityFramework
 {
@@ -14,6 +13,6 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         }
 
 
-        
+
     }
 }

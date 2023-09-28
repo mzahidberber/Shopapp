@@ -1,5 +1,4 @@
-﻿using shopapp.core.DTOs.Concrete;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace shopapp.web.Models.Entity
 {

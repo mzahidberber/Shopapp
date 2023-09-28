@@ -2,7 +2,7 @@
 
 public static class OrderStateInfo
 {
-    public static Dictionary<int, string> OrderState=new Dictionary<int, string>
+    public static Dictionary<int, string> OrderState = new Dictionary<int, string>
     {
         {0,"Has been taken" },
         {1,"Getting ready" },

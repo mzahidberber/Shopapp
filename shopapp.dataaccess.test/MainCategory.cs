@@ -1,8 +1,3 @@
-using Microsoft.Extensions.Configuration;
-using Moq;
-using shopapp.core.DataAccess.Abstract;
-using shopapp.dataaccess.Concrete.EntityFramework;
-
 namespace shopapp.dataaccess.test
 {
     public class MainCategory

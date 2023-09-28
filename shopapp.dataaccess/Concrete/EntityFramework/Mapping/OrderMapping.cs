@@ -8,8 +8,8 @@ namespace shopapp.dataaccess.Concrete.EntityFramework.Mapping
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-			builder.HasOne(x => x.User).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
+            builder.HasOne(x => x.User).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
 
-		}
-	}
+        }
+    }
 }

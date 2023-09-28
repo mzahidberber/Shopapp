@@ -30,16 +30,16 @@ namespace shopapp.web.Controllers
             return View(cart ?? new CartModel());
         }
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int productId, int quantity,string? returnUrl)
+        public async Task<IActionResult> AddToCart(int productId, int quantity, string? returnUrl)
         {
             var cart = HttpContext.Session.Get<CartModel>("Cart");
             var product = await _productService.GetByIdAsync(productId);
             if (product.data.Stock < quantity)
             {
-				TempDataMessage.CreateMessage(TempData, "message", message: $"{product.data.Stock} {product.data.Name} left");
-				return Redirect(returnUrl);
-			}
-			if (cart == null)
+                TempDataMessage.CreateMessage(TempData, "message", message: $"{product.data.Stock} {product.data.Name} left");
+                return Redirect(returnUrl);
+            }
+            if (cart == null)
             {
                 var newCart = new CartModel()
                 {
@@ -71,23 +71,23 @@ namespace shopapp.web.Controllers
                 }
                 HttpContext.Session.Set<CartModel>("Cart", cart);
             }
-			if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-			{
-				return Redirect(returnUrl);
-			}
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
 
-			return RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
         [HttpPost]
-        public IActionResult ChangeProductQuantity(int quantity,int productId)
+        public IActionResult ChangeProductQuantity(int quantity, int productId)
         {
             var cart = HttpContext.Session.Get<CartModel>("Cart");
-            var product= cart.CartItems.Find(x => x.ProductId == productId);
+            var product = cart.CartItems.Find(x => x.ProductId == productId);
             product.Quantity = quantity;
             HttpContext.Session.Set<CartModel>("Cart", cart);
             return Json(new
             {
-                ProductTotalPrice=product.Product.Price*quantity,
+                ProductTotalPrice = product.Product.Price * quantity,
                 TotalPrice = cart.TotalPrice()
             });
         }

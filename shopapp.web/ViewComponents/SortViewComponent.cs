@@ -4,7 +4,7 @@ using shopapp.web.ViewModels;
 
 namespace shopapp.web.ViewComponents
 {
-    public class SortViewComponent: ViewComponent
+    public class SortViewComponent : ViewComponent
     {
         public List<Sort> SortTypes { get; set; } = new List<Sort>{
             new Sort{Name="Suggested",Value=1},

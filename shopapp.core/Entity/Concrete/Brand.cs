@@ -2,7 +2,7 @@
 
 namespace shopapp.core.Entity.Concrete;
 
-public class Brand:IEntity
+public class Brand : IEntity
 {
     public Brand()
     {

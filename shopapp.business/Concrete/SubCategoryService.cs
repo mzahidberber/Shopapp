@@ -4,7 +4,6 @@ using shopapp.core.Business.Abstract;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
-using shopapp.dataaccess.Concrete.EntityFramework;
 
 namespace shopapp.business.Concrete;
 

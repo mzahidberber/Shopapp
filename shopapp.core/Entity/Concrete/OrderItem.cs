@@ -2,7 +2,7 @@
 
 namespace shopapp.core.Entity.Concrete;
 
-public class OrderItem:IEntity
+public class OrderItem : IEntity
 {
     public int Id { get; set; }
     public int OrderId { get; set; }

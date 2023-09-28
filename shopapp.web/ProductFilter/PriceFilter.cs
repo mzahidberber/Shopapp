@@ -1,5 +1,4 @@
 ﻿using shopapp.core.Entity.Concrete;
-using System.Drawing.Printing;
 using System.Linq.Expressions;
 
 namespace shopapp.web.ProductFilter

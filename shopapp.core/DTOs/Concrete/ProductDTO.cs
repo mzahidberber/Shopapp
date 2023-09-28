@@ -1,5 +1,4 @@
 ﻿using shopapp.core.DTOs.Abstract;
-using shopapp.core.Entity.Concrete;
 
 namespace shopapp.core.DTOs.Concrete
 {
@@ -9,7 +8,7 @@ namespace shopapp.core.DTOs.Concrete
         {
             this.Images = new List<ImageDTO>();
             this.SubCategoryFeatureValues = new List<SubCategoryFeatureValueDTO>();
-            this.OrderItems=new List<OrderItemDTO>();
+            this.OrderItems = new List<OrderItemDTO>();
         }
         public int Id { get; set; }
         public string Name { get; set; }
@@ -19,24 +18,24 @@ namespace shopapp.core.DTOs.Concrete
         public string HomeImageUrl { get; set; }
         public bool IsApprove { get; set; }
         public bool IsHome { get; set; }
-		public int Stock { get; set; }
-		public int BrandId { get; set; }
+        public int Stock { get; set; }
+        public int BrandId { get; set; }
         public BrandDTO Brand { get; set; }
 
         public int CategoryId { get; set; }
         public CategoryDTO Category { get; set; }
 
-		public int SubCategoryId { get; set; }
-		public SubCategoryDTO SubCategory { get; set; }
+        public int SubCategoryId { get; set; }
+        public SubCategoryDTO SubCategory { get; set; }
 
-		public int MainCategoryId { get; set; }
+        public int MainCategoryId { get; set; }
         public MainCategoryDTO MainCategory { get; set; }
 
         public List<ImageDTO> Images { get; set; }
 
-		public List<OrderItemDTO> OrderItems { get; set; }
+        public List<OrderItemDTO> OrderItems { get; set; }
 
 
-		public List<SubCategoryFeatureValueDTO> SubCategoryFeatureValues { get; set; }
+        public List<SubCategoryFeatureValueDTO> SubCategoryFeatureValues { get; set; }
     }
 }

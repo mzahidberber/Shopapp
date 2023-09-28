@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace shopapp.web.ProductFilter
 {
-    public class IsApprove:IFilter
+    public class IsApprove : IFilter
     {
         public bool IsApproveBool { get; set; }
         public IsApprove(bool isApprove)
@@ -12,7 +12,7 @@ namespace shopapp.web.ProductFilter
         }
         public Expression<Func<Product, bool>> Expression()
         {
-            return x=>x.IsApprove==this.IsApproveBool;
+            return x => x.IsApprove == this.IsApproveBool;
         }
     }
 }

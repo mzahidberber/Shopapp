@@ -5,7 +5,6 @@ using shopapp.core.Business.Abstract;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
-using shopapp.dataaccess.Concrete.EntityFramework;
 
 namespace shopapp.business.Concrete;
 
@@ -16,7 +15,7 @@ public class CategoryService : GenericService<Category, CategoryDTO>, ICategoryS
 
     public CategoryService(ICategoryRepository genericRepository) : base(genericRepository)
     {
-        _genericRepository = genericRepository;    
+        _genericRepository = genericRepository;
     }
 
     public async Task<Response<CategoryDTO>> AddCheckUrlAndNameAsync(CategoryDTO entity)

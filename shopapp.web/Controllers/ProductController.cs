@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using shopapp.core.Aspects.Caching;
 using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
 using shopapp.core.CrossCuttingConcers.Caching;
-using shopapp.core.CrossCuttingConcers.Caching.Microsoft;
-using shopapp.core.DTOs.Concrete;
 using shopapp.core.Reflection;
 using shopapp.web.Mapper;
 using shopapp.web.Models.Entity;
@@ -38,7 +34,7 @@ public class ProductController : Controller
     {
         var key = Reflection.CreateCacheKey(typeof(ProductController), "GetCategoriesAsync");
         if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IEnumerable<MainCategoryModel>>(key);
-        var categories =await _mainCategoryService.GetAllWithCategoriAndSubCategoriesAndBrands();
+        var categories = await _mainCategoryService.GetAllWithCategoriAndSubCategoriesAndBrands();
         var categoriModel = ObjectMapper.Mapper.Map<IEnumerable<MainCategoryModel>>(categories.data);
         _cacheManager.Add(key, categoriModel, 60);
         return categoriModel;
@@ -68,7 +64,7 @@ public class ProductController : Controller
         var main = categoryModels.FirstOrDefault(x => x.Url == category);
         var cate = categoryModels.FirstOrDefault(x => x.Categories.Any(x => x.Url == category));
         var sub = categoryModels.FirstOrDefault(x => x.Categories.Any(x => x.SubCategories.Any(x => x.Url == category)));
-        
+
         MainCategoryModel? SelectedMainCategory = null;
         CategoryModel? SelectedCategory = null;
         SubCategoryModel? SelectedSubCategory = null;
@@ -102,39 +98,39 @@ public class ProductController : Controller
 
         return new SelectedCategoryModel
         {
-            MainCategory=SelectedMainCategory,
-            CategoryType=categoryType,
-            Category=SelectedCategory,
-            SubCategory=SelectedSubCategory,
-            Brands=SelectedBrands
+            MainCategory = SelectedMainCategory,
+            CategoryType = categoryType,
+            Category = SelectedCategory,
+            SubCategory = SelectedSubCategory,
+            Brands = SelectedBrands
         };
     }
 
     //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 60)]
-    public async Task<IActionResult> Index(string? category,List<string> c, List<string> b, string? prc=null,int s=1, int p = 1)
+    public async Task<IActionResult> Index(string? category, List<string> c, List<string> b, string? prc = null, int s = 1, int p = 1)
     {
         //var key = Reflection.CreateCacheKey(typeof(ProductController), "List",c, prc ?? "<Null>", s, p);
         //if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
 
-        var selectedInfo=await FindCategoryStatusAsync(category);
+        var selectedInfo = await FindCategoryStatusAsync(category);
 
         if (selectedInfo.MainCategory == null) return NotFound();
 
         var filterBuilder = new FilterBuilder().AddFilter(new IsApprove(true));
-        if (category!=null) filterBuilder.AddFilter(new CategoryFilter(category));
-        if (c.Count>0) filterBuilder.AddFilter(new SubCategoryFilter(c));
+        if (category != null) filterBuilder.AddFilter(new CategoryFilter(category));
+        if (c.Count > 0) filterBuilder.AddFilter(new SubCategoryFilter(c));
         if (b.Count > 0) filterBuilder.AddFilter(new BrandFilter(b));
-        if (prc!=null) filterBuilder.AddFilter(new PriceFilter(prc));
-        var filter=filterBuilder.Build();
+        if (prc != null) filterBuilder.AddFilter(new PriceFilter(prc));
+        var filter = filterBuilder.Build();
 
         var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
 
         var categoriesss = await GetCategoriesAsync();
         ViewBag.categories = categoriesss;
 
-        var product =await this._productService.WherePage(selectedInfo.MainCategory.Url,p, pageSize, s, filter);
+        var product = await this._productService.WherePage(selectedInfo.MainCategory.Url, p, pageSize, s, filter);
 
-        
+
         return View(new ProductInfo
         {
             PageInfo = new PageInfo
@@ -142,31 +138,31 @@ public class ProductController : Controller
                 TotalItems = product.data.TotalCount,
                 CurrentPage = p,
                 ItemsPerPage = pageSize,
-                MostPrice =product.data.MaxPrice!=null?Convert.ToInt32(product.data.MaxPrice):null,
-                Url= category,
-                Selected =new SelectedInfo 
-                { 
-                    SelectedSubCategories=c,
-                    Category=category,
-                    Brands=b,
-                    CategoryType= selectedInfo.CategoryType,
-                    SelectedMainCategory= selectedInfo.MainCategory,
-                    SelectedCategory= selectedInfo.Category,
-                    SelectedSubCategory= selectedInfo.SubCategory,
-                    SelectedBrands= selectedInfo.Brands.GroupBy(x=>x.Name).Select(x=>x.First()).ToList(),
-                    Sort=s,
-                    Page=p,
-                    Search=null,
-                    Price=prc,
+                MostPrice = product.data.MaxPrice != null ? Convert.ToInt32(product.data.MaxPrice) : null,
+                Url = category,
+                Selected = new SelectedInfo
+                {
+                    SelectedSubCategories = c,
+                    Category = category,
+                    Brands = b,
+                    CategoryType = selectedInfo.CategoryType,
+                    SelectedMainCategory = selectedInfo.MainCategory,
+                    SelectedCategory = selectedInfo.Category,
+                    SelectedSubCategory = selectedInfo.SubCategory,
+                    SelectedBrands = selectedInfo.Brands.GroupBy(x => x.Name).Select(x => x.First()).ToList(),
+                    Sort = s,
+                    Page = p,
+                    Search = null,
+                    Price = prc,
                 }
             },
             Products = ObjectMapper.Mapper.Map<List<ProductModel>>(product.data.Product.ToList())
-        });;
+        }); ;
     }
 
-    
 
-    
+
+
 
     //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 60)]
     public async Task<IActionResult> Search(string? q, List<string> c, List<string> b, string? prc = null, int s = 1, int p = 1)
@@ -186,9 +182,9 @@ public class ProductController : Controller
         var product = await this._productService.WherePage(null, p, pageSize, s, filter);
 
 
-        var categoriesss =await GetCategoriesAsync();
+        var categoriesss = await GetCategoriesAsync();
         ViewBag.categories = categoriesss;
-        var brands=categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories.SelectMany(x => x.Brands)));
+        var brands = categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories.SelectMany(x => x.Brands)));
         return View(new ProductInfo
         {
             PageInfo = new PageInfo
@@ -207,7 +203,7 @@ public class ProductController : Controller
                     SelectedMainCategory = null,
                     SelectedCategory = new CategoryModel
                     {
-                        SubCategories=categoriesss.SelectMany(x=>x.Categories.SelectMany(x=>x.SubCategories)).GroupBy(x => x.Name).Select(x => x.First()).ToList(),
+                        SubCategories = categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories)).GroupBy(x => x.Name).Select(x => x.First()).ToList(),
                     },
                     SelectedSubCategory = null,
                     SelectedBrands = brands.GroupBy(x => x.Name).Select(x => x.First()).ToList(),
@@ -224,53 +220,53 @@ public class ProductController : Controller
     }
     //[CacheAspectController(typeof(MemoryCacheManager), cacheByMinute: 60)]
     public async Task<IActionResult> Products(List<string> c, List<string> b, string? prc = null, int s = 1, int p = 1)
+    {
+        //var key = Reflection.CreateCacheKey(typeof(ProductController), "Search", q, c, prc ?? "<Null>", s, p);
+        //if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
+
+
+        var filterBuilder = new FilterBuilder().AddFilter(new IsApprove(true));
+        if (c.Count > 0) filterBuilder.AddFilter(new SubCategoryFilter(c));
+        if (b.Count > 0) filterBuilder.AddFilter(new BrandFilter(b));
+        if (prc != null) filterBuilder.AddFilter(new PriceFilter(prc));
+        var filter = filterBuilder.Build();
+
+        var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
+        var product = await this._productService.WherePage(null, p, pageSize, s, filter);
+
+
+        var categoriesss = await GetCategoriesAsync();
+        ViewBag.categories = categoriesss;
+        var brands = categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories.SelectMany(x => x.Brands)));
+        return View(new ProductInfo
         {
-            //var key = Reflection.CreateCacheKey(typeof(ProductController), "Search", q, c, prc ?? "<Null>", s, p);
-            //if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IActionResult>(key);
-
-
-            var filterBuilder = new FilterBuilder().AddFilter(new IsApprove(true));
-            if (c.Count > 0) filterBuilder.AddFilter(new SubCategoryFilter(c));
-            if (b.Count > 0) filterBuilder.AddFilter(new BrandFilter(b));
-            if (prc != null) filterBuilder.AddFilter(new PriceFilter(prc));
-            var filter = filterBuilder.Build();
-
-            var pageSize = Convert.ToInt32(_configuration["PageSetting:PageSize"]);
-            var product = await this._productService.WherePage(null, p, pageSize, s, filter);
-
-
-            var categoriesss = await GetCategoriesAsync();
-            ViewBag.categories = categoriesss;
-            var brands = categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories.SelectMany(x => x.Brands)));
-            return View(new ProductInfo
+            PageInfo = new PageInfo
             {
-                PageInfo = new PageInfo
+                TotalItems = product.data.TotalCount,
+                CurrentPage = p,
+                ItemsPerPage = pageSize,
+                MostPrice = product.data.MaxPrice != null ? Convert.ToInt32(product.data.MaxPrice) : null,
+                Url = "/products",
+                Selected = new SelectedInfo
                 {
-                    TotalItems = product.data.TotalCount,
-                    CurrentPage = p,
-                    ItemsPerPage = pageSize,
-                    MostPrice = product.data.MaxPrice != null ? Convert.ToInt32(product.data.MaxPrice) : null,
-                    Url = "/products",
-                    Selected = new SelectedInfo
+                    SelectedSubCategories = c,
+                    Category = null,
+                    Brands = b,
+                    CategoryType = 2,
+                    SelectedMainCategory = null,
+                    SelectedCategory = new CategoryModel
                     {
-                        SelectedSubCategories = c,
-                        Category = null,
-                        Brands = b,
-                        CategoryType = 2,
-                        SelectedMainCategory = null,
-                        SelectedCategory = new CategoryModel
-                        {
-                            SubCategories = categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories)).GroupBy(x => x.Name).Select(x => x.First()).ToList(),
-                        },
-                        SelectedSubCategory = null,
-                        SelectedBrands = brands.GroupBy(x => x.Name).Select(x => x.First()).ToList(),
-                        Sort = s,
-                        Page = p,
-                        Search = null,
-                        Price = prc,
-                    }
-                },
-                Products = ObjectMapper.Mapper.Map<List<ProductModel>>(product.data.Product.ToList())
-            });
+                        SubCategories = categoriesss.SelectMany(x => x.Categories.SelectMany(x => x.SubCategories)).GroupBy(x => x.Name).Select(x => x.First()).ToList(),
+                    },
+                    SelectedSubCategory = null,
+                    SelectedBrands = brands.GroupBy(x => x.Name).Select(x => x.First()).ToList(),
+                    Sort = s,
+                    Page = p,
+                    Search = null,
+                    Price = prc,
+                }
+            },
+            Products = ObjectMapper.Mapper.Map<List<ProductModel>>(product.data.Product.ToList())
+        });
     }
 }

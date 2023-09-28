@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.Entity.Abstract;
-using shopapp.core.Reflection;
 using System.Linq.Expressions;
 
 namespace shopapp.dataaccess.Concrete.EntityFramework

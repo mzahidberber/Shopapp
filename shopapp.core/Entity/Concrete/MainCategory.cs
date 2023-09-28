@@ -2,7 +2,7 @@
 
 namespace shopapp.core.Entity.Concrete;
 
-public class MainCategory: IEntity
+public class MainCategory : IEntity
 {
     public MainCategory()
     {

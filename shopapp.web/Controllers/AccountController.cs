@@ -77,7 +77,7 @@ namespace shopapp.web.Controllers
                 LastName = model.LastName,
                 UserName = model.UserName,
                 Email = model.Email,
-                EmailConfirmed=true
+                EmailConfirmed = true
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
@@ -211,21 +211,21 @@ namespace shopapp.web.Controllers
             });
         }
         [HttpPost]
-		public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
-		{
-			if (!ModelState.IsValid)
-				return View(model);
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
 
-            var user =await _userManager.FindByNameAsync(model.userName);
+            var user = await _userManager.FindByNameAsync(model.userName);
             if (user == null)
             {
                 TempDataMessage.CreateMessage(TempData, "SingInMessage", message: "User not found.");
                 return View(model);
             }
-            var check=await _userManager.CheckPasswordAsync(user, model.OldPassword);
+            var check = await _userManager.CheckPasswordAsync(user, model.OldPassword);
             if (check)
             {
-                var result=await _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
+                var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
                 if (result.Succeeded)
                 {
                     TempDataMessage.CreateMessage(TempData, "message", message: "Your password changed successly");
@@ -243,9 +243,9 @@ namespace shopapp.web.Controllers
             }
 
             return View(model);
-		}
+        }
 
 
-		public IActionResult AccessDenied() => View();
+        public IActionResult AccessDenied() => View();
     }
 }

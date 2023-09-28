@@ -5,5 +5,5 @@ namespace shopapp.web.ProductFilter;
 
 public interface IFilter
 {
-    Expression<Func<Product, bool>> Expression(); 
+    Expression<Func<Product, bool>> Expression();
 }

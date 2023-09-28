@@ -12,6 +12,6 @@ public class SubCategoryFilter : IFilter
     }
     public Expression<Func<Product, bool>> Expression()
     {
-        return p=> this.Categories.Any(x => x==p.SubCategory.Url );
+        return p => this.Categories.Any(x => x == p.SubCategory.Url);
     }
 }

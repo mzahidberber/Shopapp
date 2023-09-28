@@ -2,7 +2,7 @@
 
 namespace shopapp.web.Models.Entity;
 
-	public class SubCategoryModel
+public class SubCategoryModel
 {
     public SubCategoryModel()
     {

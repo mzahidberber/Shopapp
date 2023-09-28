@@ -1,6 +1,4 @@
-﻿using shopapp.core.DTOs.Abstract;
-
-namespace shopapp.core.DTOs.Concrete;
+﻿namespace shopapp.core.DTOs.Concrete;
 
 public class MainCategoryAndProductCountDTO
 {

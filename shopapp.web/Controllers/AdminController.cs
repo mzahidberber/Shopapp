@@ -1,5 +1,4 @@
-﻿using AutoMapper.Features;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +14,6 @@ using shopapp.web.Models.Account;
 using shopapp.web.Models.Admin;
 using shopapp.web.Models.Entity;
 using System.Data;
-using System.Text.Json.Serialization;
 
 namespace shopapp.web.Controllers;
 
@@ -40,25 +38,25 @@ public class AdminController : Controller
 
     private IWebHostEnvironment _webHostEnvironment { get; set; }
 
-	public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ICacheManager cacheManager, IMainCategoryService mainCategoryService, IImageService imageService, ISubCategoryFeatureValueService subCategoryFeatureValueService, ISubCategoryService subCategoryService, IBrandService brandService, ISubCategoryFeatureService subCategoryFeatureService, IOrderService orderService)
-	{
-		_roleManager = roleManager;
-		_userManager = userManager;
-		_productService = productService;
-		_categoryService = categoryService;
-		_configuration = configuration;
-		_webHostEnvironment = webHostEnvironment;
-		_cacheManager = cacheManager;
-		_mainCategoryService = mainCategoryService;
-		_imageService = imageService;
-		_subCategoryFeatureValueService = subCategoryFeatureValueService;
-		_subCategoryService = subCategoryService;
-		_brandService = brandService;
-		_subCategoryFeatureService = subCategoryFeatureService;
-		_orderService = orderService;
-	}
+    public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ICacheManager cacheManager, IMainCategoryService mainCategoryService, IImageService imageService, ISubCategoryFeatureValueService subCategoryFeatureValueService, ISubCategoryService subCategoryService, IBrandService brandService, ISubCategoryFeatureService subCategoryFeatureService, IOrderService orderService)
+    {
+        _roleManager = roleManager;
+        _userManager = userManager;
+        _productService = productService;
+        _categoryService = categoryService;
+        _configuration = configuration;
+        _webHostEnvironment = webHostEnvironment;
+        _cacheManager = cacheManager;
+        _mainCategoryService = mainCategoryService;
+        _imageService = imageService;
+        _subCategoryFeatureValueService = subCategoryFeatureValueService;
+        _subCategoryService = subCategoryService;
+        _brandService = brandService;
+        _subCategoryFeatureService = subCategoryFeatureService;
+        _orderService = orderService;
+    }
 
-	public async Task<IEnumerable<MainCategoryModel>> GetCategoriesAsync()
+    public async Task<IEnumerable<MainCategoryModel>> GetCategoriesAsync()
     {
         var key = Reflection.CreateCacheKey(typeof(AdminController), "GetCategoriesAsync");
         if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IEnumerable<MainCategoryModel>>(key);
@@ -316,47 +314,48 @@ public class AdminController : Controller
     }
 
 
-	public IActionResult GetPartialView(string partialViewName)
-	{
-		return PartialView(partialViewName);
-	}
+    public IActionResult GetPartialView(string partialViewName)
+    {
+        return PartialView(partialViewName);
+    }
 
     [HttpGet]
     public async Task<IActionResult> ProductCreate()
     {
-        ViewBag.Categories =await GetCategoriesAsync();
+        ViewBag.Categories = await GetCategoriesAsync();
         return PartialView(new ProductModel());
     }
 
     [HttpPost]
-    public async Task<IActionResult> FilterCategoryAndBrands(int mainCategoryId,int? categoryId=null,int? subCategoryId=null)
+    public async Task<IActionResult> FilterCategoryAndBrands(int mainCategoryId, int? categoryId = null, int? subCategoryId = null)
     {
-        var categories= await GetCategoriesAsync();
-        if(categoryId!=null && subCategoryId!=null){
-            return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId).Categories.FirstOrDefault(x=>x.Id==categoryId).SubCategories.FirstOrDefault(x=>x.Id==subCategoryId));
-        }
-        if(categoryId!=null && mainCategoryId!=0 && mainCategoryId != null)
+        var categories = await GetCategoriesAsync();
+        if (categoryId != null && subCategoryId != null)
         {
-            return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId).Categories.FirstOrDefault(x=>x.Id==categoryId));
+            return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId).Categories.FirstOrDefault(x => x.Id == categoryId).SubCategories.FirstOrDefault(x => x.Id == subCategoryId));
+        }
+        if (categoryId != null && mainCategoryId != 0 && mainCategoryId != null)
+        {
+            return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId).Categories.FirstOrDefault(x => x.Id == categoryId));
         }
         return Json(categories.FirstOrDefault(x => x.Id == mainCategoryId));
     }
 
 
     [HttpPost]
-    public async Task<IActionResult> ProductCreate(ProductModel product, List<string> imageUrls, List<string>? features=null,List<string>? values=null)
+    public async Task<IActionResult> ProductCreate(ProductModel product, List<string> imageUrls, List<string>? features = null, List<string>? values = null)
     {
-        ViewBag.Categories =await GetCategoriesAsync();
+        ViewBag.Categories = await GetCategoriesAsync();
         if (ModelState.IsValid)
         {
             foreach (var imageUrl in imageUrls)
             {
                 product.Images.Add(new ImageModel
                 {
-                    Url= imageUrl,
-                    ProductId=product.Id
+                    Url = imageUrl,
+                    ProductId = product.Id
                 });
-                
+
             }
 
             var ct = await GetCategoriesAsync();
@@ -366,10 +365,10 @@ public class AdminController : Controller
                 product.SubCategoryFeatureValues.Add(new SubCategoryFeatureValueModel
                 {
                     Value = values[i],
-                    SubCategoryFeatureId= sub.SubCategoryFeatures.FirstOrDefault(x => features[i]==x.Name).Id
+                    SubCategoryFeatureId = sub.SubCategoryFeatures.FirstOrDefault(x => features[i] == x.Name).Id
                 });
             }
-            
+
             await this._productService.AddCheckUrlAsync(ObjectMapper.Mapper.Map<ProductDTO>(product));
             return RedirectToAction("ProductList");
         }
@@ -381,17 +380,18 @@ public class AdminController : Controller
         ViewBag.fileInfo = dir.GetFiles();
         return PartialView("FileExplorer");
     }
-    
+
     public async Task<IActionResult> ProductEdit(int id)
     {
-        ViewBag.Categories =await GetCategoriesAsync();
+        ViewBag.Categories = await GetCategoriesAsync();
         var product = this._productService.GetByIdWithAttsAsync(id).Result.data;
         return View(ObjectMapper.Mapper.Map<ProductModel>(product));
     }
 
     [HttpPost]
-    public async Task<IActionResult> LoadImages(int productId){
-        var images =await _imageService.Where(x => x.ProductId == productId);
+    public async Task<IActionResult> LoadImages(int productId)
+    {
+        var images = await _imageService.Where(x => x.ProductId == productId);
         return Json(images.data);
     }
 
@@ -415,7 +415,7 @@ public class AdminController : Controller
 
 
         }
-            
+
         return RedirectToAction("ProductList");
     }
     [HttpPost]
@@ -427,26 +427,26 @@ public class AdminController : Controller
     }
     [HttpPost]
     public IActionResult IsUrl(string url) => Json(_productService.IsUrl(url).data.IsUrl);
-    
+
     public IActionResult ImageList()
     {
-        var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","img"));
+        var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img"));
         return View(images.Select(x => Path.GetFileName(x)).ToList());
     }
 
     public IActionResult ImagesUrls()
     {
-        var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","img"));
+        var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img"));
         return Json(images.Select(x => Path.GetFileName(x)).ToList());
     }
     public async Task<IActionResult> IsHomeChange(bool isHome, int productId)
     {
-        var result=await _productService.ChangeHome(productId, isHome);
+        var result = await _productService.ChangeHome(productId, isHome);
         return Json(result.statusCode);
     }
     public async Task<IActionResult> IsApproveChange(bool isApprove, int productId)
     {
-        var result=await _productService.ChangeApprove(productId, isApprove);
+        var result = await _productService.ChangeApprove(productId, isApprove);
         return Json(result.statusCode);
     }
     //public async Task<IActionResult> IsHomeChange(bool  isHome,int productId)
@@ -463,14 +463,14 @@ public class AdminController : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> AddImage(List<IFormFile> files,string name)
+    public async Task<IActionResult> AddImage(List<IFormFile> files, string name)
     {
         if (files != null)
         {
-            name= name.Replace(" ", "-");
-            var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","img"));
+            name = name.Replace(" ", "-");
+            var images = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img"));
             var imageNames = images.Select(x => Path.GetFileName(x)).ToList();
-            if (imageNames.Any(x=>x.Contains(name)))
+            if (imageNames.Any(x => x.Contains(name)))
                 name = string.Format($"{name}-{Guid.NewGuid()}");
             foreach (var file in files)
             {
@@ -489,8 +489,8 @@ public class AdminController : Controller
 
     public async Task<IActionResult> DeleteImage(string name)
     {
-        var products=await _productService.Where(x=>x.Images.Any(x=>x.Url== name) || x.HomeImageUrl==name);
-        if(products.data.Count()>0)
+        var products = await _productService.Where(x => x.Images.Any(x => x.Url == name) || x.HomeImageUrl == name);
+        if (products.data.Count() > 0)
             return Redirect("ImageList");
         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", name);
         System.IO.File.Delete(path);
@@ -501,21 +501,22 @@ public class AdminController : Controller
     [HttpPost]
     public async Task<IActionResult> CheckImageProduct(string name)
     {
-        var products=await _productService.Where(x=>x.Images.Any(x=>x.Url== name) || x.HomeImageUrl==name);
+        var products = await _productService.Where(x => x.Images.Any(x => x.Url == name) || x.HomeImageUrl == name);
         return Json(products.data);
     }
 
     public async Task<IActionResult> CategoriesList()
     {
-        var categories=await _mainCategoryService.GetAllWithCategoriAndSubCategoriesAndBrands();
+        var categories = await _mainCategoryService.GetAllWithCategoriAndSubCategoriesAndBrands();
         return View(ObjectMapper.Mapper.Map<List<MainCategoryModel>>(categories.data));
     }
 
-    public async Task<IActionResult> CreateMainCategory(string name,string url)
+    public async Task<IActionResult> CreateMainCategory(string name, string url)
     {
-        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url)) {
+        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+        {
 
-            var result= await _mainCategoryService.AddCheckUrlAndNameAsync(new MainCategoryDTO
+            var result = await _mainCategoryService.AddCheckUrlAndNameAsync(new MainCategoryDTO
             {
                 Name = name,
                 Url = url
@@ -539,11 +540,11 @@ public class AdminController : Controller
                     key: "message", message: "Name or url must not empty!",
                     alertType: "warning");
         }
-        
+
         return Redirect("CategoriesList");
     }
 
-    public async Task<IActionResult> EditMainCategory(string name, string url,int entityId)
+    public async Task<IActionResult> EditMainCategory(string name, string url, int entityId)
     {
         if (entityId == 0)
         {
@@ -557,7 +558,7 @@ public class AdminController : Controller
 
             var result = await _mainCategoryService.UpdateCheckUrlAndNameAsync(new MainCategoryDTO
             {
-                Id= entityId,
+                Id = entityId,
                 Name = name,
                 Url = url
             }, entityId);
@@ -590,7 +591,7 @@ public class AdminController : Controller
         return Redirect("CategoriesList");
     }
 
-    public async Task<IActionResult> CreateCategory(string name, string url,int mainCategoryId)
+    public async Task<IActionResult> CreateCategory(string name, string url, int mainCategoryId)
     {
         if (mainCategoryId == 0)
         {
@@ -605,7 +606,7 @@ public class AdminController : Controller
 
             var result = await _categoryService.AddCheckUrlAndNameAsync(new CategoryDTO
             {
-                MainCategoryId=mainCategoryId,
+                MainCategoryId = mainCategoryId,
                 Name = name,
                 Url = url
             });
@@ -633,7 +634,7 @@ public class AdminController : Controller
     }
     public async Task<IActionResult> EditCategory(string name, string url, int entityId, int mainCategoryId)
     {
-        if (entityId == 0 || mainCategoryId==0)
+        if (entityId == 0 || mainCategoryId == 0)
         {
             TempDataMessage.CreateMessage(TempData,
                     key: "message", message: "Main category must!",
@@ -677,30 +678,31 @@ public class AdminController : Controller
         RemoveCacheCategories();
         return Redirect("CategoriesList");
     }
-    public async Task<IActionResult> CreateSubCategory(string name, string url,int categoryId,List<string>? features=null)
+    public async Task<IActionResult> CreateSubCategory(string name, string url, int categoryId, List<string>? features = null)
     {
-        
-        if (categoryId==0)
+
+        if (categoryId == 0)
         {
             TempDataMessage.CreateMessage(TempData,
                     key: "message", message: "Main category must!",
                     alertType: "warning");
             return Redirect("CategoriesList");
         }
-       
+
 
         if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
         {
 
             var result = await _subCategoryService.AddCheckUrlAndNameAsync(new SubCategoryDTO
             {
-                CategoryId=categoryId,
+                CategoryId = categoryId,
                 Name = name,
                 Url = url
             });
 
-            if (features != null) {
-                List<SubCategoryFeatureDTO> list=new List<SubCategoryFeatureDTO>();
+            if (features != null)
+            {
+                List<SubCategoryFeatureDTO> list = new List<SubCategoryFeatureDTO>();
                 foreach (var feature in features)
                 {
                     list.Add(new SubCategoryFeatureDTO
@@ -733,7 +735,7 @@ public class AdminController : Controller
 
         return Redirect("CategoriesList");
     }
-    public async Task<IActionResult> EditSubCategory(string name, string url, int entityId, int categoryId,List<string>? features=null)
+    public async Task<IActionResult> EditSubCategory(string name, string url, int entityId, int categoryId, List<string>? features = null)
     {
         if (entityId == 0 || categoryId == 0)
         {
@@ -754,7 +756,7 @@ public class AdminController : Controller
 
             if (features != null)
             {
-                await _subCategoryFeatureService.SyncFeatures(entityId,features);
+                await _subCategoryFeatureService.SyncFeatures(entityId, features);
             }
 
             if (result.statusCode != 204)
@@ -784,7 +786,7 @@ public class AdminController : Controller
         RemoveCacheCategories();
         return Redirect("CategoriesList");
     }
-    public async Task<IActionResult> CreateBrand(string name, string url,int subCategoryId)
+    public async Task<IActionResult> CreateBrand(string name, string url, int subCategoryId)
     {
         if (subCategoryId == 0)
         {
@@ -872,12 +874,12 @@ public class AdminController : Controller
     }
     public async Task<IActionResult> GetFeatures(int subCategoryId)
     {
-        var featureValues = await _subCategoryFeatureService.Where(x => x.SubCategoryId==subCategoryId);
-        
-        return Json(featureValues.data.Select(x=>new
+        var featureValues = await _subCategoryFeatureService.Where(x => x.SubCategoryId == subCategoryId);
+
+        return Json(featureValues.data.Select(x => new
         {
-            Id=x.Id,
-            FeatureName=x.Name,
+            Id = x.Id,
+            FeatureName = x.Name,
         }));
     }
 
@@ -887,14 +889,14 @@ public class AdminController : Controller
 
         return Json(new
         {
-            ProductCount= count.data.ProductCount,
-            
+            ProductCount = count.data.ProductCount,
+
         });
     }
 
     public async Task<IActionResult> OrderList()
     {
-        var orders =await  _orderService.GetAllWithUserAsync();
+        var orders = await _orderService.GetAllWithUserAsync();
         return View(ObjectMapper.Mapper.Map<List<OrderModel>>(orders.data));
     }
 
@@ -906,7 +908,7 @@ public class AdminController : Controller
 
     public async Task<IActionResult> ChangeOrderState(int orderId, core.Entity.Concrete.EnumOrderState state)
     {
-        var result = await _orderService.ChangeOrderState(orderId,state);
+        var result = await _orderService.ChangeOrderState(orderId, state);
         return Redirect("OrderList");
     }
 }

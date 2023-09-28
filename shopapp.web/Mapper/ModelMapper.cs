@@ -13,7 +13,7 @@ internal class ModelMapper : Profile
         CreateMap<CategoryModel, CategoryDTO>().ReverseMap();
         CreateMap<SubCategoryModel, SubCategoryDTO>().ReverseMap();
         CreateMap<SubCategoryFeatureModel, SubCategoryFeatureDTO>().ReverseMap();
-        CreateMap<SubCategoryFeatureValueModel,SubCategoryFeatureValueDTO>().ReverseMap();
+        CreateMap<SubCategoryFeatureValueModel, SubCategoryFeatureValueDTO>().ReverseMap();
         CreateMap<ProductCategoryModel, ProductCategoryDTO>().ReverseMap();
         CreateMap<UserRoleModel, UserRole>().ReverseMap();
         CreateMap<OrderModel, OrderDTO>().ReverseMap();

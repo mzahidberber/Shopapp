@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using shopapp.core.Entity.Concrete;
@@ -57,12 +56,12 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             }
             else if (environment == "Production")
             {
-                var host=Environment.GetEnvironmentVariable("dbHost");
-                var name=Environment.GetEnvironmentVariable("dbName");
-                var password=Environment.GetEnvironmentVariable("dbPassword");
-                var port=Environment.GetEnvironmentVariable("dbPort");
+                var host = Environment.GetEnvironmentVariable("dbHost");
+                var name = Environment.GetEnvironmentVariable("dbName");
+                var password = Environment.GetEnvironmentVariable("dbPassword");
+                var port = Environment.GetEnvironmentVariable("dbPort");
                 connectionString = $"server={host};port={port};database={name};User Id=root;password={password};";
-               
+
             }
             else
             {

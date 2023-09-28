@@ -8,7 +8,7 @@ namespace shopapp.dataaccess.Concrete.EntityFramework.Mapping
     {
         public void Configure(EntityTypeBuilder<MainCategory> builder)
         {
-			builder.HasData(
+            builder.HasData(
                 new MainCategory { Id = 1, Name = "Computer", Url = "computer" },
                 new MainCategory { Id = 2, Name = "Phone", Url = "phone" },
                 new MainCategory { Id = 3, Name = "TV", Url = "tv" },

@@ -13,6 +13,6 @@ public class EfSubCategoryFeatureValueRepository : EfGenericRepository<SubCatego
 
     public IQueryable<SubCategoryFeatureValue> GetWhereWithFeature(Expression<Func<SubCategoryFeatureValue, bool>> filter)
     {
-        return _dbSet.Where(filter).Include(x=>x.SubCategoryFeature);
+        return _dbSet.Where(filter).Include(x => x.SubCategoryFeature);
     }
 }

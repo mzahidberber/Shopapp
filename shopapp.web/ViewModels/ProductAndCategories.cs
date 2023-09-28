@@ -1,5 +1,4 @@
 ﻿using shopapp.web.Models.Entity;
-using shopapp.web.Models.Shared;
 
 namespace shopapp.web.ViewModels
 {

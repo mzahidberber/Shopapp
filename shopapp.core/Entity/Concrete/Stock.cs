@@ -2,7 +2,7 @@
 
 namespace shopapp.core.Entity.Concrete;
 
-public class Stock:IEntity
+public class Stock : IEntity
 {
     public Stock()
     {

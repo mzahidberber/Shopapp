@@ -4,7 +4,6 @@ using shopapp.core.Business.Abstract;
 using shopapp.core.DataAccess.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
-using shopapp.dataaccess.Concrete.EntityFramework;
 
 namespace shopapp.business.Concrete;
 
@@ -18,9 +17,9 @@ public class ImageService : GenericService<Image, ImageDTO>, IImageService
         _productRepository = productRepository;
     }
 
-    public async Task<Response<NoDataDTO>> SyncProductImages(List<string> urls,int productId)
+    public async Task<Response<NoDataDTO>> SyncProductImages(List<string> urls, int productId)
     {
-        var productImages= _genericRepository.GetWhere(x => x.ProductId == productId);
+        var productImages = _genericRepository.GetWhere(x => x.ProductId == productId);
         foreach (var image in productImages)
         {
             if (!urls.Any(x => x == image.Url))
@@ -34,8 +33,8 @@ public class ImageService : GenericService<Image, ImageDTO>, IImageService
             {
                 await _genericRepository.AddAsync(new Image
                 {
-                    Url= url, 
-                    ProductId=productId
+                    Url = url,
+                    ProductId = productId
                 });
             }
         }
@@ -44,7 +43,7 @@ public class ImageService : GenericService<Image, ImageDTO>, IImageService
     }
     public async Task<Response<NoDataDTO>> RemoveForName(string name)
     {
-        var isExistEntity = await _genericRepository.GetWhere(x=>x.Url==name).FirstOrDefaultAsync();
+        var isExistEntity = await _genericRepository.GetWhere(x => x.Url == name).FirstOrDefaultAsync();
         if (isExistEntity == null)
         {
             return Response<NoDataDTO>.Fail("Id Not Found", 404, true);

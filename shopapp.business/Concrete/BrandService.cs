@@ -2,10 +2,8 @@
 using shopapp.business.Concrete.Mapper;
 using shopapp.core.Business.Abstract;
 using shopapp.core.DataAccess.Abstract;
-using shopapp.core.DTOs.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
-using shopapp.dataaccess.Concrete.EntityFramework;
 
 namespace shopapp.business.Concrete;
 
@@ -35,7 +33,7 @@ public class BrandService : GenericService<Brand, BrandDTO>, IBrandService
         await _genericRepository.CommitAsync();
         return Response<BrandProductCount>.Success(new BrandProductCount
         {
-            ProductCount=count
+            ProductCount = count
         }, 200);
     }
     public async Task<Response<NoDataDTO>> UpdateCheckUrlAndNameAsync(BrandDTO entity, int id)

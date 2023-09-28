@@ -17,8 +17,8 @@ public class FilterBuilder
     {
         var parameter = Expression.Parameter(typeof(Product), "p");
         Expression? combinedBody = null;
-        
-        if(ExpressionList.Count > 0)
+
+        if (ExpressionList.Count > 0)
         {
             foreach (var condition in ExpressionList)
             {
@@ -28,7 +28,7 @@ public class FilterBuilder
                     : Expression.AndAlso(combinedBody, invokedCondition);
             }
         }
-        
-        return combinedBody!=null?Expression.Lambda<Func<Product, bool>>(combinedBody, parameter):null;
+
+        return combinedBody != null ? Expression.Lambda<Func<Product, bool>>(combinedBody, parameter) : null;
     }
 }
