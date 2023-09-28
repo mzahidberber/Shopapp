@@ -8,8 +8,10 @@ namespace shopapp.web.Models.Entity
         {
             this.Orders = new List<OrderModel>();
         }
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string UserName { get; set; }
         public List<OrderModel> Orders { get; set; }
     }
 }

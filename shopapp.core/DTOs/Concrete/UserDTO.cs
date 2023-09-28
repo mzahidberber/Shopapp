@@ -1,15 +1,17 @@
-﻿using shopapp.core.DTOs.Abstract;
-using shopapp.core.Entity.Concrete;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace shopapp.core.DTOs.Concrete
 {
-    public class UserDTO : IDTO
+    public class UserDTO 
     {
         public UserDTO()
         {
-            this.Orders = new List<Order>();
+            this.Orders = new List<OrderDTO>();
         }
-        public int Id { get; set; }
-        public List<Order> Orders { get; set; }
+        public string Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string UserName { get; set; }
+        public List<OrderDTO> Orders { get; set; }
     }
 }

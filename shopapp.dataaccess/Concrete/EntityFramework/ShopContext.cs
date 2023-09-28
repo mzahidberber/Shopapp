@@ -14,12 +14,9 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         {
             this._configuration = configuration;
         }
-        //public ShopContext(DbContextOptions options, IConfiguration configuration) : base(options)
-        //{
-        //    _configuration = configuration;
-        //}
 
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<MainCategory> MainCategories { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
@@ -30,8 +27,6 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Image> Images { get; set; }
-        //public DbSet<Stock> Stocks { get; set; }
-        //public DbSet<StockValue> StockValues { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -47,19 +42,9 @@ namespace shopapp.dataaccess.Concrete.EntityFramework
             builder.ApplyConfiguration(new BrandMapping());
             builder.ApplyConfiguration(new ProductMapping());
             builder.ApplyConfiguration(new OrderMapping());
-            //builder.ApplyConfiguration(new CartMapping());
+            builder.ApplyConfiguration(new OrderItemMapping());
             builder.ApplyConfiguration(new CartItemMapping());
             builder.ApplyConfiguration(new ImageMapping());
-            //builder.ApplyConfiguration(new StockMapping());
-            //builder.ApplyConfiguration(new StockValueMapping());
-
-            //builder.Entity<IdentityUserRole<string>>().HasData(
-            //    new IdentityUserRole<string>()
-            //    {
-            //        RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-            //        UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
-            //    }
-            //    );
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

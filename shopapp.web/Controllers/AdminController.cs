@@ -35,28 +35,30 @@ public class AdminController : Controller
     public ISubCategoryFeatureService _subCategoryFeatureService { get; set; }
     public IConfiguration _configuration { get; set; }
 
+    public IOrderService _orderService { get; set; }
     public ICacheManager _cacheManager { get; set; }
 
     private IWebHostEnvironment _webHostEnvironment { get; set; }
 
-    public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ICacheManager cacheManager, IMainCategoryService mainCategoryService, IImageService imageService, ISubCategoryFeatureValueService subCategoryFeatureValueService, ISubCategoryService subCategoryService, IBrandService brandService, ISubCategoryFeatureService subCategoryFeatureService)
-    {
-        _roleManager = roleManager;
-        _userManager = userManager;
-        _productService = productService;
-        _categoryService = categoryService;
-        _configuration = configuration;
-        _webHostEnvironment = webHostEnvironment;
-        _cacheManager = cacheManager;
-        _mainCategoryService = mainCategoryService;
-        _imageService = imageService;
-        _subCategoryFeatureValueService = subCategoryFeatureValueService;
-        _subCategoryService = subCategoryService;
-        _brandService = brandService;
-        _subCategoryFeatureService = subCategoryFeatureService;
-    }
+	public AdminController(RoleManager<UserRole> roleManager, UserManager<User> userManager, IProductService productService, ICategoryService categoryService, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ICacheManager cacheManager, IMainCategoryService mainCategoryService, IImageService imageService, ISubCategoryFeatureValueService subCategoryFeatureValueService, ISubCategoryService subCategoryService, IBrandService brandService, ISubCategoryFeatureService subCategoryFeatureService, IOrderService orderService)
+	{
+		_roleManager = roleManager;
+		_userManager = userManager;
+		_productService = productService;
+		_categoryService = categoryService;
+		_configuration = configuration;
+		_webHostEnvironment = webHostEnvironment;
+		_cacheManager = cacheManager;
+		_mainCategoryService = mainCategoryService;
+		_imageService = imageService;
+		_subCategoryFeatureValueService = subCategoryFeatureValueService;
+		_subCategoryService = subCategoryService;
+		_brandService = brandService;
+		_subCategoryFeatureService = subCategoryFeatureService;
+		_orderService = orderService;
+	}
 
-    public async Task<IEnumerable<MainCategoryModel>> GetCategoriesAsync()
+	public async Task<IEnumerable<MainCategoryModel>> GetCategoriesAsync()
     {
         var key = Reflection.CreateCacheKey(typeof(AdminController), "GetCategoriesAsync");
         if (_cacheManager.IsAdd(key)) return _cacheManager.Get<IEnumerable<MainCategoryModel>>(key);
@@ -888,5 +890,23 @@ public class AdminController : Controller
             ProductCount= count.data.ProductCount,
             
         });
+    }
+
+    public async Task<IActionResult> OrderList()
+    {
+        var orders =await  _orderService.GetAllWithUserAsync();
+        return View(ObjectMapper.Mapper.Map<List<OrderModel>>(orders.data));
+    }
+
+    public async Task<IActionResult> OrderDetail(int id)
+    {
+        var orders = await _orderService.GetByIdWithUserAsync(id);
+        return View(ObjectMapper.Mapper.Map<OrderModel>(orders.data));
+    }
+
+    public async Task<IActionResult> ChangeOrderState(int orderId, core.Entity.Concrete.EnumOrderState state)
+    {
+        var result = await _orderService.ChangeOrderState(orderId,state);
+        return Redirect("OrderList");
     }
 }

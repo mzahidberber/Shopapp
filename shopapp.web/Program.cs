@@ -35,6 +35,7 @@ builder.Services.AddProxyScoped<ISubCategoryFeatureValueRepository, EfSubCategor
 builder.Services.AddProxyScoped<ISubCategoryFeatureRepository, EfSubCategoryFeatureRepository>();
 builder.Services.AddProxyScoped<ISubCategoryRepository, EfSubCategoryRepository>();
 builder.Services.AddProxyScoped<IBrandRepository, EfBrandRepository>();
+builder.Services.AddProxyScoped<IOrderRepository, EfOrderRepository>();
 
 builder.Services.AddProxyScoped<IProductService, ProductService>();
 builder.Services.AddProxyScoped<ICategoryService, CategoryService>();
@@ -46,6 +47,7 @@ builder.Services.AddProxyScoped<ISubCategoryFeatureValueService, SubCategoryFeat
 builder.Services.AddProxyScoped<ISubCategoryFeatureService, SubCategoryFeatureService>();
 builder.Services.AddProxyScoped<ISubCategoryService, SubCategoryService>();
 builder.Services.AddProxyScoped<IBrandService, BrandService>();
+builder.Services.AddProxyScoped<IOrderService, OrderService>();
 
 builder.Services.AddProxyScoped<ICacheManager, MemoryCacheManager>();
 
@@ -154,9 +156,15 @@ app.UseAuthorization();
 app.UseSession();
 
 app.MapControllerRoute(
+    name: "checkout",
+    pattern: "checkout",
+    defaults: new { controller = "Checkout", action = "Index" });
+
+app.MapControllerRoute(
     name: "productcreate",
     pattern: "product/create",
     defaults: new { controller = "Product", action = "Create" });
+
 app.MapControllerRoute(
     name: "admin",
     pattern: "admin",
@@ -173,6 +181,11 @@ app.MapControllerRoute(
     name: "detail",
     pattern: "detail/{url}",
     defaults: new { controller = "Product", action = "Details" });
+
+app.MapControllerRoute(
+	name: "order",
+	pattern: "order",
+	defaults: new { controller = "Order", action = "Index" });
 
 app.MapControllerRoute(
     name: "cart",
@@ -197,10 +210,7 @@ app.MapControllerRoute(
 
 
 
-app.MapControllerRoute(
-    name: "checkout",
-    pattern: "checkout",
-    defaults: new { controller = "Checkout", action = "Index" });
+
 
 app.MapControllerRoute(
     name: "cart",

@@ -1,4 +1,5 @@
-﻿using shopapp.core.Entity.Concrete;
+﻿using shopapp.core.DTOs.Concrete;
+using shopapp.core.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
 
 namespace shopapp.web.Models.Entity
@@ -9,6 +10,7 @@ namespace shopapp.web.Models.Entity
         {
             this.Images = new List<ImageModel>();
             this.SubCategoryFeatureValues = new List<SubCategoryFeatureValueModel>();
+            this.OrderItems = new List<OrderItemModel>();
 
         }
 
@@ -24,7 +26,7 @@ namespace shopapp.web.Models.Entity
 
         [Required(ErrorMessage = "Price Required")]
         [Range(0, 100000, ErrorMessage = "Price 1-100000")]
-        public double? Price { get; set; }
+        public double Price { get; set; }
 
         [Required(ErrorMessage = "Description Required")]
         public string Description { get; set; }
@@ -49,6 +51,8 @@ namespace shopapp.web.Models.Entity
         public int MainCategoryId { get; set; }
         public MainCategoryModel? MainCategory { get; set; }
 
-        public List<SubCategoryFeatureValueModel> SubCategoryFeatureValues { get; set; }
+		public List<OrderItemModel> OrderItems { get; set; }
+
+		public List<SubCategoryFeatureValueModel> SubCategoryFeatureValues { get; set; }
     }
 }

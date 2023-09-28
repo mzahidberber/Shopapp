@@ -1,0 +1,103 @@
+﻿@model OrderModel
+<div class="row">
+	<div class="col-md-6">
+		<hr class="m-1">
+		<div class="d-flex">
+			<h2 class="h6 ms-2">Id : </h2>
+			<h2 class="h6 ms-2">@Model.Id</h2>
+		</div>
+		<hr class="m-1">
+		<div class="d-flex">
+			<h2 class="h6 ms-2">Order Number : </h2>
+			<h2 class="h6 ms-2">@Model.OrderNumber</h2>
+		</div>
+		<hr class="m-1">
+		<div class="d-flex">
+			<h2 class="h6 ms-2">State : </h2>
+			<h2 class="h6 ms-2">@Model.State</h2>
+		</div>
+		<hr class="m-1">
+		<div class="d-flex">
+			<h2 class="h6 ms-2">Order Time : </h2>
+			<h2 class="h6 ms-2">@Model.OrderTime</h2>
+		</div>
+		<hr class="m-1">
+		<div class="d-flex">
+			<h2 class="h6 ms-2">Total Price : </h2>
+			<h2 class="h6 ms-2">@(string.Format("{0:N0}", @Model.TotalPrice)) &#x20BA;</h2>
+		</div>
+		<hr class="m-1">
+		<div >
+			<h2 class="h6 ms-2">User : </h2>
+			<h2 class="h6 ms-2">User Id : @Model.UserId</h2>
+			<h2 class="h6 ms-2">First Name : @Model.User.FirstName</h2>
+			<h2 class="h6 ms-2">Last Name : @Model.User.LastName  </h2>
+			<h2 class="h6 ms-2">User Name :  @Model.User.UserName</h2>
+		</div>
+		<hr class="m-1">
+		<div class="">
+			<h2 class="h6 ms-2">Buyer : </h2>
+			<h2 class="h6 ms-2">First Name : @Model.FirstName</h2>
+			<h2 class="h6 ms-2">Last Name : @Model.LastName</h2>
+			<h2 class="h6 ms-2">Address : @Model.Address</h2>
+			<h2 class="h6 ms-2">City : @Model.City</h2>
+			<h2 class="h6 ms-2">State : @Model.CityState</h2>
+			<h2 class="h6 ms-2">Phone Number : @Model.Phone</h2>
+			<h2 class="h6 ms-2">Email : @Model.Email</h2>
+			<h2 class="h6 ms-2">Note : @Model.Note</h2>
+		</div>
+		<hr class="m-1">
+		<div class="">
+			<h2 class="h6 ms-2">Payment : </h2>
+			<h2 class="h6 ms-2">Payment Id : @Model.PaymentId</h2>
+			<h2 class="h6 ms-2">ConversationId Id : @Model.ConversationId</h2>
+			<h2 class="h6 ms-2">Payment Type : @Model.PaymentType</h2>
+		</div>
+		<hr class="m-1">
+	</div>
+	<div class="col-md-6">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Image</th>
+					<th>Id</th>
+					<th>Product Name</th>
+					<th>Price</th>
+					<th>Quantity</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.OrderItems)
+				{
+					<tr>
+						<td width="15%">
+							<img src=~/img/@item.Product.HomeImageUrl width="80">
+						</td>
+						<td width="5%">@item.Product.Id</td>
+						<td width="25%">@item.Product.Name</td>
+						<td width="15%">@(string.Format("{0:N0}", item.Product.Price)) &#x20BA;</td>
+						<td width="10%">
+							@item.Quantity
+						</td>
+						<td width="20%">
+							<a id=@item.Product.Id>
+								@(string.Format("{0:N0}", item.Quantity * @item.Product.Price))
+
+							</a>
+							&#x20BA;
+						</td>
+
+					</tr>
+
+				}
+			</tbody>
+		</table>
+		
+	</div>
+</div>
+
+
+
+
+

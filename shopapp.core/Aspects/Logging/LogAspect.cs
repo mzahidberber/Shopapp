@@ -1,5 +1,6 @@
 ﻿using Castle.DynamicProxy;
 using NLog;
+using System.Collections;
 
 namespace shopapp.core.Aspects.Logging
 {
@@ -42,7 +43,7 @@ namespace shopapp.core.Aspects.Logging
 
                     if (argument.GetType().GetProperties().Length > 0 && argument.GetType().Name != "String")
                     {
-                        if (argument.GetType() != typeof(List<int>))
+                        if (argument.GetType() != typeof(IList))
                         {
                             foreach (var prop in argument.GetType().GetProperties())
                             {

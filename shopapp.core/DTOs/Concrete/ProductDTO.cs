@@ -9,7 +9,7 @@ namespace shopapp.core.DTOs.Concrete
         {
             this.Images = new List<ImageDTO>();
             this.SubCategoryFeatureValues = new List<SubCategoryFeatureValueDTO>();
-            //this.Stocks = new List<StockDTO>();
+            this.OrderItems=new List<OrderItemDTO>();
         }
         public int Id { get; set; }
         public string Name { get; set; }
@@ -34,7 +34,8 @@ namespace shopapp.core.DTOs.Concrete
 
         public List<ImageDTO> Images { get; set; }
 
-		//public List<StockDTO> Stocks { get; set; }
+		public List<OrderItemDTO> OrderItems { get; set; }
+
 
 		public List<SubCategoryFeatureValueDTO> SubCategoryFeatureValues { get; set; }
     }

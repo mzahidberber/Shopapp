@@ -6,12 +6,14 @@ using shopapp.core.DataAccess.Abstract;
 using shopapp.core.DTOs.Abstract;
 using shopapp.core.DTOs.Concrete;
 using shopapp.core.Entity.Concrete;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Security.Policy;
 
 namespace shopapp.business.Concrete;
 
-[LogAspect(Priority = 1)]
+//[LogAspect(Priority = 1)]
 public class ProductService : GenericService<Product, ProductDTO>, IProductService
 {
     private readonly IProductRepository _genericRepository;
@@ -20,7 +22,41 @@ public class ProductService : GenericService<Product, ProductDTO>, IProductServi
         _genericRepository = genericRepository;
     }
 
-    public async Task<Response<IEnumerable<ProductDTO>>> WhereWithAtt(Expression<Func<Product, bool>> predicate)
+    public async Task<Response<NoDataDTO>> ReductionStock(int productId,int quantity) 
+    {
+        var product= await _genericRepository.GetByIdAsync(productId);
+		if (product == null)
+			return Response<NoDataDTO>.Fail("product not found", 404, false);
+		if (product.Stock-quantity < 0)
+            return Response<NoDataDTO>.Fail("stock must more than 0",404,false);
+		
+		
+		product.Stock=product.Stock-quantity;
+		_genericRepository.Update(product);
+		await _genericRepository.CommitAsync();
+        return Response<NoDataDTO>.Success(200);
+	}
+	public async Task<Response<NoDataDTO>> ReductionManyProductStock(List<ProductStockChange> productsInfo)
+	{
+        foreach (var p in productsInfo)
+        {
+			var product = await _genericRepository.GetByIdAsync(p.productId);
+			if (product == null)
+				return Response<NoDataDTO>.Fail("product not found", 404, false);
+			if (product.Stock-p.quantity < 0)
+				return Response<NoDataDTO>.Fail("stock must more than 0", 404, false);
+
+			
+			product.Stock = product.Stock - p.quantity;
+            _genericRepository.Update(product);
+		}
+        
+		await _genericRepository.CommitAsync();
+		return Response<NoDataDTO>.Success(200);
+	}
+
+
+	public async Task<Response<IEnumerable<ProductDTO>>> WhereWithAtt(Expression<Func<Product, bool>> predicate)
     {
         var list = await _genericRepository.GetWhereWithAtt(predicate).ToListAsync();
         await _genericRepository.CommitAsync();

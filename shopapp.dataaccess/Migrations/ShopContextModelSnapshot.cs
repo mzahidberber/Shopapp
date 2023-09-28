@@ -578,7 +578,7 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = 2,
                             ProductId = 1,
-                            Url = "2.jpg"
+                            Url = "lenovatablet1.jpg"
                         },
                         new
                         {
@@ -590,7 +590,7 @@ namespace shopapp.dataaccess.Migrations
                         {
                             Id = 4,
                             ProductId = 2,
-                            Url = "2.jpg"
+                            Url = "lenovatablet1.jpg"
                         });
                 });
 
@@ -651,6 +651,61 @@ namespace shopapp.dataaccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CityState")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ConversationId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PaymentId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PaymentType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("double");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
@@ -660,6 +715,33 @@ namespace shopapp.dataaccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Product", b =>
@@ -695,9 +777,6 @@ namespace shopapp.dataaccess.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
@@ -718,8 +797,6 @@ namespace shopapp.dataaccess.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("MainCategoryId");
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("SubCategoryId");
 
@@ -1521,6 +1598,25 @@ namespace shopapp.dataaccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("shopapp.core.Entity.Concrete.OrderItem", b =>
+                {
+                    b.HasOne("shopapp.core.Entity.Concrete.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("shopapp.core.Entity.Concrete.Product", "Product")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Product", b =>
                 {
                     b.HasOne("shopapp.core.Entity.Concrete.Brand", "Brand")
@@ -1540,10 +1636,6 @@ namespace shopapp.dataaccess.Migrations
                         .HasForeignKey("MainCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("shopapp.core.Entity.Concrete.Order", null)
-                        .WithMany("Products")
-                        .HasForeignKey("OrderId");
 
                     b.HasOne("shopapp.core.Entity.Concrete.SubCategory", "SubCategory")
                         .WithMany("Products")
@@ -1627,12 +1719,14 @@ namespace shopapp.dataaccess.Migrations
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Order", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("shopapp.core.Entity.Concrete.Product", b =>
                 {
                     b.Navigation("Images");
+
+                    b.Navigation("OrderItems");
 
                     b.Navigation("SubCategoryFeatureValues");
                 });

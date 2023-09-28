@@ -24,5 +24,6 @@ internal class ModelMapper : Profile
         CreateMap<BrandModel, BrandDTO>().ReverseMap();
         CreateMap<StockModel, StockDTO>().ReverseMap();
         CreateMap<StockValueModel, StockValueDTO>().ReverseMap();
+        CreateMap<OrderItemModel, OrderItemDTO>().ReverseMap();
     }
 }

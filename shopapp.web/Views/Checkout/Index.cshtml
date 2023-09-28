@@ -1,1 +1,217 @@
-﻿<h1>Checkout</h1>
+﻿
+@model CheckOutModel
+
+@section Scripts
+	{
+	<script src="/modules/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="/modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}
+<h4>Checkout</h4>
+<hr>
+
+<form asp-action="index" asp-controller="checkout" method="post">
+<div class="row">
+	<div class="col-7">
+		<h4>Billing Information</h4>
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+					<label for="firstName">First Name</label>
+					<input type="text" asp-for=FirstName id="firstName" class="form-control" placeholder="First Name">
+						<span asp-validation-for="FirstName" class="text-danger"></span>
+
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+					<label for="lastName">Last Name</label>
+					<input type="text" asp-for=LastName class="form-control" id="lastName" placeholder="Last Name">
+						<span asp-validation-for="LastName" class="text-danger"></span>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="row mt-2">
+			<div class="col-6">
+				<div class="form-group">
+					<label for="email">Email</label>
+					<input type="email" asp-for=Email id="email" class="form-control" placeholder="Email">
+						<span asp-validation-for="Email" class="text-danger"></span>
+
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+					<label for="phone">Phone Number</label>
+					<input type="tel" asp-for=Phone id="phone" class="form-control" pattern="[0-9]{4} [0-9]{3} [0-9]{2} [0-9]{2}" maxlength="11" placeholder="05xx-xxx-xx-xx">
+						<span asp-validation-for="Phone" class="text-danger"></span>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="row mt-2">
+			<div class="col-6">
+				<div class="form-group">
+					<label for="address">Address</label>
+					<textarea type="text" asp-for=Adress id="address" class="form-control" placeholder="Address"></textarea>
+						<span asp-validation-for="Adress" class="text-danger"></span>
+
+				</div>
+				<div class="form-group">
+					<label for="note">Note</label>
+					<textarea type="text" asp-for=Note id="note" class="form-control" placeholder="Note"></textarea>
+						<span asp-validation-for="Note" class="text-danger"></span>
+
+				</div>
+
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+					<label for="city">City</label>
+					<input type="text" id="city" asp-for=City class="form-control" placeholder="City">
+						<span asp-validation-for="City" class="text-danger"></span>
+
+				</div>
+				<div class="form-group">
+					<label for="state">State</label>
+						<input type="text" id="citystate" asp-for=CityState class="form-control" placeholder="State">
+						<span asp-validation-for="CityState" class="text-danger"></span>
+
+				</div>
+			</div>
+		</div>
+
+		<h4 class="mt-2">Payment Information</h4>
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+					<label for="cardName">Card Name</label>
+					<input disabled type="text" id="cardName" asp-for=CardName class="form-control" placeholder="Card Name">
+						<span asp-validation-for="CardName" class="text-danger"></span>
+
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+					<label for="cardNumber">Card Number</label>
+					<input disabled type="text" class="form-control" asp-for=CardNumber id="cardNumber" placeholder="Card Number">
+						<span asp-validation-for="CardNumber" class="text-danger"></span>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-4">
+				<div class="form-group">
+					<label for="expirationMonth">Expiration Month</label>
+					<input disabled type="text" id="expirationMonth" asp-for=ExpirationMonth class="form-control" placeholder="Expiration Month">
+						<span asp-validation-for="ExpirationMonth" class="text-danger"></span>
+
+				</div>
+			</div>
+			<div class="col-4">
+				<div class="form-group">
+					<label for="expiraitonYear">Expiration Year</label>
+					<input disabled type="text" class="form-control" asp-for=ExpirationYear id="expiraitonYear" placeholder="Expiration Year">
+						<span asp-validation-for="ExpirationYear" class="text-danger"></span>
+
+				</div>
+			</div>
+			<div class="col-4">
+				<div class="form-group">
+					<label for="cvv">CVV</label>
+					<input disabled type="text" class="form-control" asp-for=CVV id="cvv" placeholder="CVV">
+						<span asp-validation-for="CVV" class="text-danger"></span>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="col-5">
+		@if (Model.Products.Count != 0)
+	{
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Image</th>
+					<th>Product Name</th>
+					<th>Price</th>
+					<th>Quantity</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+						@foreach (var item in @Model.Products)
+				{
+					<tr>
+						<td width="15%">
+							<img src="~/img/@item.ImageUrl" width="80" alt="">
+						</td>
+						<td width="30%">@item.Name</td>
+						<td width="15%">@(string.Format("{0:N0}", item.Price)) &#x20BA;</td>
+						<td width="10%">
+								@item.Quantity
+						</td>
+						<td width="20%">
+							<a id=@item.Id>
+								@(string.Format("{0:N0}", item.Quantity * @item.Price))
+
+							</a>
+							&#x20BA;
+						</td>
+
+					</tr>
+				}
+			</tbody>
+		</table>
+
+
+	}
+		<table class="table table-hover">
+			<tbody>
+				<tr>
+					<td width="15%">
+					</td>
+					<td width="30%"></td>
+					<td width="15%"></td>
+					<td width="10%">
+						Total : 
+					</td>
+					<td width="20%">
+							@(string.Format("{0:N0}", @Model.TotalPrice())) &#x20BA;
+					</td>
+
+				</tr>
+			</tbody>
+		</table>
+
+			@for(var i = 0; i < Model.Products.Count; i++)
+			{
+				<input asp-for=@Model.Products[@i].Id type="hidden">
+				<input asp-for=@Model.Products[@i].Name type="hidden">
+				<input asp-for=@Model.Products[@i].ImageUrl type="hidden">
+				<input asp-for=@Model.Products[@i].Price type="hidden">
+				<input asp-for=@Model.Products[@i].Quantity type="hidden">
+			}
+
+		<div class="text-center">
+			<div class="d-flex justify-content-center">
+				<a href="/" class="btn btn-outline-primary btn-sm">Cancel</a>
+
+				<button type="submit" class="btn btn-outline-primary btn-sm ms-2">Submit</button>
+
+			</div>
+
+
+		</div>
+
+	</div>
+</div>
+
+
+</form>
+

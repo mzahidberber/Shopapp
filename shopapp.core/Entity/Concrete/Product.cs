@@ -7,8 +7,8 @@ namespace shopapp.core.Entity.Concrete
         public Product()
         {
             this.Images = new List<Image>();
-            //this.Stocks = new List<Stock>();
             this.SubCategoryFeatureValues = new List<SubCategoryFeatureValue>();
+            this.OrderItems = new List<OrderItem>();
         }
         public int Id { get; set; }
         public string Name { get; set; }
@@ -37,8 +37,9 @@ namespace shopapp.core.Entity.Concrete
 
         public List<Image> Images { get; set; }
 
-		//public List<Stock> Stocks { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
 
-		public List<SubCategoryFeatureValue> SubCategoryFeatureValues { get; set; }
+
+        public List<SubCategoryFeatureValue> SubCategoryFeatureValues { get; set; }
     }
 }

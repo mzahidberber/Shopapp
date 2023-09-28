@@ -21,7 +21,10 @@ namespace shopapp.core.Business.Abstract
         Task<Response<NoDataDTO>> ChangeHome(int id, bool isHome);
         Task<Response<ProductDTO>> AddCheckUrlAsync(ProductDTO entity);
         Task<Response<IEnumerable<ProductDTO>>> GetAllWithCategoriesAndBrandAsync();
+        Task<Response<NoDataDTO>> ReductionStock(int productId, int stock);
+        Task<Response<NoDataDTO>> ReductionManyProductStock(List<ProductStockChange> productsInfo);
 
 
-    }
+
+	}
 }

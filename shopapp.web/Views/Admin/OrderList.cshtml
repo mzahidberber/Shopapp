@@ -1,0 +1,381 @@
+﻿@model List<OrderModel>
+@{
+    Layout = "_adminLayout";
+}
+@section Css{
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+}
+@section Scripts{
+    <script src="//cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        $('#myTable').DataTable({
+            responsive: true
+        });
+        $('#myTable1').DataTable({
+            responsive: true
+        });
+        $('#myTable2').DataTable({
+            responsive: true
+        });
+        $('#myTable3').DataTable({
+            responsive: true
+        });
+        $('#myTable4').DataTable({
+            responsive: true
+        });
+        $('#myTable5').DataTable({
+            responsive: true
+        });
+    </script>
+    <script>
+        $('#changeModel').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('bsUserid')
+            var state = button.data('bsState')
+            var modal = $(this)
+            modal.find('#changeInput').val(recipient)
+            modal.find('#changeState').val(state)
+        })
+    </script>
+}
+<style>
+    .link {
+        color: black;
+    }
+</style>
+
+
+<ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active link" id="maincategory-tab" data-bs-toggle="tab" data-bs-target="#hasbeentaken" type="button" role="tab" aria-controls="hasbeentaken" aria-selected="true">HasbeenTaken</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link link" id="category-tab" data-bs-toggle="tab" data-bs-target="#waiting" type="button" role="tab" aria-controls="waiting" aria-selected="false">Waiting</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link link" id="subcategory-tab" data-bs-toggle="tab" data-bs-target="#unpaid" type="button" role="tab" aria-controls="unpaid" aria-selected="false">Unpaid</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link link" id="brand-tab" data-bs-toggle="tab" data-bs-target="#gettingready" type="button" role="tab" aria-controls="gettingready" aria-selected="false">GettingReady</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link link" id="brand-tab" data-bs-toggle="tab" data-bs-target="#incargo" type="button" role="tab" aria-controls="incargo" aria-selected="false">InCargo</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link link" id="brand-tab" data-bs-toggle="tab" data-bs-target="#hasdelivered" type="button" role="tab" aria-controls="hasdelivered" aria-selected="false">HasDelivered</button>
+    </li>
+</ul>
+
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="hasbeentaken" role="tabpanel" aria-labelledby="hasbeentaken-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">Has been taken list</h1>
+                <hr>
+                <table id="myTable" class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>OrderNumber</td>
+                            <td>OrderTime</td>
+                            <td>Username</td>
+                            <td>User First Name</td>
+                            <td>User Last Name</td>
+                            <td>TotalPrice</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var o in Model)
+                        {
+                            if (o.State == EnumOrderState.HasbeenTaken)
+                            {
+                                <tr>
+                                    <td>@o.Id</td>
+                                    <td>@o.OrderNumber</td>
+                                    <td>@o.OrderTime</td>
+                                    <td>@o.User.UserName</td>
+                                    <td>@o.User.FirstName</td>
+                                    <td>@o.User.LastName</td>
+                                    <td>@(string.Format("{0:N0}", @o.TotalPrice)) &#x20BA;</td>
+                                    <td>
+                                        <a href="/admin/orderdetail/@o.Id" class="btn btn-primary btn-sm ">Detail</a>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.Waiting data-bs-toggle="modal" data-bs-target="#changeModel">Up</button>
+
+                                        </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="waiting" role="tabpanel" aria-labelledby="waiting-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">Waiting List</h1>
+                <hr>
+                <table id="myTable1" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <td >Id</td>
+                            <td >OrderNumber</td>
+                            <td >OrderTime</td>
+                            <td >Username</td>
+                            <td >User First Name</td>
+                            <td >User Last Name</td>
+                            <td >TotalPrice</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var o in Model)
+                        {
+                            if (o.State == EnumOrderState.Waiting)
+                            {
+                                <tr>
+                                    <td width="5%">@o.Id</td>
+                                    <td width="30%">@o.OrderNumber</td>
+                                    <td width="15%">@o.OrderTime</td>
+                                    <td width="5%">@o.User.UserName</td>
+                                    <td width="10%">@o.User.FirstName</td>
+                                    <td width="10%">@o.User.LastName</td>
+                                    <td width="10%">@(string.Format("{0:N0}", @o.TotalPrice)) &#x20BA;</td>
+                                    <td width="15%">
+                                        <a href="/admin/orderdetail/@o.Id" class="btn btn-primary btn-sm ">Detail</a>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.Unpaid data-bs-toggle="modal" data-bs-target="#changeModel">Up</button>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.HasbeenTaken data-bs-toggle="modal" data-bs-target="#changeModel">Down</button>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tab-pane fade" id="unpaid" role="tabpanel" aria-labelledby="unpaid-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">Unpaid List</h1>
+                <hr>
+                <table id="myTable2" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <td >Id</td>
+                            <td >OrderNumber</td>
+                            <td >OrderTime</td>
+                            <td >Username</td>
+                            <td >User First Name</td>
+                            <td >User Last Name</td>
+                            <td >TotalPrice</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var o in Model)
+                        {
+                            if (o.State == EnumOrderState.Unpaid)
+                            {
+                                <tr>
+                                    <td width="5%">@o.Id</td>
+                                    <td width="30%">@o.OrderNumber</td>
+                                    <td width="15%">@o.OrderTime</td>
+                                    <td width="5%">@o.User.UserName</td>
+                                    <td width="10%">@o.User.FirstName</td>
+                                    <td width="10%">@o.User.LastName</td>
+                                    <td width="10%">@(string.Format("{0:N0}", @o.TotalPrice)) &#x20BA;</td>
+                                    <td width="15%">
+                                        <a href="/admin/orderdetail/@o.Id" class="btn btn-primary btn-sm ">Detail</a>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.GettingReady data-bs-toggle="modal" data-bs-target="#changeModel">Up</button>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.Waiting data-bs-toggle="modal" data-bs-target="#changeModel">Down</button>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tab-pane fade" id="gettingready" role="tabpanel" aria-labelledby="gettingready-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">Getting Ready List</h1>
+                <hr>
+                <table id="myTable3" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>OrderNumber</td>
+                            <td>OrderTime</td>
+                            <td>Username</td>
+                            <td>User First Name</td>
+                            <td>User Last Name</td>
+                            <td>TotalPrice</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var o in Model)
+                        {
+                            if (o.State == EnumOrderState.GettingReady)
+                            {
+                                <tr>
+                                    <td width="5%">@o.Id</td>
+                                    <td width="30%">@o.OrderNumber</td>
+                                    <td width="15%">@o.OrderTime</td>
+                                    <td width="5%">@o.User.UserName</td>
+                                    <td width="10%">@o.User.FirstName</td>
+                                    <td width="10%">@o.User.LastName</td>
+                                    <td width="10%">@(string.Format("{0:N0}", @o.TotalPrice)) &#x20BA;</td>
+                                    <td width="15%">
+                                        <a href="/admin/orderdetail/@o.Id" class="btn btn-primary btn-sm ">Detail</a>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.InCargo data-bs-toggle="modal" data-bs-target="#changeModel">Up</button>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.Unpaid data-bs-toggle="modal" data-bs-target="#changeModel">Down</button>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="incargo" role="tabpanel" aria-labelledby="incargo-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">In Cargo List</h1>
+                <hr>
+                <table id="myTable4" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>OrderNumber</td>
+                            <td>OrderTime</td>
+                            <td>Username</td>
+                            <td>User First Name</td>
+                            <td>User Last Name</td>
+                            <td>TotalPrice</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var o in Model)
+                        {
+                            if (o.State == EnumOrderState.InCargo)
+                            {
+                                <tr>
+                                    <td width="5%">@o.Id</td>
+                                    <td width="30%">@o.OrderNumber</td>
+                                    <td width="15%">@o.OrderTime</td>
+                                    <td width="5%">@o.User.UserName</td>
+                                    <td width="10%">@o.User.FirstName</td>
+                                    <td width="10%">@o.User.LastName</td>
+                                    <td width="10%">@(string.Format("{0:N0}", @o.TotalPrice)) &#x20BA;</td>
+                                    <td width="15%">
+                                        <a href="/admin/orderdetail/@o.Id" class="btn btn-primary btn-sm ">Detail</a>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.HasDelivered data-bs-toggle="modal" data-bs-target="#changeModel">Up</button>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.GettingReady data-bs-toggle="modal" data-bs-target="#changeModel">Down</button>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="hasdelivered" role="tabpanel" aria-labelledby="hasdelivered-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h4 mt-3">Has Delivered List</h1>
+                <hr>
+                <table id="myTable5" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <td>OrderNumber</td>
+                            <td>OrderTime</td>
+                            <td>Username</td>
+                            <td>User First Name</td>
+                            <td>User Last Name</td>
+                            <td>TotalPrice</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var o in Model)
+                        {
+                            if (o.State == EnumOrderState.HasDelivered)
+                            {
+                                <tr>
+                                    <td width="5%">@o.Id</td>
+                                    <td width="30%">@o.OrderNumber</td>
+                                    <td width="15%">@o.OrderTime</td>
+                                    <td width="5%">@o.User.UserName</td>
+                                    <td width="10%">@o.User.FirstName</td>
+                                    <td width="10%">@o.User.LastName</td>
+                                    <td width="10%">@(string.Format("{0:N0}", @o.TotalPrice)) &#x20BA;</td>
+                                    <td width="15%">
+                                        <a href="/admin/orderdetail/@o.Id" class="btn btn-primary btn-sm ">Detail</a>
+                                        <button class="btn btn-primary btn-sm" data-bs-userid="@o.Id" data-bs-state=@EnumOrderState.InCargo data-bs-toggle="modal" data-bs-target="#changeModel">Down</button>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="changeModel" tabindex="-1" aria-labelledby="changeModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="changeModelLabel">Change Order</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3>Are you sure?</h3>
+            </div>
+            <div class="modal-footer">
+                <form asp-controller="admin" asp-action="ChangeOrderState" style="display: inline;">
+                    <input id="changeInput" type="hidden" name=orderId value="">
+                    <input id="changeState" type="hidden" name=state value="">
+                    <button type="submit" class="btn btn-primary btn-sm">Ok</button>
+                </form>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -29,28 +29,28 @@
     </div>
     
     <div class="row">
-        <div class="col-2">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2">
             <div class="sticky-top">@await Html.PartialAsync("_filter",Model.PageInfo)</div>
         </div>
-        <div class="col-10">
-            <div class="mt-1 mb-1">
+        <div class="col-12 col-sm-12 col-md-8 col-lg-9 col-xl-10">
+            <div class="mt-2 mb-1">
                 <div class="row">
-                    <div class="col-md-8">
-                        <h3 class="h5">@Model.PageInfo.TotalItems products found</h3>
+                    <div class="col-8">
+                        <h3 class="h5 pt-2 pe-2">@Model.PageInfo.TotalItems products found</h3>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-4">
                         <div class="d-flex justify-content-end">
                             @await Component.InvokeAsync("Sort",new { pageInfo = Model.PageInfo})
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-2">
                     @await Html.PartialAsync("_filterCarts",Model.PageInfo)
                 </div>
 
             </div>
 
-            <div class="row mt-1 me-2 ms-2">
+            <div class="row mt-2 me-2 ms-2">
                 @await Html.PartialAsync("_productList",Model.Products)
             </div>
 

@@ -12,7 +12,7 @@ public class CartModel
     public List<CartItemModel> CartItems { get; set; }
     public double TotalPrice()
     {
-        return CartItems.Sum(i => (i.Product.Price ?? 0) * i.Quantity);
+        return CartItems.Sum(i => (i.Product.Price) * i.Quantity);
     }
 }
 

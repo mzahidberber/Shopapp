@@ -25,12 +25,13 @@
 @foreach (var p in Model)
 {
 
-    <div class="col-md-3 mt-1 p-1 d-flex justify-content-center">
+    <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3   mt-1 p-1 d-flex justify-content-center">
         <div class="card " style="width: 18rem;">
             <div class="imgParent">
                 <a href="/detail/@p.Url ">
                     <img class="card-img-top imgDiv" src="~/img/@p.HomeImageUrl">
                 </a>
+                
             </div>
             
             
@@ -38,7 +39,15 @@
                 <a href="/detail/@p.Url" class="cartText">
                     <h2 class="card-title h6 m-0" style="color:gray;" >@p.Brand.Name</h2>
                     <h2 class="card-title h5" >@p.Name</h2>
-                    <h3 class="card-text h6" style="color:darkblue;">@p.Price <span class="h6">TL</span></h3>
+                    <h3 class="card-text h6" style="color:darkblue;">@(string.Format("{0:N0}", @p.Price)) <span class="h6">TL</span></h3>
+                    @if (p.Stock != 0 && p.Stock < 5)
+                    {
+                        <h6 style="color:red;font-size:small;">Last @p.Stock products</h6>
+                    }
+                    @if (p.Stock == 0)
+                    {
+                        <h6 style="color:red;font-size:small;">Product sold out</h6>
+                    }
                 </a>
                 @{
                     var returnURl = Context.Request.Path+Context.Request.QueryString;

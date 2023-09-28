@@ -4,6 +4,7 @@ using shopapp.core.Aspects.Logging;
 using shopapp.core.Business.Abstract;
 using shopapp.core.Entity.Concrete;
 using shopapp.web.Extensions;
+using shopapp.web.Helpers;
 using shopapp.web.Mapper;
 using shopapp.web.Models.Cart;
 using shopapp.web.Models.Entity;
@@ -33,8 +34,12 @@ namespace shopapp.web.Controllers
         {
             var cart = HttpContext.Session.Get<CartModel>("Cart");
             var product = await _productService.GetByIdAsync(productId);
-
-            if (cart == null)
+            if (product.data.Stock < quantity)
+            {
+				TempDataMessage.CreateMessage(TempData, "message", message: $"{product.data.Stock} {product.data.Name} left");
+				return Redirect(returnUrl);
+			}
+			if (cart == null)
             {
                 var newCart = new CartModel()
                 {
@@ -72,6 +77,19 @@ namespace shopapp.web.Controllers
 			}
 
 			return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult ChangeProductQuantity(int quantity,int productId)
+        {
+            var cart = HttpContext.Session.Get<CartModel>("Cart");
+            var product= cart.CartItems.Find(x => x.ProductId == productId);
+            product.Quantity = quantity;
+            HttpContext.Session.Set<CartModel>("Cart", cart);
+            return Json(new
+            {
+                ProductTotalPrice=product.Product.Price*quantity,
+                TotalPrice = cart.TotalPrice()
+            });
         }
 
         [HttpPost]

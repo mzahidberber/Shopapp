@@ -201,7 +201,51 @@ namespace shopapp.web.Controllers
 
             return View(model);
         }
+        public IActionResult ChangePassword(string userName)
+        {
+            if (userName == null)
+                return RedirectToAction("Index", "Home");
+            return View(new ChangePasswordModel
+            {
+                userName = userName
+            });
+        }
+        [HttpPost]
+		public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+		{
+			if (!ModelState.IsValid)
+				return View(model);
 
-        public IActionResult AccessDenied() => View();
+            var user =await _userManager.FindByNameAsync(model.userName);
+            if (user == null)
+            {
+                TempDataMessage.CreateMessage(TempData, "SingInMessage", message: "User not found.");
+                return View(model);
+            }
+            var check=await _userManager.CheckPasswordAsync(user, model.OldPassword);
+            if (check)
+            {
+                var result=await _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
+                if (result.Succeeded)
+                {
+                    TempDataMessage.CreateMessage(TempData, "message", message: "Your password changed successly");
+                    return RedirectToAction("Index", "Home");
+
+                }
+                else
+                    TempDataMessage.CreateMessage(TempData, "SingInMessage", message: string.Join("\n- ", result.Errors.Select(x => x.Description)));
+
+            }
+            else
+            {
+                TempDataMessage.CreateMessage(TempData, "SingInMessage", message: "Old password wrong!");
+
+            }
+
+            return View(model);
+		}
+
+
+		public IActionResult AccessDenied() => View();
     }
 }

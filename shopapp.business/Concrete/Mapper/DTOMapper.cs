@@ -9,6 +9,7 @@ namespace shopapp.business.Concrete.Mapper
         public DTOMapper()
         {
             CreateMap<ProductDTO, Product>().ReverseMap();
+            CreateMap<OrderItemDTO, OrderItem>().ReverseMap();
             CreateMap<OrderDTO, Order>().ReverseMap();
             CreateMap<UserDTO, User>().ReverseMap();
             CreateMap<CartDTO, Cart>().ReverseMap();
